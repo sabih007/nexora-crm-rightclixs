@@ -58,7 +58,11 @@ export default async function ProfilePage() {
       />
 
       {mfaRequired && !user.mfaEnabled ? (
-        <Callout tone="warning" title="Two-factor authentication is required for your role" className="mb-5">
+        <Callout
+          tone="warning"
+          title="Two-factor authentication is required for your role"
+          className="mb-5"
+        >
           As {ROLE_LABELS[ctx.role]} you can move money or change who else can. Enrol below — once
           you do, signing in will ask for a code from your authenticator app.
         </Callout>
@@ -130,7 +134,7 @@ export default async function ProfilePage() {
                 {sessions.map((session) => (
                   <li key={session.id} className="text-xs">
                     <p className="flex items-center gap-1.5">
-                      <span className="truncate text-ink">
+                      <span className="text-ink truncate">
                         {describeUserAgent(session.userAgent)}
                       </span>
                       {session.id === ctx.sessionId ? (
@@ -145,7 +149,7 @@ export default async function ProfilePage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 border-t border-line pt-2.5 text-[11px] text-ink-subtle">
+              <p className="border-line text-ink-subtle mt-3 border-t pt-2.5 text-[11px]">
                 Changing your password ends every session except this one.
               </p>
             </CardContent>
@@ -159,8 +163,8 @@ export default async function ProfilePage() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <span className="shrink-0 text-ink-subtle">{label}</span>
-      <span className="min-w-0 truncate text-right text-ink">{value}</span>
+      <span className="text-ink-subtle shrink-0">{label}</span>
+      <span className="text-ink min-w-0 truncate text-right">{value}</span>
     </div>
   );
 }
@@ -168,19 +172,27 @@ function Row({ label, value }: { label: string; value: string }) {
 /** A readable device name from a user-agent string. */
 function describeUserAgent(userAgent: string | null): string {
   if (!userAgent) return 'Unknown device';
-  const browser =
-    /Edg\//.test(userAgent) ? 'Edge'
-    : /OPR\//.test(userAgent) ? 'Opera'
-    : /Chrome\//.test(userAgent) ? 'Chrome'
-    : /Safari\//.test(userAgent) ? 'Safari'
-    : /Firefox\//.test(userAgent) ? 'Firefox'
-    : 'Browser';
-  const platform =
-    /Windows/.test(userAgent) ? 'Windows'
-    : /Macintosh|Mac OS/.test(userAgent) ? 'macOS'
-    : /Android/.test(userAgent) ? 'Android'
-    : /iPhone|iPad/.test(userAgent) ? 'iOS'
-    : /Linux/.test(userAgent) ? 'Linux'
-    : '';
+  const browser = /Edg\//.test(userAgent)
+    ? 'Edge'
+    : /OPR\//.test(userAgent)
+      ? 'Opera'
+      : /Chrome\//.test(userAgent)
+        ? 'Chrome'
+        : /Safari\//.test(userAgent)
+          ? 'Safari'
+          : /Firefox\//.test(userAgent)
+            ? 'Firefox'
+            : 'Browser';
+  const platform = /Windows/.test(userAgent)
+    ? 'Windows'
+    : /Macintosh|Mac OS/.test(userAgent)
+      ? 'macOS'
+      : /Android/.test(userAgent)
+        ? 'Android'
+        : /iPhone|iPad/.test(userAgent)
+          ? 'iOS'
+          : /Linux/.test(userAgent)
+            ? 'Linux'
+            : '';
   return platform ? `${browser} on ${platform}` : browser;
 }

@@ -294,10 +294,7 @@ async function main() {
         dueDate: seed.due,
         tags: ['demo'],
         members: {
-          create: [
-            { userId: users.MANAGER as string },
-            { userId: users.STAFF as string },
-          ],
+          create: [{ userId: users.MANAGER as string }, { userId: users.STAFF as string }],
         },
       },
       select: { id: true },
@@ -323,11 +320,46 @@ async function main() {
   // Invoices and payments
   // ---------------------------------------------------------------------
   const invoiceSeeds = [
-    { clientIndex: 0, currency: 'PKR', status: 'PAID' as const, issueOffset: -58, amount: '650000', paid: '650000' },
-    { clientIndex: 0, currency: 'PKR', status: 'PARTIALLY_PAID' as const, issueOffset: -24, amount: '480000', paid: '200000' },
-    { clientIndex: 1, currency: 'GBP', status: 'SENT' as const, issueOffset: -9, amount: '7400', paid: '0' },
-    { clientIndex: 2, currency: 'USD', status: 'OVERDUE' as const, issueOffset: -47, amount: '12500', paid: '0' },
-    { clientIndex: 1, currency: 'GBP', status: 'DRAFT' as const, issueOffset: -2, amount: '3200', paid: '0' },
+    {
+      clientIndex: 0,
+      currency: 'PKR',
+      status: 'PAID' as const,
+      issueOffset: -58,
+      amount: '650000',
+      paid: '650000',
+    },
+    {
+      clientIndex: 0,
+      currency: 'PKR',
+      status: 'PARTIALLY_PAID' as const,
+      issueOffset: -24,
+      amount: '480000',
+      paid: '200000',
+    },
+    {
+      clientIndex: 1,
+      currency: 'GBP',
+      status: 'SENT' as const,
+      issueOffset: -9,
+      amount: '7400',
+      paid: '0',
+    },
+    {
+      clientIndex: 2,
+      currency: 'USD',
+      status: 'OVERDUE' as const,
+      issueOffset: -47,
+      amount: '12500',
+      paid: '0',
+    },
+    {
+      clientIndex: 1,
+      currency: 'GBP',
+      status: 'DRAFT' as const,
+      issueOffset: -2,
+      amount: '3200',
+      paid: '0',
+    },
   ];
 
   let sequence = 1;
@@ -447,8 +479,18 @@ async function main() {
   // ---------------------------------------------------------------------
   const cardSeeds = [
     { nickname: '[DEMO] Office Visa', issuer: 'Demo Bank', brand: 'VISA' as const, last4: '4242' },
-    { nickname: '[DEMO] Marketing Mastercard', issuer: 'Demo Bank', brand: 'MASTERCARD' as const, last4: '5588' },
-    { nickname: '[DEMO] Director Amex', issuer: 'Demo Charge', brand: 'AMEX' as const, last4: '9001' },
+    {
+      nickname: '[DEMO] Marketing Mastercard',
+      issuer: 'Demo Bank',
+      brand: 'MASTERCARD' as const,
+      last4: '5588',
+    },
+    {
+      nickname: '[DEMO] Director Amex',
+      issuer: 'Demo Charge',
+      brand: 'AMEX' as const,
+      last4: '9001',
+    },
   ];
 
   const cardIds: string[] = [];
@@ -536,11 +578,56 @@ async function main() {
   }
 
   const subscriptionSeeds = [
-    { platformIndex: 0, cardIndex: 0, plan: 'Business', amount: '249.00', currency: 'USD', cadence: 'MONTHLY' as const, nextIn: 6, category: 'Hosting' },
-    { platformIndex: 1, cardIndex: 0, plan: 'Teams annual', amount: '1199.88', currency: 'USD', cadence: 'ANNUAL' as const, nextIn: 48, category: 'Design' },
-    { platformIndex: 2, cardIndex: 1, plan: 'Growth', amount: '89.00', currency: 'EUR', cadence: 'MONTHLY' as const, nextIn: 19, category: 'Email' },
-    { platformIndex: 3, cardIndex: 0, plan: 'Org quarterly', amount: '540.00', currency: 'USD', cadence: 'QUARTERLY' as const, nextIn: 72, category: 'Developer tools' },
-    { platformIndex: 4, cardIndex: 2, plan: 'Ads retainer', amount: '125000', currency: 'PKR', cadence: 'MONTHLY' as const, nextIn: 2, category: 'Marketing' },
+    {
+      platformIndex: 0,
+      cardIndex: 0,
+      plan: 'Business',
+      amount: '249.00',
+      currency: 'USD',
+      cadence: 'MONTHLY' as const,
+      nextIn: 6,
+      category: 'Hosting',
+    },
+    {
+      platformIndex: 1,
+      cardIndex: 0,
+      plan: 'Teams annual',
+      amount: '1199.88',
+      currency: 'USD',
+      cadence: 'ANNUAL' as const,
+      nextIn: 48,
+      category: 'Design',
+    },
+    {
+      platformIndex: 2,
+      cardIndex: 1,
+      plan: 'Growth',
+      amount: '89.00',
+      currency: 'EUR',
+      cadence: 'MONTHLY' as const,
+      nextIn: 19,
+      category: 'Email',
+    },
+    {
+      platformIndex: 3,
+      cardIndex: 0,
+      plan: 'Org quarterly',
+      amount: '540.00',
+      currency: 'USD',
+      cadence: 'QUARTERLY' as const,
+      nextIn: 72,
+      category: 'Developer tools',
+    },
+    {
+      platformIndex: 4,
+      cardIndex: 2,
+      plan: 'Ads retainer',
+      amount: '125000',
+      currency: 'PKR',
+      cadence: 'MONTHLY' as const,
+      nextIn: 2,
+      category: 'Marketing',
+    },
   ];
 
   let subsCreated = 0;
@@ -592,7 +679,9 @@ async function main() {
       });
     }
   }
-  console.log(`  ✓ ${cardIds.length} cards, ${platformIds.length} platforms, ${subsCreated} subscriptions`);
+  console.log(
+    `  ✓ ${cardIds.length} cards, ${platformIds.length} platforms, ${subsCreated} subscriptions`,
+  );
 
   // Default reminder rules
   for (const daysBefore of DEFAULT_SETTINGS.renewalReminderDays) {

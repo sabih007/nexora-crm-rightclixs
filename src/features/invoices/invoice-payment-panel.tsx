@@ -110,7 +110,7 @@ export function InvoicePaymentPanel({
       <CardHeader>
         <div>
           <CardTitle>Payments &amp; credits</CardTitle>
-          <p className="mt-0.5 text-xs text-ink-subtle">
+          <p className="text-ink-subtle mt-0.5 text-xs">
             Manually recorded receipts. Nexora OS never charges a card or moves money.
           </p>
         </div>
@@ -146,16 +146,16 @@ export function InvoicePaymentPanel({
                 key={payment.allocationId}
                 className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0"
               >
-                <span className="text-sm text-ink">{formatDate(payment.paymentDate)}</span>
+                <span className="text-ink text-sm">{formatDate(payment.paymentDate)}</span>
                 <Badge tone="outline">{METHOD_LABELS[payment.method] ?? payment.method}</Badge>
                 {payment.reference ? (
-                  <span className="truncate text-xs text-ink-subtle">ref {payment.reference}</span>
+                  <span className="text-ink-subtle truncate text-xs">ref {payment.reference}</span>
                 ) : null}
-                <span className="text-xs text-ink-subtle">by {payment.createdBy}</span>
+                <span className="text-ink-subtle text-xs">by {payment.createdBy}</span>
 
                 <span className="ml-auto flex items-center gap-3">
                   {payment.allocatedAmount !== payment.amount ? (
-                    <span className="text-[11px] text-ink-subtle">
+                    <span className="text-ink-subtle text-[11px]">
                       of{' '}
                       <CurrencyAmount
                         amount={payment.amount}
@@ -187,9 +187,9 @@ export function InvoicePaymentPanel({
 
             {creditNotes.map((note) => (
               <li key={note.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
-                <span className="text-sm text-ink">{formatDate(note.issuedAt)}</span>
+                <span className="text-ink text-sm">{formatDate(note.issuedAt)}</span>
                 <Badge tone="info">Credit note {note.number}</Badge>
-                <span className="truncate text-xs text-ink-subtle">{note.reason}</span>
+                <span className="text-ink-subtle truncate text-xs">{note.reason}</span>
                 <CurrencyAmount
                   amount={note.amount}
                   currency={note.currency}
@@ -297,7 +297,7 @@ function CreditNoteDialog({
               inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="text-right tabular"
+              className="tabular text-right"
             />
           </Field>
           <Field label="Reason" required htmlFor="credit-reason">

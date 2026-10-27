@@ -132,7 +132,9 @@ export async function runRenewalReminders(workspaceId: string): Promise<Reminder
 
       const body =
         `${subscription.planName} · ${amount} on ${formatDate(subscription.nextChargeAt)}` +
-        (subscription.card ? ` · ${subscription.card.nickname} ···· ${subscription.card.last4}` : '') +
+        (subscription.card
+          ? ` · ${subscription.card.nickname} ···· ${subscription.card.last4}`
+          : '') +
         (cancelBy ? ` · cancel by ${formatDate(cancelBy)}` : '');
 
       try {

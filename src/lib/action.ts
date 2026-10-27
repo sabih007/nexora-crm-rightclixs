@@ -25,7 +25,10 @@ export class ActionError extends Error {
   readonly code: string;
   readonly fieldErrors?: Record<string, string[]>;
 
-  constructor(message: string, options?: { code?: string; fieldErrors?: Record<string, string[]> }) {
+  constructor(
+    message: string,
+    options?: { code?: string; fieldErrors?: Record<string, string[]> },
+  ) {
     super(message);
     this.name = 'ActionError';
     this.code = options?.code ?? 'ACTION_ERROR';
@@ -64,7 +67,11 @@ function normaliseError(error: unknown, actionName: string): ActionResult<never>
   }
   if (error instanceof z.ZodError) {
     const flat = z.flattenError(error);
-    return actionFail('Please correct the highlighted fields.', 'VALIDATION', flat.fieldErrors as Record<string, string[]>);
+    return actionFail(
+      'Please correct the highlighted fields.',
+      'VALIDATION',
+      flat.fieldErrors as Record<string, string[]>,
+    );
   }
 
   // Prisma unique-constraint and foreign-key violations get a readable message

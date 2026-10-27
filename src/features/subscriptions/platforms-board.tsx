@@ -151,7 +151,7 @@ export function PlatformsBoard({
                         {platform.category}
                       </Badge>
                     </CardTitle>
-                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-ink-subtle">
+                    <div className="text-ink-subtle mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs">
                       {platform.accountIdentifier ? (
                         <span className="truncate">{platform.accountIdentifier}</span>
                       ) : null}
@@ -188,30 +188,33 @@ export function PlatformsBoard({
 
                 <CardContent className="space-y-3.5">
                   <div>
-                    <p className="mb-1 flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                    <p className="text-ink-subtle mb-1 flex items-center justify-between text-[11px] font-semibold tracking-wide uppercase">
                       <span>Cards saved here</span>
                       {permissions.manageLinks ? (
                         <button
                           type="button"
                           onClick={() => setLinkTarget(platform)}
                           aria-label={`Record a card saved on ${platform.name}`}
-                          className="inline-flex items-center gap-1 rounded text-[11px] font-medium normal-case tracking-normal text-brand-500 hover:underline"
+                          className="text-brand-500 inline-flex items-center gap-1 rounded text-[11px] font-medium tracking-normal normal-case hover:underline"
                         >
                           <Link2 className="size-3" aria-hidden /> Record a card
                         </button>
                       ) : null}
                     </p>
                     {activeCards.length === 0 && removedCards.length === 0 ? (
-                      <p className="text-sm text-ink-subtle">None recorded.</p>
+                      <p className="text-ink-subtle text-sm">None recorded.</p>
                     ) : (
                       <ul className="flex flex-wrap gap-1.5">
                         {activeCards.map((card) => (
                           <li key={card.linkId}>
-                            <Badge tone="success" title={
-                              card.lastVerifiedAt
-                                ? `Last confirmed ${formatDate(card.lastVerifiedAt)}`
-                                : 'Never confirmed'
-                            }>
+                            <Badge
+                              tone="success"
+                              title={
+                                card.lastVerifiedAt
+                                  ? `Last confirmed ${formatDate(card.lastVerifiedAt)}`
+                                  : 'Never confirmed'
+                              }
+                            >
                               <span className="font-mono">···· {card.last4}</span>
                               <span className="opacity-75">{card.nickname}</span>
                             </Badge>
@@ -231,7 +234,7 @@ export function PlatformsBoard({
 
                   {activeSubs.length > 0 ? (
                     <div>
-                      <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <p className="text-ink-subtle mb-1 text-[11px] font-semibold tracking-wide uppercase">
                         Subscriptions
                       </p>
                       <ul className="space-y-1">
@@ -239,12 +242,12 @@ export function PlatformsBoard({
                           <li key={sub.id} className="flex items-center gap-2 text-sm">
                             <Link
                               href={`/subscriptions/${sub.id}`}
-                              className="min-w-0 flex-1 truncate text-ink hover:text-brand-500 hover:underline"
+                              className="text-ink hover:text-brand-500 min-w-0 flex-1 truncate hover:underline"
                             >
                               {sub.planName}
                             </Link>
                             <StatusBadge kind="subscription" value={sub.status} size="sm" />
-                            <span className="whitespace-nowrap text-[11px] text-ink-subtle">
+                            <span className="text-ink-subtle text-[11px] whitespace-nowrap">
                               next {formatDate(sub.nextChargeAt, 'dd MMM')}
                             </span>
                             <CurrencyAmount
@@ -258,13 +261,13 @@ export function PlatformsBoard({
                     </div>
                   ) : null}
 
-                  <div className="flex flex-wrap gap-3 border-t border-line pt-2.5 text-xs">
+                  <div className="border-line flex flex-wrap gap-3 border-t pt-2.5 text-xs">
                     {platform.websiteUrl ? (
                       <a
                         href={normaliseUrl(platform.websiteUrl)}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
-                        className="inline-flex items-center gap-1 text-brand-500 hover:underline"
+                        className="text-brand-500 inline-flex items-center gap-1 hover:underline"
                       >
                         <ExternalLink className="size-3" aria-hidden /> Website
                       </a>
@@ -274,7 +277,7 @@ export function PlatformsBoard({
                         href={normaliseUrl(platform.cancellationUrl)}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
-                        className="inline-flex items-center gap-1 text-brand-500 hover:underline"
+                        className="text-brand-500 inline-flex items-center gap-1 hover:underline"
                       >
                         <ExternalLink className="size-3" aria-hidden /> Billing / cancel
                       </a>
@@ -288,7 +291,7 @@ export function PlatformsBoard({
                   </div>
 
                   {platform.notes ? (
-                    <p className="text-xs text-ink-subtle">{platform.notes}</p>
+                    <p className="text-ink-subtle text-xs">{platform.notes}</p>
                   ) : null}
                 </CardContent>
               </Card>
@@ -304,11 +307,7 @@ export function PlatformsBoard({
         members={members}
       />
 
-      <RecordCardDialog
-        platform={linkTarget}
-        cards={cards}
-        onClose={() => setLinkTarget(null)}
-      />
+      <RecordCardDialog platform={linkTarget} cards={cards} onClose={() => setLinkTarget(null)} />
 
       <ConfirmDialog
         open={deleteTarget !== null}
@@ -419,7 +418,10 @@ function PlatformFormBody({
 
       <DialogBody className="space-y-4">
         {error ? (
-          <p role="alert" className="rounded-lg border border-danger/25 bg-danger-soft px-3 py-2 text-sm text-danger">
+          <p
+            role="alert"
+            className="border-danger/25 bg-danger-soft text-danger rounded-lg border px-3 py-2 text-sm"
+          >
             {error}
           </p>
         ) : null}
@@ -484,7 +486,11 @@ function PlatformFormBody({
           </Field>
 
           <Field label="Owner" htmlFor="platform-owner">
-            <Select id="platform-owner" value={ownerId} onChange={(e) => setOwnerId(e.target.value)}>
+            <Select
+              id="platform-owner"
+              value={ownerId}
+              onChange={(e) => setOwnerId(e.target.value)}
+            >
               <option value="">Unassigned</option>
               {members.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -583,7 +589,7 @@ function RecordCardDialog({
         </DialogHeader>
         <DialogBody>
           {available.length === 0 ? (
-            <p className="text-sm text-ink-subtle">
+            <p className="text-ink-subtle text-sm">
               Every active card is already recorded against this platform.
             </p>
           ) : (

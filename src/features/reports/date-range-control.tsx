@@ -32,7 +32,7 @@ export function DateRangeControl({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <CalendarDays className="size-4 text-ink-subtle" aria-hidden />
+      <CalendarDays className="text-ink-subtle size-4" aria-hidden />
 
       <Select
         aria-label="Date range"
@@ -62,7 +62,7 @@ export function DateRangeControl({
             aria-label="From date"
             className="h-9 w-auto"
           />
-          <span className="text-xs text-ink-subtle">to</span>
+          <span className="text-ink-subtle text-xs">to</span>
           <Input
             type="date"
             value={to ?? ''}

@@ -134,7 +134,7 @@ function RecordChargeBody({
               inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="text-right tabular"
+              className="tabular text-right"
               autoFocus
             />
           </Field>
@@ -156,14 +156,18 @@ function RecordChargeBody({
           />
         </Field>
 
-        <label className="flex items-center justify-between gap-4 rounded-lg border border-line px-3.5 py-2.5">
+        <label className="border-line flex items-center justify-between gap-4 rounded-lg border px-3.5 py-2.5">
           <span>
             <Label>Advance the schedule</Label>
-            <span className="mt-0.5 block text-xs text-ink-subtle">
+            <span className="text-ink-subtle mt-0.5 block text-xs">
               Moves the next charge date forward by one {cadenceDescription.toLowerCase()} period.
             </span>
           </span>
-          <Switch checked={advance} onCheckedChange={setAdvance} aria-label="Advance the schedule" />
+          <Switch
+            checked={advance}
+            onCheckedChange={setAdvance}
+            aria-label="Advance the schedule"
+          />
         </label>
       </DialogBody>
 

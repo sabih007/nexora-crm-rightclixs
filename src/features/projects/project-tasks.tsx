@@ -61,7 +61,7 @@ export function ProjectTasks({
     <div>
       <div className="mb-3 flex items-center justify-between gap-2">
         <div
-          className="inline-flex rounded-lg border border-line bg-surface p-0.5"
+          className="border-line bg-surface inline-flex rounded-lg border p-0.5"
           role="group"
           aria-label="Task view"
         >
@@ -119,7 +119,7 @@ export function ProjectTasks({
           onCreateTask={openCreate}
         />
       ) : (
-        <ul className="divide-y divide-[var(--line)] overflow-hidden rounded-xl border border-line bg-surface">
+        <ul className="border-line bg-surface divide-y divide-[var(--line)] overflow-hidden rounded-xl border">
           {tasks.map((task) => {
             const overdue = task.dueDate && task.status !== 'DONE' && daysUntil(task.dueDate) < 0;
             return (
@@ -127,27 +127,23 @@ export function ProjectTasks({
                 <button
                   type="button"
                   onClick={() => openTask(task.id)}
-                  className="flex w-full flex-wrap items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500/40"
+                  className="hover:bg-surface-hover focus-visible:ring-brand-500/40 flex w-full flex-wrap items-center gap-3 px-4 py-2.5 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
                 >
                   <StatusBadge kind="task" value={task.status} />
-                  <span className="min-w-0 flex-1 truncate text-sm text-ink">{task.title}</span>
+                  <span className="text-ink min-w-0 flex-1 truncate text-sm">{task.title}</span>
                   <StatusBadge kind="priority" value={task.priority} size="sm" />
                   {task.dueDate ? (
                     <span
                       className={cn(
-                        'whitespace-nowrap text-xs',
-                        overdue ? 'font-medium text-danger' : 'text-ink-subtle',
+                        'text-xs whitespace-nowrap',
+                        overdue ? 'text-danger font-medium' : 'text-ink-subtle',
                       )}
                     >
                       {formatDate(task.dueDate)}
                     </span>
                   ) : null}
                   {task.assignee ? (
-                    <Avatar
-                      name={task.assignee.name}
-                      color={task.assignee.avatarColor}
-                      size="xs"
-                    />
+                    <Avatar name={task.assignee.name} color={task.assignee.avatarColor} size="xs" />
                   ) : (
                     <span className="size-5" aria-hidden />
                   )}

@@ -76,10 +76,10 @@ export const projectInputSchema = z
     tags: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
     memberIds: z.array(z.uuid()).max(100).default([]),
   })
-  .refine(
-    (v) => !v.startDate || !v.dueDate || v.dueDate >= v.startDate,
-    { message: 'The due date cannot be before the start date.', path: ['dueDate'] },
-  );
+  .refine((v) => !v.startDate || !v.dueDate || v.dueDate >= v.startDate, {
+    message: 'The due date cannot be before the start date.',
+    path: ['dueDate'],
+  });
 
 export type ProjectInput = z.output<typeof projectInputSchema>;
 export type ProjectFormValues = z.input<typeof projectInputSchema>;

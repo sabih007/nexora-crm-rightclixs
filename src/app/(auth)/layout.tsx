@@ -10,26 +10,26 @@ export const metadata: Metadata = {
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-canvas">
+    <div className="bg-canvas flex min-h-screen">
       <div className="flex w-full flex-col justify-center px-5 py-10 sm:px-10 lg:w-[46%] lg:px-14">
         <div className="mx-auto w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2.5">
             <span
-              className="flex size-9 items-center justify-center rounded-xl bg-ink text-base font-bold text-accent"
+              className="bg-ink text-accent flex size-9 items-center justify-center rounded-xl text-base font-bold"
               aria-hidden
             >
               N
             </span>
             <div>
-              <p className="text-sm font-semibold leading-tight text-ink">Nexora OS</p>
-              <p className="text-[11px] leading-tight text-ink-subtle">Office CRM</p>
+              <p className="text-ink text-sm leading-tight font-semibold">Nexora OS</p>
+              <p className="text-ink-subtle text-[11px] leading-tight">Office CRM</p>
             </div>
           </div>
           {children}
         </div>
       </div>
 
-      <div className="relative hidden flex-1 overflow-hidden border-l border-line bg-[#0B1220] lg:block">
+      <div className="border-line relative hidden flex-1 overflow-hidden border-l bg-[#0B1220] lg:block">
         <div
           className="absolute inset-0 opacity-70"
           style={{
@@ -49,7 +49,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         />
 
         <div className="relative flex h-full flex-col justify-end p-12 xl:p-16">
-          <h2 className="max-w-md text-3xl font-semibold leading-tight tracking-tight text-white">
+          <h2 className="max-w-md text-3xl leading-tight font-semibold tracking-tight text-white">
             Clients, invoices, subscriptions and projects in one place.
           </h2>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-white/65">
@@ -65,7 +65,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               { k: 'Audit trail', v: 'Every financial change recorded' },
             ].map((item) => (
               <div key={item.k}>
-                <dt className="text-xs font-semibold text-accent">{item.k}</dt>
+                <dt className="text-accent text-xs font-semibold">{item.k}</dt>
                 <dd className="mt-1 text-[11px] leading-relaxed text-white/50">{item.v}</dd>
               </div>
             ))}

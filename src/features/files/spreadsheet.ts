@@ -188,7 +188,10 @@ export interface ValidationOutcome<T> {
 export function mapAndValidateRows<T>(
   sheet: SheetData,
   mapping: Record<string, string | null>,
-  validate: (record: Record<string, string>, row: number) => { ok: true; data: T } | { ok: false; errors: Omit<RowError, 'row'>[] },
+  validate: (
+    record: Record<string, string>,
+    row: number,
+  ) => { ok: true; data: T } | { ok: false; errors: Omit<RowError, 'row'>[] },
 ): ValidationOutcome<T> {
   const outcome: ValidationOutcome<T> = { valid: [], errors: [] };
 

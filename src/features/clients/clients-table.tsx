@@ -64,7 +64,7 @@ export function ClientsTable({
       cell: (row) => (
         <div className="flex min-w-0 items-center gap-2.5">
           <span
-            className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-surface-sunken text-ink-subtle"
+            className="bg-surface-sunken text-ink-subtle flex size-7 shrink-0 items-center justify-center rounded-lg"
             aria-hidden
           >
             {row.type === 'COMPANY' ? (
@@ -76,13 +76,13 @@ export function ClientsTable({
           <div className="min-w-0">
             <Link
               href={`/clients/${row.id}`}
-              className="block truncate font-medium text-ink hover:text-brand-500 hover:underline"
+              className="text-ink hover:text-brand-500 block truncate font-medium hover:underline"
               onClick={(e) => e.stopPropagation()}
             >
               {row.name}
             </Link>
             {row.email ? (
-              <span className="block truncate text-xs text-ink-subtle">{row.email}</span>
+              <span className="text-ink-subtle block truncate text-xs">{row.email}</span>
             ) : null}
           </div>
         </div>
@@ -264,7 +264,7 @@ export function ClientsTable({
             </Select>
           ) : null}
 
-          <label className="flex cursor-pointer items-center gap-1.5 text-[13px] text-ink-muted">
+          <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-[13px]">
             <Checkbox
               checked={filters.includeArchived}
               onCheckedChange={(checked) => update({ includeArchived: checked ? '1' : null })}

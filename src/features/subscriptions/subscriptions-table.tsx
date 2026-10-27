@@ -62,12 +62,12 @@ export function SubscriptionsTable({
         <div className="min-w-0">
           <Link
             href={`/subscriptions/${row.id}`}
-            className="block truncate font-medium text-ink hover:text-brand-500 hover:underline"
+            className="text-ink hover:text-brand-500 block truncate font-medium hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             {row.platform.name}
           </Link>
-          <span className="block truncate text-xs text-ink-subtle">{row.planName}</span>
+          <span className="text-ink-subtle block truncate text-xs">{row.planName}</span>
         </div>
       ),
     },
@@ -76,10 +76,10 @@ export function SubscriptionsTable({
       header: 'Card',
       cell: (row) =>
         row.card ? (
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] text-ink-muted">
-            <CreditCard className="size-3.5 text-ink-subtle" aria-hidden />
+          <span className="text-ink-muted inline-flex items-center gap-1.5 text-[13px] whitespace-nowrap">
+            <CreditCard className="text-ink-subtle size-3.5" aria-hidden />
             <span className="font-mono">···· {row.card.last4}</span>
-            <span className="truncate text-xs text-ink-subtle">{row.card.nickname}</span>
+            <span className="text-ink-subtle truncate text-xs">{row.card.nickname}</span>
           </span>
         ) : (
           <span className="text-ink-subtle">No card linked</span>
@@ -93,7 +93,7 @@ export function SubscriptionsTable({
       cell: (row) => (
         <div className="text-right">
           <CurrencyAmount amount={row.amount} currency={row.currency} className="font-medium" />
-          <span className="block text-[11px] text-ink-subtle">
+          <span className="text-ink-subtle block text-[11px]">
             {cadenceLabel(row.cadence as Cadence, row.intervalDays)}
           </span>
         </div>
@@ -129,8 +129,8 @@ export function SubscriptionsTable({
           <div className="text-right">
             <span
               className={cn(
-                'whitespace-nowrap text-[13px]',
-                imminent ? 'font-medium text-warning' : 'text-ink-muted',
+                'text-[13px] whitespace-nowrap',
+                imminent ? 'text-warning font-medium' : 'text-ink-muted',
               )}
             >
               {formatDate(row.nextChargeAt)}
@@ -139,7 +139,7 @@ export function SubscriptionsTable({
               <Tooltip
                 content={`Notice period is ${row.noticeDays} days — cancel by ${formatDate(row.cancelBy)} to avoid the next charge.`}
               >
-                <span className="mt-0.5 flex items-center justify-end gap-1 text-[11px] text-danger">
+                <span className="text-danger mt-0.5 flex items-center justify-end gap-1 text-[11px]">
                   <AlertTriangle className="size-3" aria-hidden />
                   cancel by {formatDate(row.cancelBy, 'dd MMM')}
                 </span>

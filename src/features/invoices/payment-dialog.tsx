@@ -230,7 +230,7 @@ function PaymentDialogBody({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="text-right tabular"
+              className="tabular text-right"
               autoFocus
             />
           </Field>
@@ -258,7 +258,11 @@ function PaymentDialogBody({
             </Select>
           </Field>
 
-          <Field label="Reference" htmlFor="payment-reference" hint="Transaction ID, cheque number…">
+          <Field
+            label="Reference"
+            htmlFor="payment-reference"
+            hint="Transaction ID, cheque number…"
+          >
             <Input
               id="payment-reference"
               value={reference}
@@ -279,10 +283,10 @@ function PaymentDialogBody({
         {preview && preview.allocations.length > 0 ? (
           <div>
             <Label>Allocation</Label>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               Applied oldest first, never exceeding each invoice&rsquo;s outstanding balance.
             </p>
-            <ul className="mt-2 divide-y divide-[var(--line)] overflow-hidden rounded-lg border border-line">
+            <ul className="border-line mt-2 divide-y divide-[var(--line)] overflow-hidden rounded-lg border">
               {preview.allocations.map((allocation) => {
                 const invoice = invoiceById[allocation.invoiceId];
                 if (!invoice) return null;
@@ -291,9 +295,9 @@ function PaymentDialogBody({
                     key={allocation.invoiceId}
                     className="flex flex-wrap items-center gap-2 px-3 py-2 text-sm"
                   >
-                    <span className="font-mono text-[13px] text-ink">{invoice.invoiceNumber}</span>
+                    <span className="text-ink font-mono text-[13px]">{invoice.invoiceNumber}</span>
                     <StatusBadge kind="invoice" value={invoice.status} size="sm" />
-                    <span className="text-xs text-ink-subtle">
+                    <span className="text-ink-subtle text-xs">
                       due {formatDate(invoice.dueDate)} · balance{' '}
                       <CurrencyAmount amount={invoice.balance} currency={currency} size="sm" />
                     </span>

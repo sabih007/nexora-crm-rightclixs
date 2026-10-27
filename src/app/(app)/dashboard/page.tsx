@@ -46,10 +46,7 @@ export default async function DashboardPage({
   const canSeeFinance = roleHasPermission(ctx.role, 'report:read_office_finance');
   const canSeeInvoices = roleHasPermission(ctx.role, 'invoice:read');
 
-  const [data, myTasks] = await Promise.all([
-    getDashboardData(ctx, range),
-    listMyTasks(ctx, 6),
-  ]);
+  const [data, myTasks] = await Promise.all([getDashboardData(ctx, range), listMyTasks(ctx, 6)]);
 
   const { report } = data;
 
@@ -58,16 +55,18 @@ export default async function DashboardPage({
       <PageHeader
         title="Overview"
         description={`Figures computed from source records for ${range.label.toLowerCase()}.`}
-        actions={<DateRangeControl preset={preset} from={first(params.from)} to={first(params.to)} />}
+        actions={
+          <DateRangeControl preset={preset} from={first(params.from)} to={first(params.to)} />
+        }
       />
 
       {report.cashCollected.incomplete ||
       report.invoicedRevenue.incomplete ||
       report.actualExpenses.incomplete ? (
         <Callout tone="warning" title="Some amounts could not be converted" className="mb-4">
-          One or more transactions are in a currency with no exchange rate on or before their
-          date, so they are excluded from the consolidated totals below rather than being
-          estimated. Add the missing rates in{' '}
+          One or more transactions are in a currency with no exchange rate on or before their date,
+          so they are excluded from the consolidated totals below rather than being estimated. Add
+          the missing rates in{' '}
           <Link href="/settings/exchange-rates" className="font-medium underline">
             Settings → Exchange rates
           </Link>
@@ -88,7 +87,9 @@ export default async function DashboardPage({
           <StatCard
             label="Invoiced revenue"
             definition={report.invoicedRevenue.definition}
-            value={formatMoney(report.invoicedRevenue.value, report.baseCurrency, { compact: true })}
+            value={formatMoney(report.invoicedRevenue.value, report.baseCurrency, {
+              compact: true,
+            })}
             sublabel={`${report.invoicedRevenue.count} invoice${report.invoicedRevenue.count === 1 ? '' : 's'}`}
             icon={Receipt}
             href="/invoices"
@@ -178,24 +179,20 @@ export default async function DashboardPage({
             <CardHeader>
               <div>
                 <CardTitle>Renewals in the next 30 days</CardTitle>
-                <p className="mt-0.5 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-xs">
                   Expected charges from each subscription&rsquo;s schedule — not payments.
                 </p>
               </div>
               <Link
                 href="/subscriptions/calendar"
-                className="shrink-0 text-xs font-medium text-brand-500 hover:underline"
+                className="text-brand-500 shrink-0 text-xs font-medium hover:underline"
               >
                 Calendar →
               </Link>
             </CardHeader>
             <CardContent>
               {data.upcomingRenewals.length === 0 ? (
-                <EmptyState
-                  icon={CalendarClock}
-                  title="Nothing due in 30 days"
-                  compact
-                />
+                <EmptyState icon={CalendarClock} title="Nothing due in 30 days" compact />
               ) : (
                 <>
                   <ul className="divide-y divide-[var(--line)]">
@@ -209,19 +206,19 @@ export default async function DashboardPage({
                           <span
                             className={cn(
                               'w-16 shrink-0 text-xs',
-                              days <= 7 ? 'font-medium text-warning' : 'text-ink-subtle',
+                              days <= 7 ? 'text-warning font-medium' : 'text-ink-subtle',
                             )}
                           >
                             {formatDate(charge.chargeDate, 'dd MMM')}
                           </span>
                           <Link
                             href={`/subscriptions/${charge.subscriptionId}`}
-                            className="min-w-0 flex-1 truncate text-sm text-ink hover:text-brand-500 hover:underline"
+                            className="text-ink hover:text-brand-500 min-w-0 flex-1 truncate text-sm hover:underline"
                           >
                             {charge.platformName}
                           </Link>
                           {charge.cardLabel ? (
-                            <span className="truncate text-[11px] text-ink-subtle">
+                            <span className="text-ink-subtle truncate text-[11px]">
                               {charge.cardLabel}
                             </span>
                           ) : null}
@@ -234,7 +231,7 @@ export default async function DashboardPage({
                       );
                     })}
                   </ul>
-                  <div className="mt-3 flex flex-wrap items-baseline gap-x-5 gap-y-1 border-t border-line pt-3 text-xs">
+                  <div className="border-line mt-3 flex flex-wrap items-baseline gap-x-5 gap-y-1 border-t pt-3 text-xs">
                     <span className="text-ink-subtle">Next 7 days:</span>
                     <MultiCurrencyAmount amounts={data.renewalTotals.next7} size="md" />
                     <span className="text-ink-subtle">Next 30 days:</span>
@@ -250,7 +247,7 @@ export default async function DashboardPage({
           <CardHeader>
             <div>
               <CardTitle>Your open tasks</CardTitle>
-              <p className="mt-0.5 text-xs text-ink-subtle">
+              <p className="text-ink-subtle mt-0.5 text-xs">
                 Assigned to you and not yet done, soonest first.
               </p>
             </div>
@@ -263,22 +260,25 @@ export default async function DashboardPage({
                 {myTasks.map((task) => {
                   const overdue = task.dueDate && daysUntil(task.dueDate) < 0;
                   return (
-                    <li key={task.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 first:pt-0">
+                    <li
+                      key={task.id}
+                      className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 first:pt-0"
+                    >
                       <StatusBadge kind="task" value={task.status} size="sm" />
                       <Link
                         href={`/projects/${task.project.id}`}
-                        className="min-w-0 flex-1 truncate text-sm text-ink hover:text-brand-500 hover:underline"
+                        className="text-ink hover:text-brand-500 min-w-0 flex-1 truncate text-sm hover:underline"
                       >
                         {task.title}
                       </Link>
-                      <span className="truncate text-[11px] text-ink-subtle">
+                      <span className="text-ink-subtle truncate text-[11px]">
                         {task.project.name}
                       </span>
                       {task.dueDate ? (
                         <span
                           className={cn(
-                            'whitespace-nowrap text-xs',
-                            overdue ? 'font-medium text-danger' : 'text-ink-subtle',
+                            'text-xs whitespace-nowrap',
+                            overdue ? 'text-danger font-medium' : 'text-ink-subtle',
                           )}
                         >
                           {formatDate(task.dueDate, 'dd MMM')}
@@ -309,8 +309,8 @@ export default async function DashboardPage({
                 const m = metric as typeof report.cashCollected;
                 return (
                   <div key={label as string}>
-                    <dt className="font-medium text-ink">{label as string}</dt>
-                    <dd className="mt-0.5 text-ink-subtle">{m.definition}</dd>
+                    <dt className="text-ink font-medium">{label as string}</dt>
+                    <dd className="text-ink-subtle mt-0.5">{m.definition}</dd>
                     {Object.keys(m.byCurrency).length > 1 ? (
                       <dd className="mt-1 flex flex-wrap gap-1.5">
                         {Object.entries(m.byCurrency).map(([currency, amount]) => (
@@ -320,12 +320,12 @@ export default async function DashboardPage({
                         ))}
                       </dd>
                     ) : null}
-                    {m.note ? <dd className="mt-1 text-ink-subtle">{m.note}</dd> : null}
+                    {m.note ? <dd className="text-ink-subtle mt-1">{m.note}</dd> : null}
                   </div>
                 );
               })}
             </dl>
-            <p className="mt-4 border-t border-line pt-3 text-[11px] text-ink-subtle">
+            <p className="border-line text-ink-subtle mt-4 border-t pt-3 text-[11px]">
               Management reporting only. These are not certified financial statements and do not
               account for tax treatment, accruals or unbilled work.
             </p>

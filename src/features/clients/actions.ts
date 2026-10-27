@@ -143,7 +143,10 @@ export const updateClient = defineAction({
       // list, and this keeps ordering and primary-flag changes consistent.
       const keepIds = input.contacts.map((c) => c.id).filter((id): id is string => Boolean(id));
       await tx.clientContact.deleteMany({
-        where: { clientId: input.id, ...(keepIds.length > 0 ? { NOT: { id: { in: keepIds } } } : {}) },
+        where: {
+          clientId: input.id,
+          ...(keepIds.length > 0 ? { NOT: { id: { in: keepIds } } } : {}),
+        },
       });
       for (const contact of input.contacts) {
         const data = {

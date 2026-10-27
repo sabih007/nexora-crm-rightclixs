@@ -75,10 +75,7 @@ const serverSchema = z
         message: 'SMTP_HOST is required when EMAIL_DRIVER=smtp',
       });
     }
-    if (
-      value.NODE_ENV === 'production' &&
-      value.AUTH_SECRET.startsWith('replace-me')
-    ) {
+    if (value.NODE_ENV === 'production' && value.AUTH_SECRET.startsWith('replace-me')) {
       ctx.addIssue({
         code: 'custom',
         path: ['AUTH_SECRET'],

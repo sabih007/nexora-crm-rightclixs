@@ -21,7 +21,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const ctx = await requireAuthPage();
   const subscription = await getSubscriptionDetail(ctx, id);
-  return { title: subscription ? `${subscription.platform.name} — ${subscription.planName}` : 'Subscription' };
+  return {
+    title: subscription
+      ? `${subscription.platform.name} — ${subscription.planName}`
+      : 'Subscription',
+  };
 }
 
 export default async function SubscriptionDetailPage({
@@ -111,25 +115,25 @@ export default async function SubscriptionDetailPage({
             <CardHeader>
               <div>
                 <CardTitle>Forecast</CardTitle>
-                <p className="mt-0.5 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-xs">
                   Expected cost derived from the amount and schedule. Not money paid.
                 </p>
               </div>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-3">
               <div>
-                <p className="text-xs text-ink-subtle">Per charge</p>
+                <p className="text-ink-subtle text-xs">Per charge</p>
                 <CurrencyAmount
                   amount={subscription.amount.toString()}
                   currency={subscription.currency}
                   size="lg"
                 />
-                <p className="mt-0.5 text-[11px] text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-[11px]">
                   {cadenceLabel(subscription.cadence as Cadence, subscription.intervalDays)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-ink-subtle">Monthly equivalent</p>
+                <p className="text-ink-subtle text-xs">Monthly equivalent</p>
                 <CurrencyAmount
                   amount={subscription.monthlyEquivalent}
                   currency={subscription.currency}
@@ -137,7 +141,7 @@ export default async function SubscriptionDetailPage({
                 />
               </div>
               <div>
-                <p className="text-xs text-ink-subtle">Annual commitment</p>
+                <p className="text-ink-subtle text-xs">Annual commitment</p>
                 <CurrencyAmount amount={annual} currency={subscription.currency} size="lg" />
               </div>
             </CardContent>
@@ -147,7 +151,7 @@ export default async function SubscriptionDetailPage({
             <CardHeader>
               <div>
                 <CardTitle>Actual charges paid</CardTitle>
-                <p className="mt-0.5 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-xs">
                   Real expenses recorded against this subscription — separate from the forecast
                   above.
                 </p>
@@ -167,9 +171,9 @@ export default async function SubscriptionDetailPage({
                       key={expense.id}
                       className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0 last:pb-0"
                     >
-                      <span className="text-sm text-ink">{formatDate(expense.paidAt)}</span>
+                      <span className="text-ink text-sm">{formatDate(expense.paidAt)}</span>
                       {expense.reference ? (
-                        <span className="truncate text-xs text-ink-subtle">
+                        <span className="text-ink-subtle truncate text-xs">
                           ref {expense.reference}
                         </span>
                       ) : null}
@@ -203,7 +207,7 @@ export default async function SubscriptionDetailPage({
                       <span className="text-ink-muted">
                         for the {formatDate(reminder.chargeDate)} charge
                       </span>
-                      <span className="ml-auto text-xs text-ink-subtle">
+                      <span className="text-ink-subtle ml-auto text-xs">
                         {formatDateTime(reminder.sentAt)}
                       </span>
                     </li>
@@ -220,7 +224,10 @@ export default async function SubscriptionDetailPage({
               <CardTitle>Schedule</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              <Row label="Next charge" value={isBilling ? formatDate(subscription.nextChargeAt) : '—'} />
+              <Row
+                label="Next charge"
+                value={isBilling ? formatDate(subscription.nextChargeAt) : '—'}
+              />
               <Row label="Started" value={formatDate(subscription.startedAt)} />
               {subscription.trialEndsAt ? (
                 <Row label="Trial ends" value={formatDate(subscription.trialEndsAt)} />
@@ -245,21 +252,21 @@ export default async function SubscriptionDetailPage({
             <CardContent>
               {subscription.card ? (
                 <div className="flex items-center gap-2.5">
-                  <span className="flex size-8 items-center justify-center rounded-lg bg-surface-sunken text-ink-subtle">
+                  <span className="bg-surface-sunken text-ink-subtle flex size-8 items-center justify-center rounded-lg">
                     <CreditCard className="size-4" aria-hidden />
                   </span>
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-ink">
+                    <p className="text-ink truncate text-[13px] font-medium">
                       {subscription.card.nickname}
                     </p>
-                    <p className="font-mono text-xs text-ink-subtle">
+                    <p className="text-ink-subtle font-mono text-xs">
                       ···· {subscription.card.last4}
                     </p>
                   </div>
                   <StatusBadge kind="card" value={subscription.card.status} size="sm" />
                 </div>
               ) : (
-                <p className="text-sm text-warning">
+                <p className="text-warning text-sm">
                   No card linked. Link one so this charge appears in the card footprint.
                 </p>
               )}
@@ -271,9 +278,9 @@ export default async function SubscriptionDetailPage({
               <CardTitle>Platform</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              <p className="font-medium text-ink">{subscription.platform.name}</p>
+              <p className="text-ink font-medium">{subscription.platform.name}</p>
               {subscription.platform.accountIdentifier ? (
-                <p className="break-all text-xs text-ink-subtle">
+                <p className="text-ink-subtle text-xs break-all">
                   {subscription.platform.accountIdentifier}
                 </p>
               ) : null}
@@ -287,7 +294,7 @@ export default async function SubscriptionDetailPage({
                     }
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1 text-brand-500 hover:underline"
+                    className="text-brand-500 inline-flex items-center gap-1 hover:underline"
                   >
                     <ExternalLink className="size-3" aria-hidden /> Website
                   </a>
@@ -301,7 +308,7 @@ export default async function SubscriptionDetailPage({
                     }
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="inline-flex items-center gap-1 text-brand-500 hover:underline"
+                    className="text-brand-500 inline-flex items-center gap-1 hover:underline"
                   >
                     <ExternalLink className="size-3" aria-hidden /> Cancel here
                   </a>
@@ -318,7 +325,7 @@ export default async function SubscriptionDetailPage({
               <CardContent className="space-y-2 text-sm">
                 {subscription.client ? (
                   <div>
-                    <p className="text-xs text-ink-subtle">Client</p>
+                    <p className="text-ink-subtle text-xs">Client</p>
                     <Link
                       href={`/clients/${subscription.client.id}`}
                       className="text-brand-500 hover:underline"
@@ -329,7 +336,7 @@ export default async function SubscriptionDetailPage({
                 ) : null}
                 {subscription.project ? (
                   <div>
-                    <p className="text-xs text-ink-subtle">Project</p>
+                    <p className="text-ink-subtle text-xs">Project</p>
                     <Link
                       href={`/projects/${subscription.project.id}`}
                       className="text-brand-500 hover:underline"
@@ -351,7 +358,7 @@ export default async function SubscriptionDetailPage({
                 <CardTitle>Notes</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="whitespace-pre-wrap text-sm text-ink-muted">{subscription.notes}</p>
+                <p className="text-ink-muted text-sm whitespace-pre-wrap">{subscription.notes}</p>
               </CardContent>
             </Card>
           ) : null}
@@ -365,7 +372,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
       <span className="text-ink-subtle">{label}</span>
-      <span className="text-right text-ink">{value}</span>
+      <span className="text-ink text-right">{value}</span>
     </div>
   );
 }

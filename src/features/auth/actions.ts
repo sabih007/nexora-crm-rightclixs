@@ -9,12 +9,7 @@ import { recordAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { RATE_LIMITS, rateLimit, resetRateLimit } from '@/lib/rate-limit';
 import { roleRequiresMfa } from '@/lib/permissions';
-import {
-  decryptSecret,
-  encryptSecret,
-  hashPassword,
-  verifyPassword,
-} from '@/lib/auth/crypto';
+import { decryptSecret, encryptSecret, hashPassword, verifyPassword } from '@/lib/auth/crypto';
 import {
   consumeRecoveryCode,
   generateRecoveryCodes,
@@ -56,9 +51,7 @@ async function requestIp(): Promise<string> {
   return h.get('x-forwarded-for')?.split(',')[0]?.trim() ?? h.get('x-real-ip') ?? 'unknown';
 }
 
-export type LoginOutcome =
-  | { status: 'authenticated' }
-  | { status: 'mfa_required' };
+export type LoginOutcome = { status: 'authenticated' } | { status: 'mfa_required' };
 
 export async function login(raw: unknown): Promise<ActionResult<LoginOutcome>> {
   const parsed = loginSchema.safeParse(raw);
@@ -175,7 +168,8 @@ export async function verifyMfa(raw: unknown): Promise<ActionResult<{ status: 'a
   if (ctx.mfaSatisfied) return actionOk({ status: 'authenticated' });
 
   const parsed = verifySchema.safeParse(raw);
-  if (!parsed.success) return actionFail('Enter the 6-digit code from your authenticator app.', 'VALIDATION');
+  if (!parsed.success)
+    return actionFail('Enter the 6-digit code from your authenticator app.', 'VALIDATION');
 
   const limit = await rateLimit(ctx.user.id, RATE_LIMITS.mfa);
   if (!limit.allowed) {
@@ -186,7 +180,8 @@ export async function verifyMfa(raw: unknown): Promise<ActionResult<{ status: 'a
     where: { id: ctx.user.id },
     select: { id: true, email: true, mfaSecretEnc: true, mfaRecoveryCodes: true },
   });
-  if (!user.mfaSecretEnc) return actionFail('Two-factor is not configured for this account.', 'NO_MFA');
+  if (!user.mfaSecretEnc)
+    return actionFail('Two-factor is not configured for this account.', 'NO_MFA');
 
   if (parsed.data.useRecoveryCode) {
     const hashes = (user.mfaRecoveryCodes as string[] | null) ?? [];
@@ -255,7 +250,10 @@ export const completeMfaEnrolment = defineAction({
   name: 'auth.mfa_enrol',
   input: z.object({
     secret: z.string().min(16),
-    code: z.string().trim().regex(/^\d{6}$/, 'Enter the 6-digit code.'),
+    code: z
+      .string()
+      .trim()
+      .regex(/^\d{6}$/, 'Enter the 6-digit code.'),
   }),
   handler: async ({ input, ctx }) => {
     if (!verifyTotp(input.secret, input.code, ctx.user.email)) {
@@ -304,7 +302,9 @@ export const disableMfa = defineAction({
       select: { passwordHash: true },
     });
     if (!user.passwordHash || !(await verifyPassword(user.passwordHash, input.password))) {
-      throw new ActionError('Incorrect password.', { fieldErrors: { password: ['Incorrect password.'] } });
+      throw new ActionError('Incorrect password.', {
+        fieldErrors: { password: ['Incorrect password.'] },
+      });
     }
     await prisma.user.update({
       where: { id: ctx.user.id },
@@ -350,7 +350,8 @@ export const changePassword = defineAction({
     }),
   handler: async ({ input, ctx }) => {
     const limit = await rateLimit(ctx.user.id, RATE_LIMITS.passwordChange);
-    if (!limit.allowed) throw new ActionError('Too many attempts. Try again later.', { code: 'RATE_LIMITED' });
+    if (!limit.allowed)
+      throw new ActionError('Too many attempts. Try again later.', { code: 'RATE_LIMITED' });
 
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: ctx.user.id },

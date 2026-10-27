@@ -41,9 +41,9 @@ export interface UploadOutcome {
  * Rejections are reported per file rather than failing the whole batch, so
  * one bad document does not discard nine good ones.
  */
-export async function uploadFiles(formData: FormData): Promise<
-  { ok: true; data: UploadOutcome } | { ok: false; error: string; code: string }
-> {
+export async function uploadFiles(
+  formData: FormData,
+): Promise<{ ok: true; data: UploadOutcome } | { ok: false; error: string; code: string }> {
   const { requirePermission } = await import('@/lib/auth/guard');
 
   let ctx;

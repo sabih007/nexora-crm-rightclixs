@@ -53,14 +53,25 @@ export async function GET(request: Request) {
   const allRows = [...result.rows];
   const totalPages = Math.ceil(result.total / 100);
   for (let page = 2; page <= totalPages && page <= 100; page += 1) {
-    const next = await listClients(ctx, filters, { page, pageSize: 100 }, { key: 'name', direction: 'asc' });
+    const next = await listClients(
+      ctx,
+      filters,
+      { page, pageSize: 100 },
+      { key: 'name', direction: 'asc' },
+    );
     allRows.push(...next.rows);
   }
 
   const headers = [
-    'Name', 'Type', 'Status', 'Currency',
+    'Name',
+    'Type',
+    'Status',
+    'Currency',
     ...(canSeeSensitive ? ['Email', 'Phone'] : []),
-    'Projects', 'Open invoices', 'Tags', 'Added',
+    'Projects',
+    'Open invoices',
+    'Tags',
+    'Added',
   ];
 
   const rows = allRows.map((client) => [

@@ -20,12 +20,12 @@ export const Label = React.forwardRef<
   return (
     <LabelPrimitive.Root
       ref={ref}
-      className={cn('text-[13px] font-medium text-ink leading-none', className)}
+      className={cn('text-ink text-[13px] leading-none font-medium', className)}
       {...props}
     >
       {children}
       {required ? (
-        <span className="ml-0.5 text-danger" aria-hidden>
+        <span className="text-danger ml-0.5" aria-hidden>
           *
         </span>
       ) : null}
@@ -42,18 +42,24 @@ const inputBase = [
   'aria-[invalid=true]:border-danger aria-[invalid=true]:ring-danger/25',
 ].join(' ');
 
-export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  function Input({ className, type = 'text', ...props }, ref) {
-    return <input ref={ref} type={type} className={cn(inputBase, 'h-9', className)} {...props} />;
-  },
-);
+export const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(function Input({ className, type = 'text', ...props }, ref) {
+  return <input ref={ref} type={type} className={cn(inputBase, 'h-9', className)} {...props} />;
+});
 
 export const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(function Textarea({ className, rows = 4, ...props }, ref) {
   return (
-    <textarea ref={ref} rows={rows} className={cn(inputBase, 'py-2 resize-y', className)} {...props} />
+    <textarea
+      ref={ref}
+      rows={rows}
+      className={cn(inputBase, 'resize-y py-2', className)}
+      {...props}
+    />
   );
 });
 
@@ -70,13 +76,13 @@ export const Select = React.forwardRef<
     <div className="relative">
       <select
         ref={ref}
-        className={cn(inputBase, 'h-9 appearance-none pr-8 cursor-pointer', className)}
+        className={cn(inputBase, 'h-9 cursor-pointer appearance-none pr-8', className)}
         {...props}
       >
         {children}
       </select>
       <svg
-        className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle"
+        className="text-ink-subtle pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2"
         viewBox="0 0 16 16"
         fill="none"
         aria-hidden
@@ -104,9 +110,7 @@ export function Field({ label, hint, error, required, htmlFor, className, childr
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
 
-  const describedBy = [errorText ? errorId : null, hint ? hintId : null]
-    .filter(Boolean)
-    .join(' ');
+  const describedBy = [errorText ? errorId : null, hint ? hintId : null].filter(Boolean).join(' ');
 
   /**
    * When the caller supplies `htmlFor` it is wiring the control's `id`
@@ -133,12 +137,12 @@ export function Field({ label, hint, error, required, htmlFor, className, childr
       ) : null}
       {child}
       {hint && !errorText ? (
-        <p id={hintId} className="text-xs text-ink-subtle">
+        <p id={hintId} className="text-ink-subtle text-xs">
           {hint}
         </p>
       ) : null}
       {errorText ? (
-        <p id={errorId} role="alert" className="flex items-start gap-1 text-xs text-danger">
+        <p id={errorId} role="alert" className="text-danger flex items-start gap-1 text-xs">
           <AlertCircle className="mt-px size-3.5 shrink-0" aria-hidden />
           <span>{errorText}</span>
         </p>
@@ -163,8 +167,8 @@ export function FieldSet({
     <fieldset className={cn('space-y-4', className)}>
       <legend className="sr-only">{title}</legend>
       <div>
-        <h3 className="text-sm font-semibold text-ink">{title}</h3>
-        {description ? <p className="mt-0.5 text-xs text-ink-subtle">{description}</p> : null}
+        <h3 className="text-ink text-sm font-semibold">{title}</h3>
+        {description ? <p className="text-ink-subtle mt-0.5 text-xs">{description}</p> : null}
       </div>
       {children}
     </fieldset>

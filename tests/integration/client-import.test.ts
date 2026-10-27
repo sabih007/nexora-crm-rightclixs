@@ -125,9 +125,7 @@ describe('client spreadsheet import', () => {
 
   describe('validate', () => {
     it('reports every row-level error without writing', async () => {
-      const validation = expectOk(
-        await importActions.validateClientImport({ fileId, mapping }),
-      );
+      const validation = expectOk(await importActions.validateClientImport({ fileId, mapping }));
 
       expect(validation.totalRows).toBe(5);
       expect(validation.validRows).toBe(2);
@@ -141,9 +139,7 @@ describe('client spreadsheet import', () => {
     });
 
     it('reports the spreadsheet row number, counting the header', async () => {
-      const validation = expectOk(
-        await importActions.validateClientImport({ fileId, mapping }),
-      );
+      const validation = expectOk(await importActions.validateClientImport({ fileId, mapping }));
       // The blank-name row is the third data row, line 4 of the file.
       const nameError = validation.errors.find((e) => e.field === 'name');
       expect(nameError?.row).toBe(4);
@@ -168,9 +164,7 @@ describe('client spreadsheet import', () => {
         },
       });
 
-      const validation = expectOk(
-        await importActions.validateClientImport({ fileId, mapping }),
-      );
+      const validation = expectOk(await importActions.validateClientImport({ fileId, mapping }));
       expect(validation.duplicates).toHaveLength(1);
       expect(validation.duplicates[0]?.name).toBe('Northwind Trading');
     });
@@ -275,10 +269,7 @@ describe('client spreadsheet import', () => {
 
   describe('data handling', () => {
     it('does not coerce values that look numeric', async () => {
-      const id = await seedFile(
-        'Name,Tax ID\nZero Co,007\nDate Co,2026-01-01\n',
-        'coercion.csv',
-      );
+      const id = await seedFile('Name,Tax ID\nZero Co,007\nDate Co,2026-01-01\n', 'coercion.csv');
       expectOk(
         await importActions.commitClientImport({
           fileId: id,
@@ -292,9 +283,7 @@ describe('client spreadsheet import', () => {
 
     it('keeps a formula-looking cell as literal text', async () => {
       const id = await seedFile('Name\n=SUM(A1:A9)\n', 'formula.csv');
-      expectOk(
-        await importActions.commitClientImport({ fileId: id, mapping: { Name: 'name' } }),
-      );
+      expectOk(await importActions.commitClientImport({ fileId: id, mapping: { Name: 'name' } }));
 
       const client = await prisma.client.findFirstOrThrow({
         where: { workspaceId, name: { startsWith: '=' } },

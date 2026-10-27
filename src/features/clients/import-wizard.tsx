@@ -54,26 +54,23 @@ export function ClientImportWizard({
     skippedDuplicates: number;
   } | null>(null);
 
-  const loadPreview = React.useCallback(
-    async (targetFileId: string, targetSheet?: string) => {
-      setBusy(true);
-      setError(null);
-      try {
-        const response = await previewClientImport({ fileId: targetFileId, sheetName: targetSheet });
-        if (!response.ok) {
-          setError(response.error);
-          return;
-        }
-        setPreview(response.data);
-        setMapping(response.data.suggestedMapping);
-        setSheetName(response.data.sheet.name);
-        setStep('map');
-      } finally {
-        setBusy(false);
+  const loadPreview = React.useCallback(async (targetFileId: string, targetSheet?: string) => {
+    setBusy(true);
+    setError(null);
+    try {
+      const response = await previewClientImport({ fileId: targetFileId, sheetName: targetSheet });
+      if (!response.ok) {
+        setError(response.error);
+        return;
       }
-    },
-    [],
-  );
+      setPreview(response.data);
+      setMapping(response.data.suggestedMapping);
+      setSheetName(response.data.sheet.name);
+      setStep('map');
+    } finally {
+      setBusy(false);
+    }
+  }, []);
 
   // Load the preview when arriving with a file already chosen.
   const [primedFileId, setPrimedFileId] = React.useState<string | null>(null);
@@ -137,7 +134,7 @@ export function ClientImportWizard({
           <CardHeader>
             <div>
               <CardTitle>Choose a spreadsheet</CardTitle>
-              <p className="mt-0.5 text-xs text-ink-subtle">
+              <p className="text-ink-subtle mt-0.5 text-xs">
                 Upload a new CSV or XLSX file, or pick one already in Sheets &amp; Files.
               </p>
             </div>
@@ -160,8 +157,10 @@ export function ClientImportWizard({
 
             {spreadsheets.length > 0 ? (
               <div>
-                <p className="mb-1.5 text-[13px] font-medium text-ink">Or choose an existing file</p>
-                <ul className="divide-y divide-[var(--line)] overflow-hidden rounded-lg border border-line">
+                <p className="text-ink mb-1.5 text-[13px] font-medium">
+                  Or choose an existing file
+                </p>
+                <ul className="border-line divide-y divide-[var(--line)] overflow-hidden rounded-lg border">
                   {spreadsheets.map((file) => (
                     <li key={file.id}>
                       <button
@@ -171,13 +170,13 @@ export function ClientImportWizard({
                           setPrimedFileId(file.id);
                           void loadPreview(file.id);
                         }}
-                        className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-surface-hover"
+                        className="hover:bg-surface-hover flex w-full items-center gap-2.5 px-3 py-2.5 text-left transition-colors"
                       >
-                        <Table2 className="size-4 shrink-0 text-ink-subtle" aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-sm text-ink">
+                        <Table2 className="text-ink-subtle size-4 shrink-0" aria-hidden />
+                        <span className="text-ink min-w-0 flex-1 truncate text-sm">
                           {file.originalName}
                         </span>
-                        <ArrowRight className="size-3.5 text-ink-subtle" aria-hidden />
+                        <ArrowRight className="text-ink-subtle size-3.5" aria-hidden />
                       </button>
                     </li>
                   ))}
@@ -203,7 +202,7 @@ export function ClientImportWizard({
           {preview.sheetNames.length > 1 ? (
             <Card>
               <CardContent className="flex items-center gap-3 pt-4">
-                <span className="text-[13px] font-medium text-ink">Sheet</span>
+                <span className="text-ink text-[13px] font-medium">Sheet</span>
                 <Select
                   aria-label="Choose a sheet"
                   value={sheetName ?? ''}
@@ -227,7 +226,7 @@ export function ClientImportWizard({
             <CardHeader>
               <div>
                 <CardTitle>Map the columns</CardTitle>
-                <p className="mt-0.5 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-xs">
                   {preview.sheet.rowCount} data row{preview.sheet.rowCount === 1 ? '' : 's'} found.
                   Columns left unmapped are ignored.
                 </p>
@@ -244,14 +243,23 @@ export function ClientImportWizard({
                 <table className="w-full border-collapse text-sm">
                   <caption className="sr-only">Column mapping and sample data</caption>
                   <thead>
-                    <tr className="border-b border-line">
-                      <th scope="col" className="py-2 pr-4 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                    <tr className="border-line border-b">
+                      <th
+                        scope="col"
+                        className="text-ink-subtle py-2 pr-4 text-left text-[11px] font-semibold tracking-wide uppercase"
+                      >
                         Spreadsheet column
                       </th>
-                      <th scope="col" className="py-2 pr-4 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <th
+                        scope="col"
+                        className="text-ink-subtle py-2 pr-4 text-left text-[11px] font-semibold tracking-wide uppercase"
+                      >
                         Import as
                       </th>
-                      <th scope="col" className="py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <th
+                        scope="col"
+                        className="text-ink-subtle py-2 text-left text-[11px] font-semibold tracking-wide uppercase"
+                      >
                         Sample values
                       </th>
                     </tr>
@@ -265,8 +273,8 @@ export function ClientImportWizard({
                         .filter((v) => v && v.trim() !== '');
 
                       return (
-                        <tr key={header} className="border-b border-line last:border-0">
-                          <td className="py-2 pr-4 font-medium text-ink">{header}</td>
+                        <tr key={header} className="border-line border-b last:border-0">
+                          <td className="text-ink py-2 pr-4 font-medium">{header}</td>
                           <td className="py-2 pr-4">
                             <Select
                               aria-label={`Import "${header}" as`}
@@ -292,7 +300,7 @@ export function ClientImportWizard({
                               ))}
                             </Select>
                           </td>
-                          <td className="py-2 text-xs text-ink-subtle">
+                          <td className="text-ink-subtle py-2 text-xs">
                             {samples.length > 0 ? samples.join(' · ') : <span>—</span>}
                           </td>
                         </tr>
@@ -336,7 +344,7 @@ export function ClientImportWizard({
               <CardHeader>
                 <div>
                   <CardTitle>Rows that will be skipped</CardTitle>
-                  <p className="mt-0.5 text-xs text-ink-subtle">
+                  <p className="text-ink-subtle mt-0.5 text-xs">
                     Fix these in the spreadsheet and re-upload if you need them.
                   </p>
                 </div>
@@ -344,13 +352,18 @@ export function ClientImportWizard({
               <CardContent className="max-h-72 overflow-y-auto">
                 <ul className="divide-y divide-[var(--line)] text-sm">
                   {validation.errors.slice(0, 200).map((rowError, index) => (
-                    <li key={`${rowError.row}-${rowError.field}-${index}`} className="flex gap-3 py-2">
-                      <span className="w-16 shrink-0 tabular text-ink-subtle">Row {rowError.row}</span>
-                      <span className="w-28 shrink-0 font-medium text-ink">{rowError.field}</span>
-                      <span className="min-w-0 flex-1 text-ink-muted">
+                    <li
+                      key={`${rowError.row}-${rowError.field}-${index}`}
+                      className="flex gap-3 py-2"
+                    >
+                      <span className="tabular text-ink-subtle w-16 shrink-0">
+                        Row {rowError.row}
+                      </span>
+                      <span className="text-ink w-28 shrink-0 font-medium">{rowError.field}</span>
+                      <span className="text-ink-muted min-w-0 flex-1">
                         {rowError.message}
                         {rowError.value ? (
-                          <span className="ml-1 font-mono text-xs text-ink-subtle">
+                          <span className="text-ink-subtle ml-1 font-mono text-xs">
                             ({rowError.value})
                           </span>
                         ) : null}
@@ -359,7 +372,7 @@ export function ClientImportWizard({
                   ))}
                 </ul>
                 {validation.errors.length > 200 ? (
-                  <p className="pt-2 text-xs text-ink-subtle">
+                  <p className="text-ink-subtle pt-2 text-xs">
                     …and {validation.errors.length - 200} more.
                   </p>
                 ) : null}
@@ -372,7 +385,7 @@ export function ClientImportWizard({
               <CardHeader>
                 <div>
                   <CardTitle>Possible duplicates</CardTitle>
-                  <p className="mt-0.5 text-xs text-ink-subtle">
+                  <p className="text-ink-subtle mt-0.5 text-xs">
                     These rows match a client that already exists, by name or email.
                   </p>
                 </div>
@@ -381,21 +394,21 @@ export function ClientImportWizard({
                 <ul className="max-h-48 space-y-1 overflow-y-auto text-sm">
                   {validation.duplicates.slice(0, 50).map((dup) => (
                     <li key={`${dup.row}-${dup.existingId}`} className="flex gap-3">
-                      <span className="w-16 shrink-0 tabular text-ink-subtle">Row {dup.row}</span>
+                      <span className="tabular text-ink-subtle w-16 shrink-0">Row {dup.row}</span>
                       <span className="text-ink">{dup.name}</span>
                     </li>
                   ))}
                 </ul>
 
-                <label className="mt-3 flex cursor-pointer items-start gap-2.5 rounded-lg border border-line px-3 py-2.5">
+                <label className="border-line mt-3 flex cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5">
                   <Checkbox
                     checked={includeDuplicates}
                     onCheckedChange={(checked) => setIncludeDuplicates(checked === true)}
                     className="mt-0.5"
                   />
-                  <span className="text-[13px] text-ink">
+                  <span className="text-ink text-[13px]">
                     Create these anyway
-                    <span className="block text-xs text-ink-subtle">
+                    <span className="text-ink-subtle block text-xs">
                       Leave unticked to skip them. They are never merged automatically.
                     </span>
                   </span>
@@ -494,16 +507,12 @@ function Steps({ current }: { current: Step }) {
               {index + 1}
             </span>
             <span
-              className={cn(
-                state === 'active' ? 'font-medium text-ink' : 'text-ink-subtle',
-              )}
+              className={cn(state === 'active' ? 'text-ink font-medium' : 'text-ink-subtle')}
               aria-current={state === 'active' ? 'step' : undefined}
             >
               {step.label}
             </span>
-            {index < steps.length - 1 ? (
-              <span className="h-px w-5 bg-line" aria-hidden />
-            ) : null}
+            {index < steps.length - 1 ? <span className="bg-line h-px w-5" aria-hidden /> : null}
           </li>
         );
       })}
@@ -523,11 +532,11 @@ function SummaryTile({
   tone?: 'success' | 'danger';
 }) {
   return (
-    <div className="rounded-xl border border-line bg-surface p-3.5">
-      <p className="text-xs text-ink-subtle">{label}</p>
+    <div className="border-line bg-surface rounded-xl border p-3.5">
+      <p className="text-ink-subtle text-xs">{label}</p>
       <p
         className={cn(
-          'mt-0.5 text-2xl font-semibold tabular',
+          'tabular mt-0.5 text-2xl font-semibold',
           tone === 'success' && 'text-success',
           tone === 'danger' && 'text-danger',
           !tone && 'text-ink',
@@ -536,7 +545,7 @@ function SummaryTile({
         {value}
       </p>
       {note ? (
-        <p className="mt-0.5 flex items-center gap-1 text-[11px] text-warning">
+        <p className="text-warning mt-0.5 flex items-center gap-1 text-[11px]">
           <AlertTriangle className="size-3" aria-hidden />
           {note}
         </p>

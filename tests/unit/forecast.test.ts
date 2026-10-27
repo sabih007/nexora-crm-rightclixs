@@ -65,9 +65,9 @@ describe('monthlyEquivalent', () => {
 
   it('rounds once, at the end, to the currency minor unit', () => {
     expect(monthlyEquivalent({ ...base, amount: '1000', cadence: 'ANNUAL' })).toBe('83.33');
-    expect(
-      monthlyEquivalent({ ...base, amount: '1000', cadence: 'ANNUAL', currency: 'JPY' }),
-    ).toBe('83');
+    expect(monthlyEquivalent({ ...base, amount: '1000', cadence: 'ANNUAL', currency: 'JPY' })).toBe(
+      '83',
+    );
   });
 });
 
@@ -83,16 +83,20 @@ describe('annualizedCost', () => {
 
 describe('advanceChargeDate', () => {
   it('advances a month', () => {
-    expect(advanceChargeDate(utc(2026, 1, 15), 'MONTHLY').toISOString().slice(0, 10)).toBe(
-      '2026-02-15',
-    );
+    expect(
+      advanceChargeDate(utc(2026, 1, 15), 'MONTHLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2026-02-15');
   });
 
   it('keeps the billing anchor through a short month', () => {
     // 31 Jan bills on 28 Feb, not 3 March.
-    expect(advanceChargeDate(utc(2026, 1, 31), 'MONTHLY').toISOString().slice(0, 10)).toBe(
-      '2026-02-28',
-    );
+    expect(
+      advanceChargeDate(utc(2026, 1, 31), 'MONTHLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2026-02-28');
   });
 
   it('returns to the anchor day after a short month', () => {
@@ -102,33 +106,45 @@ describe('advanceChargeDate', () => {
   });
 
   it('handles a leap year', () => {
-    expect(advanceChargeDate(utc(2028, 1, 31), 'MONTHLY').toISOString().slice(0, 10)).toBe(
-      '2028-02-29',
-    );
+    expect(
+      advanceChargeDate(utc(2028, 1, 31), 'MONTHLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2028-02-29');
   });
 
   it('advances quarterly and annually', () => {
-    expect(advanceChargeDate(utc(2026, 1, 15), 'QUARTERLY').toISOString().slice(0, 10)).toBe(
-      '2026-04-15',
-    );
-    expect(advanceChargeDate(utc(2026, 1, 15), 'ANNUAL').toISOString().slice(0, 10)).toBe(
-      '2027-01-15',
-    );
+    expect(
+      advanceChargeDate(utc(2026, 1, 15), 'QUARTERLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2026-04-15');
+    expect(
+      advanceChargeDate(utc(2026, 1, 15), 'ANNUAL')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2027-01-15');
   });
 
   it('advances weekly and by a custom interval', () => {
-    expect(advanceChargeDate(utc(2026, 1, 1), 'WEEKLY').toISOString().slice(0, 10)).toBe(
-      '2026-01-08',
-    );
     expect(
-      advanceChargeDate(utc(2026, 1, 1), 'CUSTOM_DAYS', 45).toISOString().slice(0, 10),
+      advanceChargeDate(utc(2026, 1, 1), 'WEEKLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2026-01-08');
+    expect(
+      advanceChargeDate(utc(2026, 1, 1), 'CUSTOM_DAYS', 45)
+        .toISOString()
+        .slice(0, 10),
     ).toBe('2026-02-15');
   });
 
   it('crosses a year boundary', () => {
-    expect(advanceChargeDate(utc(2026, 12, 20), 'MONTHLY').toISOString().slice(0, 10)).toBe(
-      '2027-01-20',
-    );
+    expect(
+      advanceChargeDate(utc(2026, 12, 20), 'MONTHLY')
+        .toISOString()
+        .slice(0, 10),
+    ).toBe('2027-01-20');
   });
 });
 
@@ -219,9 +235,9 @@ describe('upcomingCharges', () => {
   });
 
   it('returns nothing for an empty window', () => {
-    expect(
-      upcomingCharges([sub()], { from: utc(2026, 2, 1), to: utc(2026, 2, 5) }),
-    ).toHaveLength(0);
+    expect(upcomingCharges([sub()], { from: utc(2026, 2, 1), to: utc(2026, 2, 5) })).toHaveLength(
+      0,
+    );
   });
 });
 
@@ -328,7 +344,9 @@ describe('totalChargesByCurrency', () => {
 describe('cancellationDeadline', () => {
   it('subtracts the notice period', () => {
     expect(
-      cancellationDeadline(utc(2026, 6, 30), 30)?.toISOString().slice(0, 10),
+      cancellationDeadline(utc(2026, 6, 30), 30)
+        ?.toISOString()
+        .slice(0, 10),
     ).toBe('2026-05-31');
   });
 

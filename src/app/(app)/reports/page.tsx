@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Download } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 import { requireAuthPage, can } from '@/lib/auth/guard';
 import { roleHasPermission } from '@/lib/permissions';
 import { NoAccessState, Callout, EmptyState } from '@/components/ui/empty-state';
@@ -62,6 +62,7 @@ export default async function ReportsPage({
     from: first(params.from) ?? null,
     to: first(params.to) ?? null,
   });
+  const pdfExportQuery = withSearchParams(new URLSearchParams(exportQuery), { format: 'pdf' });
 
   return (
     <>
@@ -73,20 +74,27 @@ export default async function ReportsPage({
           <>
             <DateRangeControl preset={preset} from={first(params.from)} to={first(params.to)} />
             {can(ctx, 'report:export') ? (
-              <Button variant="secondary" asChild>
-                <a href={`/api/reports/export${exportQuery}`}>
-                  <Download /> Export CSV
-                </a>
-              </Button>
+              <>
+                <Button variant="secondary" asChild>
+                  <a href={`/api/reports/export${exportQuery}`}>
+                    <Download /> Export CSV
+                  </a>
+                </Button>
+                <Button variant="secondary" asChild>
+                  <a href={`/api/reports/export${pdfExportQuery}`}>
+                    <FileText /> Export PDF
+                  </a>
+                </Button>
+              </>
             ) : null}
           </>
         }
       />
 
       <Callout tone="info" className="mb-5">
-        <strong>Management reporting, not financial statements.</strong> Figures are computed
-        from the records in this system at the moment you loaded the page. They make no
-        allowance for tax treatment, accruals, unbilled work or anything not entered here.
+        <strong>Management reporting, not financial statements.</strong> Figures are computed from
+        the records in this system at the moment you loaded the page. They make no allowance for tax
+        treatment, accruals, unbilled work or anything not entered here.
       </Callout>
 
       <Tabs defaultValue="summary">
@@ -106,22 +114,22 @@ export default async function ReportsPage({
                 ['Cash collected', report.cashCollected, 'The money that actually arrived.'],
                 ['Invoiced revenue', report.invoicedRevenue, 'What was billed, paid or not.'],
                 ['Expenses paid', report.actualExpenses, 'Real spend, not forecast.'],
-                ['Outstanding receivable', report.outstandingReceivable, 'Still owed to the office.'],
+                [
+                  'Outstanding receivable',
+                  report.outstandingReceivable,
+                  'Still owed to the office.',
+                ],
               ] as const
             ).map(([label, metric, blurb]) => (
               <Card key={label}>
                 <CardHeader>
                   <div>
                     <CardTitle>{label}</CardTitle>
-                    <p className="mt-0.5 text-xs text-ink-subtle">{blurb}</p>
+                    <p className="text-ink-subtle mt-0.5 text-xs">{blurb}</p>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <CurrencyAmount
-                    amount={metric.value}
-                    currency={report.baseCurrency}
-                    size="xl"
-                  />
+                  <CurrencyAmount amount={metric.value} currency={report.baseCurrency} size="xl" />
 
                   {Object.keys(metric.byCurrency).length > 0 ? (
                     <div className="flex flex-wrap gap-1.5">
@@ -133,15 +141,13 @@ export default async function ReportsPage({
                     </div>
                   ) : null}
 
-                  <p className="text-[11px] leading-relaxed text-ink-subtle">
-                    {metric.definition}
-                  </p>
+                  <p className="text-ink-subtle text-[11px] leading-relaxed">{metric.definition}</p>
                   {metric.note ? (
                     <p
                       className={
                         metric.incomplete
-                          ? 'text-[11px] leading-relaxed text-warning'
-                          : 'text-[11px] leading-relaxed text-ink-subtle'
+                          ? 'text-warning text-[11px] leading-relaxed'
+                          : 'text-ink-subtle text-[11px] leading-relaxed'
                       }
                     >
                       {metric.note}
@@ -156,7 +162,7 @@ export default async function ReportsPage({
             <CardHeader>
               <div>
                 <CardTitle>Net cash movement</CardTitle>
-                <p className="mt-0.5 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 text-xs">
                   {report.netCashPosition.definition}
                 </p>
               </div>
@@ -169,7 +175,7 @@ export default async function ReportsPage({
                 tone={Number(report.netCashPosition.value) >= 0 ? 'positive' : 'negative'}
               />
               {report.netCashPosition.incomplete ? (
-                <p className="mt-1 text-[11px] text-warning">
+                <p className="text-warning mt-1 text-[11px]">
                   Incomplete: some transactions could not be converted and are excluded.
                 </p>
               ) : null}
@@ -190,23 +196,32 @@ export default async function ReportsPage({
                   <table className="w-full text-sm">
                     <caption className="sr-only">Receivables aging by bucket and currency</caption>
                     <thead>
-                      <tr className="border-b border-line bg-surface-sunken/60">
-                        <th scope="col" className="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <tr className="border-line bg-surface-sunken/60 border-b">
+                        <th
+                          scope="col"
+                          className="text-ink-subtle px-4 py-2.5 text-left text-[11px] font-semibold tracking-wide uppercase"
+                        >
                           Age
                         </th>
-                        <th scope="col" className="px-4 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                        <th
+                          scope="col"
+                          className="text-ink-subtle px-4 py-2.5 text-right text-[11px] font-semibold tracking-wide uppercase"
+                        >
                           Invoices
                         </th>
-                        <th scope="col" className="px-4 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                        <th
+                          scope="col"
+                          className="text-ink-subtle px-4 py-2.5 text-right text-[11px] font-semibold tracking-wide uppercase"
+                        >
                           Outstanding
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {aging.map((bucket) => (
-                        <tr key={bucket.label} className="border-b border-line last:border-0">
-                          <td className="px-4 py-2.5 text-ink">{bucket.label}</td>
-                          <td className="px-4 py-2.5 text-right tabular text-ink-muted">
+                        <tr key={bucket.label} className="border-line border-b last:border-0">
+                          <td className="text-ink px-4 py-2.5">{bucket.label}</td>
+                          <td className="tabular text-ink-muted px-4 py-2.5 text-right">
                             {bucket.count}
                           </td>
                           <td className="px-4 py-2.5 text-right">
@@ -224,10 +239,10 @@ export default async function ReportsPage({
                 </div>
               </CardContent>
             </Card>
-            <p className="mt-2 text-[11px] text-ink-subtle">
+            <p className="text-ink-subtle mt-2 text-[11px]">
               Buckets are measured from each invoice&rsquo;s due date. Each currency is listed
-              separately — aging buckets are never converted, because an ageing figure mixes
-              dates and a single rate would misstate it.
+              separately — aging buckets are never converted, because an ageing figure mixes dates
+              and a single rate would misstate it.
             </p>
           </TabsContent>
         ) : null}
@@ -247,13 +262,13 @@ export default async function ReportsPage({
                   <table className="w-full text-sm">
                     <caption className="sr-only">Revenue by client</caption>
                     <thead>
-                      <tr className="border-b border-line bg-surface-sunken/60">
+                      <tr className="border-line bg-surface-sunken/60 border-b">
                         {['Client', 'Invoices', 'Invoiced', 'Collected', 'Outstanding'].map(
                           (header, index) => (
                             <th
                               key={header}
                               scope="col"
-                              className={`px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle ${index === 0 ? 'text-left' : 'text-right'}`}
+                              className={`text-ink-subtle px-4 py-2.5 text-[11px] font-semibold tracking-wide uppercase ${index === 0 ? 'text-left' : 'text-right'}`}
                             >
                               {header}
                             </th>
@@ -263,16 +278,16 @@ export default async function ReportsPage({
                     </thead>
                     <tbody>
                       {clientRevenue.map((row) => (
-                        <tr key={row.clientId} className="border-b border-line last:border-0">
+                        <tr key={row.clientId} className="border-line border-b last:border-0">
                           <td className="px-4 py-2.5">
                             <Link
                               href={`/clients/${row.clientId}`}
-                              className="font-medium text-ink hover:text-brand-500 hover:underline"
+                              className="text-ink hover:text-brand-500 font-medium hover:underline"
                             >
                               {row.name}
                             </Link>
                           </td>
-                          <td className="px-4 py-2.5 text-right tabular text-ink-muted">
+                          <td className="tabular text-ink-muted px-4 py-2.5 text-right">
                             {row.invoiceCount}
                           </td>
                           <td className="px-4 py-2.5 text-right">
@@ -310,8 +325,8 @@ export default async function ReportsPage({
           />
           <Callout tone="warning" className="mb-3">
             <strong>Margin here is invoiced minus recorded expenses only.</strong> It does not
-            include staff time, overhead, or any cost that was never entered as an expense, so
-            it is not project profitability.
+            include staff time, overhead, or any cost that was never entered as an expense, so it is
+            not project profitability.
           </Callout>
 
           {projectPerformance.length === 0 ? (
@@ -323,38 +338,46 @@ export default async function ReportsPage({
                   <table className="w-full text-sm">
                     <caption className="sr-only">Project performance</caption>
                     <thead>
-                      <tr className="border-b border-line bg-surface-sunken/60">
-                        {['Project', 'Status', 'Tasks', 'Budget', 'Invoiced', 'Expenses', 'Margin'].map(
-                          (header, index) => (
-                            <th
-                              key={header}
-                              scope="col"
-                              className={`px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle ${index <= 1 ? 'text-left' : 'text-right'}`}
-                            >
-                              {header}
-                            </th>
-                          ),
-                        )}
+                      <tr className="border-line bg-surface-sunken/60 border-b">
+                        {[
+                          'Project',
+                          'Status',
+                          'Tasks',
+                          'Budget',
+                          'Invoiced',
+                          'Expenses',
+                          'Margin',
+                        ].map((header, index) => (
+                          <th
+                            key={header}
+                            scope="col"
+                            className={`text-ink-subtle px-4 py-2.5 text-[11px] font-semibold tracking-wide uppercase ${index <= 1 ? 'text-left' : 'text-right'}`}
+                          >
+                            {header}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
                       {projectPerformance.map((row) => (
-                        <tr key={row.projectId} className="border-b border-line last:border-0">
+                        <tr key={row.projectId} className="border-line border-b last:border-0">
                           <td className="px-4 py-2.5">
                             <Link
                               href={`/projects/${row.projectId}`}
-                              className="font-medium text-ink hover:text-brand-500 hover:underline"
+                              className="text-ink hover:text-brand-500 font-medium hover:underline"
                             >
                               {row.name}
                             </Link>
                             {row.clientName ? (
-                              <span className="block text-xs text-ink-subtle">{row.clientName}</span>
+                              <span className="text-ink-subtle block text-xs">
+                                {row.clientName}
+                              </span>
                             ) : null}
                           </td>
                           <td className="px-4 py-2.5">
                             <StatusBadge kind="project" value={row.status} />
                           </td>
-                          <td className="px-4 py-2.5 text-right tabular text-ink-muted">
+                          <td className="tabular text-ink-muted px-4 py-2.5 text-right">
                             {row.taskCompletion}%
                           </td>
                           <td className="px-4 py-2.5 text-right">
@@ -406,13 +429,13 @@ export default async function ReportsPage({
               ).map(([label, amounts]) => (
                 <Card key={label}>
                   <CardContent className="pt-4">
-                    <p className="text-xs text-ink-subtle">{label}</p>
+                    <p className="text-ink-subtle text-xs">{label}</p>
                     <MultiCurrencyAmount amounts={amounts} size="lg" className="mt-1" />
                   </CardContent>
                 </Card>
               ))}
             </div>
-            <p className="text-[11px] text-ink-subtle">
+            <p className="text-ink-subtle text-[11px]">
               Monthly equivalent: monthly = amount, quarterly = amount ÷ 3, annual = amount ÷ 12,
               weekly = amount × 52 ÷ 12, custom = amount × (365.25 ÷ interval days) ÷ 12. Each
               currency is reported separately.

@@ -119,12 +119,7 @@ export function CardsBoard({
             ) : null
           }
         />
-        <CardFormDialog
-          open={formOpen}
-          onOpenChange={setFormOpen}
-          members={members}
-          card={null}
-        />
+        <CardFormDialog open={formOpen} onOpenChange={setFormOpen} members={members} card={null} />
       </>
     );
   }
@@ -159,8 +154,8 @@ export function CardsBoard({
                     </Badge>
                   ) : null}
                 </CardTitle>
-                <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-ink-subtle">
-                  <span className="font-mono tabular">
+                <p className="text-ink-subtle mt-1 flex flex-wrap items-center gap-2 text-xs">
+                  <span className="tabular font-mono">
                     {BRAND_LABELS[card.brand] ?? 'Card'} ···· {card.last4}
                   </span>
                   <span aria-hidden>·</span>
@@ -176,7 +171,7 @@ export function CardsBoard({
                   ) : null}
                 </p>
                 {card.owner ? (
-                  <p className="mt-0.5 text-xs text-ink-subtle">Held by {card.owner.name}</p>
+                  <p className="text-ink-subtle mt-0.5 text-xs">Held by {card.owner.name}</p>
                 ) : null}
               </div>
 
@@ -208,20 +203,20 @@ export function CardsBoard({
             </CardHeader>
 
             <CardContent className="space-y-3.5">
-              <div className="flex items-baseline justify-between rounded-lg bg-surface-sunken px-3 py-2">
-                <span className="text-xs text-ink-subtle">Monthly commitment</span>
+              <div className="bg-surface-sunken flex items-baseline justify-between rounded-lg px-3 py-2">
+                <span className="text-ink-subtle text-xs">Monthly commitment</span>
                 <MultiCurrencyAmount amounts={card.monthlyByCurrency} size="md" emptyLabel="None" />
               </div>
 
               <div>
-                <p className="mb-1.5 flex items-center justify-between text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                <p className="text-ink-subtle mb-1.5 flex items-center justify-between text-[11px] font-semibold tracking-wide uppercase">
                   <span>Saved on</span>
                   {permissions.manageLinks ? (
                     <button
                       type="button"
                       onClick={() => setLinkTarget(card)}
                       aria-label={`Link a platform to ${card.nickname}`}
-                      className="inline-flex items-center gap-1 rounded text-[11px] font-medium normal-case tracking-normal text-brand-500 hover:underline"
+                      className="text-brand-500 inline-flex items-center gap-1 rounded text-[11px] font-medium tracking-normal normal-case hover:underline"
                     >
                       <Link2 className="size-3" aria-hidden /> Link a platform
                     </button>
@@ -231,7 +226,7 @@ export function CardsBoard({
                 {card.activePlatforms.length === 0 &&
                 card.unverifiedPlatforms.length === 0 &&
                 card.removedPlatforms.length === 0 ? (
-                  <p className="text-sm text-ink-subtle">
+                  <p className="text-ink-subtle text-sm">
                     No platforms recorded for this card yet.
                   </p>
                 ) : (
@@ -239,10 +234,10 @@ export function CardsBoard({
                     {card.activePlatforms.map((platform) => (
                       <li
                         key={platform.linkId}
-                        className="flex items-center gap-2 rounded-md px-1.5 py-1 text-sm hover:bg-surface-hover"
+                        className="hover:bg-surface-hover flex items-center gap-2 rounded-md px-1.5 py-1 text-sm"
                       >
-                        <span className="size-1.5 shrink-0 rounded-full bg-success" aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-ink">{platform.name}</span>
+                        <span className="bg-success size-1.5 shrink-0 rounded-full" aria-hidden />
+                        <span className="text-ink min-w-0 flex-1 truncate">{platform.name}</span>
                         <Tooltip
                           content={
                             platform.lastVerifiedAt
@@ -250,7 +245,7 @@ export function CardsBoard({
                               : 'Never confirmed'
                           }
                         >
-                          <span className="whitespace-nowrap text-[11px] text-ink-subtle">
+                          <span className="text-ink-subtle text-[11px] whitespace-nowrap">
                             {platform.lastVerifiedAt
                               ? formatDate(platform.lastVerifiedAt, 'dd MMM yy')
                               : 'unverified'}
@@ -281,7 +276,7 @@ export function CardsBoard({
                                   })
                                 }
                               >
-                                <Link2Off className="size-3.5 text-danger" />
+                                <Link2Off className="text-danger size-3.5" />
                               </Button>
                             </Tooltip>
                           </>
@@ -294,11 +289,11 @@ export function CardsBoard({
                         key={platform.linkId}
                         className="flex items-center gap-2 rounded-md px-1.5 py-1 text-sm"
                       >
-                        <CircleAlert className="size-3 shrink-0 text-warning" aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-ink-muted">
+                        <CircleAlert className="text-warning size-3 shrink-0" aria-hidden />
+                        <span className="text-ink-muted min-w-0 flex-1 truncate">
                           {platform.name}
                         </span>
-                        <span className="text-[11px] text-warning">unverified</span>
+                        <span className="text-warning text-[11px]">unverified</span>
                       </li>
                     ))}
 
@@ -307,12 +302,16 @@ export function CardsBoard({
                         key={platform.linkId}
                         className="flex items-center gap-2 rounded-md px-1.5 py-1 text-sm"
                       >
-                        <span className="size-1.5 shrink-0 rounded-full bg-line-strong" aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-ink-subtle line-through">
+                        <span
+                          className="bg-line-strong size-1.5 shrink-0 rounded-full"
+                          aria-hidden
+                        />
+                        <span className="text-ink-subtle min-w-0 flex-1 truncate line-through">
                           {platform.name}
                         </span>
-                        <span className="whitespace-nowrap text-[11px] text-ink-subtle">
-                          removed {platform.removedAt ? formatDate(platform.removedAt, 'dd MMM yy') : ''}
+                        <span className="text-ink-subtle text-[11px] whitespace-nowrap">
+                          removed{' '}
+                          {platform.removedAt ? formatDate(platform.removedAt, 'dd MMM yy') : ''}
                         </span>
                       </li>
                     ))}
@@ -323,7 +322,7 @@ export function CardsBoard({
               {card.subscriptionCount > 0 ? (
                 <Link
                   href={`/subscriptions?cardId=${card.id}`}
-                  className="inline-block text-xs font-medium text-brand-500 hover:underline"
+                  className="text-brand-500 inline-block text-xs font-medium hover:underline"
                 >
                   View {card.subscriptionCount} subscription
                   {card.subscriptionCount === 1 ? '' : 's'} on this card →
@@ -331,19 +330,14 @@ export function CardsBoard({
               ) : null}
 
               {card.notes ? (
-                <p className="border-t border-line pt-2.5 text-xs text-ink-subtle">{card.notes}</p>
+                <p className="border-line text-ink-subtle border-t pt-2.5 text-xs">{card.notes}</p>
               ) : null}
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <CardFormDialog
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        members={members}
-        card={editing}
-      />
+      <CardFormDialog open={formOpen} onOpenChange={setFormOpen} members={members} card={editing} />
 
       <LinkPlatformDialog
         card={linkTarget}
@@ -422,8 +416,8 @@ function LinkPlatformDialog({
         <DialogHeader>
           <DialogTitle>Record where {card?.nickname} is saved</DialogTitle>
           <DialogDescription>
-            Notes that this card is stored on a platform. It does not add the card to that
-            platform — do that on the platform itself.
+            Notes that this card is stored on a platform. It does not add the card to that platform
+            — do that on the platform itself.
           </DialogDescription>
         </DialogHeader>
         <DialogBody className="space-y-4">
@@ -524,9 +518,9 @@ function MarkRemovedDialog({
             Mark {target?.cardName} removed from {target?.platformName}
           </DialogTitle>
           <DialogDescription>
-            This records the removal in Nexora OS with an audit entry. It does{' '}
-            <strong>not</strong> remove the card from {target?.platformName} — do that on the
-            platform, then record it here.
+            This records the removal in Nexora OS with an audit entry. It does <strong>not</strong>{' '}
+            remove the card from {target?.platformName} — do that on the platform, then record it
+            here.
           </DialogDescription>
         </DialogHeader>
         <DialogBody className="space-y-4">

@@ -35,8 +35,7 @@ export function CurrencyAmount({
     compact,
   });
 
-  const resolvedTone =
-    tone ?? (Number.isFinite(numeric) && numeric < 0 ? 'negative' : undefined);
+  const resolvedTone = tone ?? (Number.isFinite(numeric) && numeric < 0 ? 'negative' : undefined);
 
   const sizes = {
     sm: 'text-xs',
@@ -88,11 +87,14 @@ export function ConvertedAmount({
       <CurrencyAmount amount={amount} currency={currency} />
       {!sameCurrency ? (
         convertedAmount !== null ? (
-          <span className="text-[11px] text-ink-subtle tabular" title={rateNote}>
+          <span className="text-ink-subtle tabular text-[11px]" title={rateNote}>
             ≈ {formatMoney(convertedAmount, baseCurrency)}
           </span>
         ) : (
-          <span className="text-[11px] text-warning" title="No exchange rate on or before this date">
+          <span
+            className="text-warning text-[11px]"
+            title="No exchange rate on or before this date"
+          >
             no rate
           </span>
         )

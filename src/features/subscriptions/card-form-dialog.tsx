@@ -146,9 +146,7 @@ function CardFormBody({
     <>
       <DialogHeader>
         <DialogTitle>{isEdit ? 'Edit card' : 'Add a card'}</DialogTitle>
-        <DialogDescription>
-          Tracks where a card is saved and what it pays for.
-        </DialogDescription>
+        <DialogDescription>Tracks where a card is saved and what it pays for.</DialogDescription>
       </DialogHeader>
 
       <DialogBody className="space-y-4">
@@ -158,14 +156,19 @@ function CardFormBody({
           <span className="flex items-start gap-1.5">
             <ShieldCheck className="mt-0.5 size-3.5 shrink-0" aria-hidden />
             <span>
-              Only the last four digits are stored. There is no field here for the full card
-              number, CVV or PIN — and the database refuses to hold one.
+              Only the last four digits are stored. There is no field here for the full card number,
+              CVV or PIN — and the database refuses to hold one.
             </span>
           </span>
         </Callout>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Nickname" required htmlFor="card-nickname" hint="How the office refers to it">
+          <Field
+            label="Nickname"
+            required
+            htmlFor="card-nickname"
+            hint="How the office refers to it"
+          >
             <Input
               id="card-nickname"
               value={nickname}
@@ -209,7 +212,7 @@ function CardFormBody({
               value={last4}
               onChange={(e) => setLast4(e.target.value.replace(/\D/g, '').slice(0, 4))}
               placeholder="4242"
-              className="font-mono tabular"
+              className="tabular font-mono"
             />
           </Field>
 

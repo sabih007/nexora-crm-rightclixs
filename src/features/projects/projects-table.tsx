@@ -57,12 +57,12 @@ export function ProjectsTable({
         <div className="min-w-0">
           <Link
             href={`/projects/${row.id}`}
-            className="block truncate font-medium text-ink hover:text-brand-500 hover:underline"
+            className="text-ink hover:text-brand-500 block truncate font-medium hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             {row.name}
           </Link>
-          <span className="block truncate text-xs text-ink-subtle">
+          <span className="text-ink-subtle block truncate text-xs">
             {row.code ? <span className="font-mono">{row.code}</span> : null}
             {row.code && row.client ? ' · ' : null}
             {row.client?.name ?? (row.client === null && !row.code ? 'Internal' : null)}
@@ -94,7 +94,7 @@ export function ProjectsTable({
               tone={pct === 100 ? 'success' : 'brand'}
               label={`${row.doneTaskCount} of ${row.taskCount} tasks complete`}
             />
-            <span className="mt-1 block text-[11px] text-ink-subtle tabular">
+            <span className="text-ink-subtle tabular mt-1 block text-[11px]">
               {row.doneTaskCount}/{row.taskCount} tasks
             </span>
           </div>
@@ -135,9 +135,9 @@ export function ProjectsTable({
         return (
           <span
             className={cn(
-              'whitespace-nowrap text-[13px]',
-              overdue && 'font-medium text-danger',
-              soon && 'font-medium text-warning',
+              'text-[13px] whitespace-nowrap',
+              overdue && 'text-danger font-medium',
+              soon && 'text-warning font-medium',
               !overdue && !soon && 'text-ink-muted',
             )}
             title={overdue ? `${Math.abs(days)} days overdue` : undefined}
@@ -246,7 +246,7 @@ export function ProjectsTable({
             ))}
           </Select>
 
-          <label className="flex cursor-pointer items-center gap-1.5 text-[13px] text-ink-muted">
+          <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-[13px]">
             <Checkbox
               checked={filters.includeArchived}
               onCheckedChange={(checked) => update({ includeArchived: checked ? '1' : null })}

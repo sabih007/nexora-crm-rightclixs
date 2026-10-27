@@ -57,9 +57,7 @@ export function findRate(
   const direct = rates
     .filter(
       (r) =>
-        r.baseCurrency === from &&
-        r.quoteCurrency === to &&
-        r.effectiveDate.getTime() <= cutoff,
+        r.baseCurrency === from && r.quoteCurrency === to && r.effectiveDate.getTime() <= cutoff,
     )
     .sort((a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime())[0];
 
@@ -75,9 +73,7 @@ export function findRate(
   const reverse = rates
     .filter(
       (r) =>
-        r.baseCurrency === to &&
-        r.quoteCurrency === from &&
-        r.effectiveDate.getTime() <= cutoff,
+        r.baseCurrency === to && r.quoteCurrency === from && r.effectiveDate.getTime() <= cutoff,
     )
     .sort((a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime())[0];
 

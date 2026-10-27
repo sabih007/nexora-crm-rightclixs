@@ -257,11 +257,7 @@ export async function getClientActivity(ctx: AuthContext, clientId: string, take
     select: { id: true },
   });
 
-  const relatedIds = [
-    clientId,
-    ...projectIds.map((p) => p.id),
-    ...invoiceIds.map((i) => i.id),
-  ];
+  const relatedIds = [clientId, ...projectIds.map((p) => p.id), ...invoiceIds.map((i) => i.id)];
 
   return prisma.auditLog.findMany({
     where: { workspaceId: ctx.workspaceId, entityId: { in: relatedIds } },

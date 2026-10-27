@@ -37,11 +37,7 @@ export function VerifyMfaForm() {
         label={useRecovery ? 'Recovery code' : 'Authentication code'}
         required
         htmlFor="code"
-        hint={
-          useRecovery
-            ? 'Each recovery code works once.'
-            : 'The code changes every 30 seconds.'
-        }
+        hint={useRecovery ? 'Each recovery code works once.' : 'The code changes every 30 seconds.'}
       >
         <Input
           id="code"
@@ -51,7 +47,9 @@ export function VerifyMfaForm() {
           inputMode={useRecovery ? 'text' : 'numeric'}
           placeholder={useRecovery ? 'XXXXX-XXXXX' : '000000'}
           maxLength={useRecovery ? 11 : 6}
-          className={useRecovery ? 'font-mono tracking-wider' : 'font-mono text-lg tracking-[0.35em]'}
+          className={
+            useRecovery ? 'font-mono tracking-wider' : 'font-mono text-lg tracking-[0.35em]'
+          }
           required
         />
       </Field>
@@ -66,7 +64,7 @@ export function VerifyMfaForm() {
           setUseRecovery((v) => !v);
           setError(null);
         }}
-        className="w-full rounded text-center text-xs text-brand-500 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+        className="text-brand-500 focus-visible:ring-brand-500/40 w-full rounded text-center text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none"
       >
         {useRecovery ? 'Use an authenticator code instead' : 'Use a recovery code instead'}
       </button>

@@ -116,7 +116,11 @@ export async function destroyCurrentSession(): Promise<void> {
 
 export async function revokeAllUserSessions(userId: string, exceptSessionId?: string) {
   await prisma.session.updateMany({
-    where: { userId, revokedAt: null, ...(exceptSessionId ? { NOT: { id: exceptSessionId } } : {}) },
+    where: {
+      userId,
+      revokedAt: null,
+      ...(exceptSessionId ? { NOT: { id: exceptSessionId } } : {}),
+    },
     data: { revokedAt: new Date() },
   });
 }
@@ -180,14 +184,7 @@ export const getAuthContext = cache(async (): Promise<AuthContext | null> => {
 });
 
 /**
- * Validate the double-submit CSRF token for a mutation.
- * Server Actions already carry Next.js' own origin checks; this is defence in
- * depth for route handlers and for any action invoked outside a form post.
+ * CSRF protection lives in `./csrf.ts`, which route handlers call. Server
+ * Actions are covered by Next's own Origin/Host verification, so they do
+ * not repeat the check.
  */
-export async function assertCsrf(submitted: string | null | undefined): Promise<void> {
-  const store = await cookies();
-  const cookieValue = store.get(csrfCookieName)?.value;
-  if (!cookieValue || !submitted || cookieValue !== submitted) {
-    throw new Error('CSRF validation failed');
-  }
-}

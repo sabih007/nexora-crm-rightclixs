@@ -248,7 +248,8 @@ export function ClientForm({
               </optgroup>
               <optgroup label="All currencies">
                 {CURRENCIES.filter(
-                  (c) => !PRIORITY_CURRENCIES.includes(c.code as (typeof PRIORITY_CURRENCIES)[number]),
+                  (c) =>
+                    !PRIORITY_CURRENCIES.includes(c.code as (typeof PRIORITY_CURRENCIES)[number]),
                 ).map((c) => (
                   <option key={c.code} value={c.code}>
                     {c.code} — {c.name}
@@ -274,7 +275,7 @@ export function ClientForm({
                         { shouldDirty: true },
                       )
                     }
-                    className="rounded-full p-0.5 hover:bg-brand-500/20"
+                    className="hover:bg-brand-500/20 rounded-full p-0.5"
                   >
                     <X className="size-3" />
                   </button>
@@ -329,7 +330,7 @@ export function ClientForm({
         <CardHeader>
           <div>
             <CardTitle>Contacts</CardTitle>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               People to reach at this client. Mark one as primary.
             </p>
           </div>
@@ -352,14 +353,14 @@ export function ClientForm({
         </CardHeader>
         <CardContent className="space-y-3">
           {contacts.fields.length === 0 ? (
-            <p className="rounded-lg border border-dashed border-line px-4 py-6 text-center text-sm text-ink-subtle">
+            <p className="border-line text-ink-subtle rounded-lg border border-dashed px-4 py-6 text-center text-sm">
               No contacts added.
             </p>
           ) : (
             contacts.fields.map((field, index) => (
               <div
                 key={field.id}
-                className="grid gap-3 rounded-lg border border-line bg-surface-sunken/50 p-3 sm:grid-cols-[1fr_1fr_1fr_auto]"
+                className="border-line bg-surface-sunken/50 grid gap-3 rounded-lg border p-3 sm:grid-cols-[1fr_1fr_1fr_auto]"
               >
                 <Field label="Name" required error={errors.contacts?.[index]?.name?.message}>
                   <Input {...register(`contacts.${index}.name`)} />
@@ -371,7 +372,7 @@ export function ClientForm({
                   <Input type="tel" {...register(`contacts.${index}.phone`)} />
                 </Field>
                 <div className="flex items-end gap-2 pb-0.5">
-                  <label className="flex cursor-pointer items-center gap-1.5 whitespace-nowrap text-xs text-ink-muted">
+                  <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-xs whitespace-nowrap">
                     <Checkbox
                       checked={watch(`contacts.${index}.isPrimary`)}
                       onCheckedChange={(checked) => {
@@ -406,7 +407,11 @@ export function ClientForm({
           <CardTitle>Notes</CardTitle>
         </CardHeader>
         <CardContent>
-          <Field label="Internal notes" htmlFor="notes" hint="Visible to roles with full client access.">
+          <Field
+            label="Internal notes"
+            htmlFor="notes"
+            hint="Visible to roles with full client access."
+          >
             <Textarea id="notes" rows={4} {...register('notes')} />
           </Field>
         </CardContent>

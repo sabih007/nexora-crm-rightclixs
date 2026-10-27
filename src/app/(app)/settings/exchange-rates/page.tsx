@@ -38,8 +38,8 @@ export default async function ExchangeRatesPage() {
       />
 
       <Callout tone="info" className="mb-5">
-        Rates are entered manually and stamped with an effective date. A conversion always uses
-        the most recent rate <strong>on or before</strong> the transaction&rsquo;s own date — never
+        Rates are entered manually and stamped with an effective date. A conversion always uses the
+        most recent rate <strong>on or before</strong> the transaction&rsquo;s own date — never
         today&rsquo;s rate applied to last year&rsquo;s invoice. If no suitable rate exists, the
         amount is excluded from the consolidated total and reported separately rather than being
         estimated. No rate provider is connected; nothing is fetched automatically.

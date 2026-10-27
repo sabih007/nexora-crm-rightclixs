@@ -10,11 +10,7 @@ export const dynamic = 'force-dynamic';
  * Shared chrome for the subscriptions area: one header plus a tab strip
  * across Overview / Cards / Platforms / Calendar / Expenses.
  */
-export default async function SubscriptionsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function SubscriptionsLayout({ children }: { children: React.ReactNode }) {
   const ctx = await requireAuthPage();
 
   if (!roleHasAnyPermission(ctx.role, ['subscription:read', 'card:read', 'platform:read'])) {
@@ -31,10 +27,7 @@ export default async function SubscriptionsLayout({
       <PageHeader
         title="Subscriptions"
         description="Recurring commitments, where each card is saved, and what is due next."
-        breadcrumbs={[
-          { label: 'Nexora OS', href: '/dashboard' },
-          { label: 'Subscriptions' },
-        ]}
+        breadcrumbs={[{ label: 'Nexora OS', href: '/dashboard' }, { label: 'Subscriptions' }]}
       />
       <SubscriptionTabs role={ctx.role} />
       <div className="mt-5">{children}</div>

@@ -111,12 +111,12 @@ export function DataTable<T>({
       {toolbar ? <div className="mb-3">{toolbar}</div> : null}
 
       {/* Desktop / tablet: real table semantics */}
-      <div className="hidden overflow-hidden rounded-xl border border-line bg-surface md:block">
+      <div className="border-line bg-surface hidden overflow-hidden rounded-xl border md:block">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             {caption ? <caption className="sr-only">{caption}</caption> : null}
             <thead>
-              <tr className="border-b border-line bg-surface-sunken/60">
+              <tr className="border-line bg-surface-sunken/60 border-b">
                 {columns.map((col) => {
                   const activeSort = sort && sort.key === col.sortKey ? sort : null;
                   return (
@@ -132,7 +132,7 @@ export function DataTable<T>({
                           : undefined
                       }
                       className={cn(
-                        'px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle',
+                        'text-ink-subtle px-3 py-2.5 text-[11px] font-semibold tracking-wide uppercase',
                         col.align === 'right' && 'text-right',
                         col.align === 'center' && 'text-center',
                         col.align !== 'right' && col.align !== 'center' && 'text-left',
@@ -144,7 +144,7 @@ export function DataTable<T>({
                           type="button"
                           onClick={() => toggleSort(col.sortKey as string)}
                           className={cn(
-                            'inline-flex items-center gap-1 rounded transition-colors hover:text-ink',
+                            'hover:text-ink inline-flex items-center gap-1 rounded transition-colors',
                             col.align === 'right' && 'flex-row-reverse',
                             activeSort && 'text-ink',
                           )}
@@ -174,15 +174,15 @@ export function DataTable<T>({
                   key={rowKey(row)}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
                   className={cn(
-                    'border-b border-line last:border-0 transition-colors',
-                    onRowClick && 'cursor-pointer hover:bg-surface-hover',
+                    'border-line border-b transition-colors last:border-0',
+                    onRowClick && 'hover:bg-surface-hover cursor-pointer',
                   )}
                 >
                   {columns.map((col) => (
                     <td
                       key={col.id}
                       className={cn(
-                        'px-3 py-2.5 align-middle text-ink',
+                        'text-ink px-3 py-2.5 align-middle',
                         col.align === 'right' && 'text-right',
                         col.align === 'center' && 'text-center',
                         col.className,
@@ -194,7 +194,9 @@ export function DataTable<T>({
                 </tr>
               ))}
             </tbody>
-            {footer ? <tfoot className="border-t border-line bg-surface-sunken/60">{footer}</tfoot> : null}
+            {footer ? (
+              <tfoot className="border-line bg-surface-sunken/60 border-t">{footer}</tfoot>
+            ) : null}
           </table>
         </div>
       </div>
@@ -220,18 +222,18 @@ export function DataTable<T>({
                     : undefined
                 }
                 className={cn(
-                  'rounded-xl border border-line bg-surface p-3.5 shadow-xs',
-                  onRowClick && 'cursor-pointer transition-colors hover:bg-surface-hover',
+                  'border-line bg-surface rounded-xl border p-3.5 shadow-xs',
+                  onRowClick && 'hover:bg-surface-hover cursor-pointer transition-colors',
                 )}
               >
                 {primary ? (
-                  <div className="mb-2 text-sm font-medium text-ink">{primary.cell(row)}</div>
+                  <div className="text-ink mb-2 text-sm font-medium">{primary.cell(row)}</div>
                 ) : null}
                 <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-[13px]">
                   {rest.map((col) => (
                     <React.Fragment key={col.id}>
                       <dt className="text-ink-subtle">{col.mobileLabel ?? col.header}</dt>
-                      <dd className="text-right text-ink">{col.cell(row)}</dd>
+                      <dd className="text-ink text-right">{col.cell(row)}</dd>
                     </React.Fragment>
                   ))}
                 </dl>
@@ -260,12 +262,12 @@ function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className="mt-3 flex flex-col items-center justify-between gap-3 text-[13px] text-ink-muted sm:flex-row"
+      className="text-ink-muted mt-3 flex flex-col items-center justify-between gap-3 text-[13px] sm:flex-row"
     >
       <p>
-        Showing <span className="font-medium text-ink tabular">{first}</span>–
-        <span className="font-medium text-ink tabular">{last}</span> of{' '}
-        <span className="font-medium text-ink tabular">{total}</span>
+        Showing <span className="text-ink tabular font-medium">{first}</span>–
+        <span className="text-ink tabular font-medium">{last}</span> of{' '}
+        <span className="text-ink tabular font-medium">{total}</span>
       </p>
       <div className="flex items-center gap-2">
         {onPageSizeChange ? (
@@ -344,7 +346,7 @@ export function SearchInput({
   return (
     <div className={cn('relative', className)}>
       <Search
-        className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-ink-subtle"
+        className="text-ink-subtle pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
         aria-hidden
       />
       <Input
@@ -353,7 +355,7 @@ export function SearchInput({
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="pl-8 pr-8"
+        className="pr-8 pl-8"
       />
       {local ? (
         <button
@@ -363,7 +365,7 @@ export function SearchInput({
             onChange('');
           }}
           aria-label="Clear search"
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-ink-subtle hover:text-ink"
+          className="text-ink-subtle hover:text-ink absolute top-1/2 right-2 -translate-y-1/2 rounded p-0.5"
         >
           <X className="size-3.5" />
         </button>
@@ -383,7 +385,12 @@ export function TableToolbar({
   className?: string;
 }) {
   return (
-    <div className={cn('flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between', className)}>
+    <div
+      className={cn(
+        'flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between',
+        className,
+      )}
+    >
       <div className="flex flex-wrap items-center gap-2">{children}</div>
       {right ? <div className="flex flex-wrap items-center gap-2">{right}</div> : null}
     </div>

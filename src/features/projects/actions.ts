@@ -117,7 +117,9 @@ export const updateProject = defineAction({
           tags: data.tags,
           completedAt:
             data.status === 'COMPLETED'
-              ? (before.status === 'COMPLETED' ? undefined : new Date())
+              ? before.status === 'COMPLETED'
+                ? undefined
+                : new Date()
               : null,
         },
       });
@@ -224,7 +226,9 @@ async function nextPosition(projectId: string, status: string): Promise<Decimal>
     orderBy: { position: 'desc' },
     select: { position: true },
   });
-  return last ? new Decimal(last.position.toString()).plus(POSITION_GAP) : new Decimal(POSITION_GAP);
+  return last
+    ? new Decimal(last.position.toString()).plus(POSITION_GAP)
+    : new Decimal(POSITION_GAP);
 }
 
 export const createTask = defineAction({

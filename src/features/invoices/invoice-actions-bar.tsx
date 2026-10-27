@@ -298,17 +298,17 @@ function SendInvoiceDialog({
             Marking an invoice sent records the fact only. It never implies the client has paid.
           </Callout>
 
-          <label className="flex cursor-pointer items-start gap-2.5 rounded-lg border border-line px-3 py-2.5">
+          <label className="border-line flex cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5">
             <Checkbox
               checked={markOnly}
               onCheckedChange={(checked) => setMarkOnly(checked === true)}
               className="mt-0.5"
             />
             <span>
-              <span className="block text-[13px] font-medium text-ink">
+              <span className="text-ink block text-[13px] font-medium">
                 Mark as sent without emailing
               </span>
-              <span className="block text-xs text-ink-subtle">
+              <span className="text-ink-subtle block text-xs">
                 Use this when the invoice was delivered by hand, post or another system.
               </span>
             </span>
@@ -319,7 +319,11 @@ function SendInvoiceDialog({
               <Field
                 label="Recipient"
                 htmlFor="recipient"
-                hint={clientEmail ? `Defaults to the client's billing email.` : 'This client has no billing email on file.'}
+                hint={
+                  clientEmail
+                    ? `Defaults to the client's billing email.`
+                    : 'This client has no billing email on file.'
+                }
               >
                 <Input
                   id="recipient"
@@ -415,7 +419,12 @@ function VoidInvoiceDialog({
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleVoid} loading={busy} disabled={reason.trim().length < 3}>
+          <Button
+            variant="danger"
+            onClick={handleVoid}
+            loading={busy}
+            disabled={reason.trim().length < 3}
+          >
             Void invoice
           </Button>
         </DialogFooter>

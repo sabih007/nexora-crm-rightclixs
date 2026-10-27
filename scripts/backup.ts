@@ -169,7 +169,8 @@ function verifyBackup(file: string) {
     console.log(`   ${flag} ${table}: ${rows}/${count}`);
   }
 
-  if (total !== actual) throw new Error('Row counts do not match the manifest — the file is damaged.');
+  if (total !== actual)
+    throw new Error('Row counts do not match the manifest — the file is damaged.');
   console.log('\n  The backup is internally consistent.\n');
 }
 

@@ -3,7 +3,15 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
-import { ArrowRight, Building2, CreditCard, FolderKanban, Loader2, Receipt, Search } from 'lucide-react';
+import {
+  ArrowRight,
+  Building2,
+  CreditCard,
+  FolderKanban,
+  Loader2,
+  Receipt,
+  Search,
+} from 'lucide-react';
 import type { Role } from '@/generated/prisma/enums';
 import { Dialog, DialogPortal, DialogOverlay } from '@/components/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
@@ -118,8 +126,8 @@ export function CommandPalette({
         <DialogOverlay />
         <DialogPrimitive.Content
           className={cn(
-            'fixed left-1/2 top-[12vh] z-50 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2',
-            'overflow-hidden rounded-xl border border-line bg-surface-raised shadow-lg animate-in-fade focus:outline-none',
+            'fixed top-[12vh] left-1/2 z-50 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2',
+            'border-line bg-surface-raised animate-in-fade overflow-hidden rounded-xl border shadow-lg focus:outline-none',
           )}
           aria-label="Command palette"
         >
@@ -129,20 +137,22 @@ export function CommandPalette({
           </DialogPrimitive.Description>
 
           <Command shouldFilter={false} loop className="flex flex-col">
-            <div className="flex items-center gap-2.5 border-b border-line px-3.5">
-              <Search className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+            <div className="border-line flex items-center gap-2.5 border-b px-3.5">
+              <Search className="text-ink-subtle size-4 shrink-0" aria-hidden />
               <Command.Input
                 value={query}
                 onValueChange={setQuery}
                 autoFocus
                 placeholder="Search clients, invoices, projects…"
-                className="h-12 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink-subtle"
+                className="text-ink placeholder:text-ink-subtle h-12 flex-1 bg-transparent text-sm outline-none"
               />
-              {loading ? <Loader2 className="size-4 animate-spin text-ink-subtle" aria-hidden /> : null}
+              {loading ? (
+                <Loader2 className="text-ink-subtle size-4 animate-spin" aria-hidden />
+              ) : null}
             </div>
 
             <Command.List className="max-h-[22rem] overflow-y-auto p-1.5">
-              <Command.Empty className="px-3 py-8 text-center text-sm text-ink-subtle">
+              <Command.Empty className="text-ink-subtle px-3 py-8 text-center text-sm">
                 {!searching
                   ? 'Type at least two characters to search.'
                   : loading
@@ -156,19 +166,19 @@ export function CommandPalette({
                   <Command.Group
                     key={type}
                     heading={TYPE_LABELS[type]}
-                    className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-ink-subtle"
+                    className="[&_[cmdk-group-heading]]:text-ink-subtle [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:uppercase"
                   >
                     {items.map((hit) => (
                       <Command.Item
                         key={`${hit.type}-${hit.id}`}
                         value={`${hit.type}-${hit.id}`}
                         onSelect={() => go(hit.href)}
-                        className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-ink data-[selected=true]:bg-surface-hover"
+                        className="text-ink data-[selected=true]:bg-surface-hover flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm"
                       >
-                        <Icon className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+                        <Icon className="text-ink-subtle size-4 shrink-0" aria-hidden />
                         <span className="min-w-0 flex-1 truncate">{hit.title}</span>
                         {hit.subtitle ? (
-                          <span className="shrink-0 text-xs text-ink-subtle">{hit.subtitle}</span>
+                          <span className="text-ink-subtle shrink-0 text-xs">{hit.subtitle}</span>
                         ) : null}
                       </Command.Item>
                     ))}
@@ -179,7 +189,7 @@ export function CommandPalette({
               {!searching ? (
                 <Command.Group
                   heading="Go to"
-                  className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:text-ink-subtle"
+                  className="[&_[cmdk-group-heading]]:text-ink-subtle [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:tracking-wide [&_[cmdk-group-heading]]:uppercase"
                 >
                   {navItems.map((item) => {
                     const Icon = item.icon;
@@ -188,11 +198,11 @@ export function CommandPalette({
                         key={item.href}
                         value={item.href}
                         onSelect={() => go(item.href)}
-                        className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-ink data-[selected=true]:bg-surface-hover"
+                        className="text-ink data-[selected=true]:bg-surface-hover flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm"
                       >
-                        <Icon className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+                        <Icon className="text-ink-subtle size-4 shrink-0" aria-hidden />
                         <span className="flex-1">{item.label}</span>
-                        <ArrowRight className="size-3.5 text-ink-subtle" aria-hidden />
+                        <ArrowRight className="text-ink-subtle size-3.5" aria-hidden />
                       </Command.Item>
                     );
                   })}

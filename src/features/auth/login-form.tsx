@@ -75,7 +75,7 @@ export function LoginForm() {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-ink-subtle transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+            className="text-ink-subtle hover:text-ink focus-visible:ring-brand-500/40 absolute top-1/2 right-2 -translate-y-1/2 rounded p-1 transition-colors focus-visible:ring-2 focus-visible:outline-none"
           >
             {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>
@@ -86,9 +86,9 @@ export function LoginForm() {
         Sign in
       </Button>
 
-      <p className="text-center text-[11px] leading-relaxed text-ink-subtle">
-        Accounts are created by a workspace administrator. If you cannot sign in, ask them to
-        reset your password.
+      <p className="text-ink-subtle text-center text-[11px] leading-relaxed">
+        Accounts are created by a workspace administrator. If you cannot sign in, ask them to reset
+        your password.
       </p>
     </form>
   );

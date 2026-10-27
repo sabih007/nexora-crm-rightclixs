@@ -25,8 +25,7 @@ const buttonVariants = cva(
         ghost: 'text-ink-muted hover:bg-surface-hover hover:text-ink',
         subtle: 'bg-surface-sunken text-ink hover:bg-surface-hover',
         danger: 'bg-danger text-white shadow-xs hover:brightness-110',
-        'danger-outline':
-          'border border-danger/40 bg-transparent text-danger hover:bg-danger-soft',
+        'danger-outline': 'border border-danger/40 bg-transparent text-danger hover:bg-danger-soft',
         link: 'text-brand-500 underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
@@ -42,8 +41,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   /** Shows a spinner and blocks interaction. */
   loading?: boolean;

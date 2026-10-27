@@ -93,7 +93,7 @@ export default async function SettingsPage() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] text-ink-muted transition-colors hover:bg-surface-hover hover:text-ink"
+                    className="text-ink-muted hover:bg-surface-hover hover:text-ink flex items-center gap-2 rounded-lg px-2 py-1.5 text-[13px] transition-colors"
                   >
                     <span className="flex-1">{link.label}</span>
                     <ArrowRight className="size-3.5" aria-hidden />
@@ -183,13 +183,13 @@ function StatusRow({
   return (
     <div>
       <div className="flex items-center gap-2">
-        <Icon className="size-3.5 shrink-0 text-ink-subtle" />
-        <span className="text-[13px] font-medium text-ink">{label}</span>
+        <Icon className="text-ink-subtle size-3.5 shrink-0" />
+        <span className="text-ink text-[13px] font-medium">{label}</span>
         <Badge tone={ready ? 'success' : 'warning'} size="sm" className="ml-auto">
           {badge}
         </Badge>
       </div>
-      <p className="mt-0.5 pl-5 text-[11px] leading-relaxed text-ink-subtle">{description}</p>
+      <p className="text-ink-subtle mt-0.5 pl-5 text-[11px] leading-relaxed">{description}</p>
     </div>
   );
 }

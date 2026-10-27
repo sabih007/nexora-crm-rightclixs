@@ -4,3 +4,10 @@ coverage
 src/generated
 prisma/migrations
 package-lock.json
+next-env.d.ts
+.backups
+storage
+test-results
+playwright-report
+.pglite
+NEXORA_OS_CLAUDE_CODE_SPEC.md

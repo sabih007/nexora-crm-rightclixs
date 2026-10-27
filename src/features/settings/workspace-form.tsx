@@ -212,7 +212,7 @@ export function WorkspaceSettingsForm({
           </div>
 
           <fieldset className="grid gap-4 sm:grid-cols-2">
-            <legend className="mb-1 text-[13px] font-medium text-ink">Address on invoices</legend>
+            <legend className="text-ink mb-1 text-[13px] font-medium">Address on invoices</legend>
             <Field label="Address line 1" htmlFor="ws-line1" className="sm:col-span-2">
               <Input
                 id="ws-line1"
@@ -264,7 +264,7 @@ export function WorkspaceSettingsForm({
           </CardFooter>
         ) : (
           <CardFooter>
-            <p className="text-xs text-ink-subtle">
+            <p className="text-ink-subtle text-xs">
               Your role can view these settings but not change them.
             </p>
           </CardFooter>

@@ -5,7 +5,10 @@ import {
   runJob,
   unauthorizedCronResponse,
 } from '@/lib/cron';
-import { runOverdueInvoiceReminders, runRenewalReminders } from '@/features/subscriptions/reminders';
+import {
+  runOverdueInvoiceReminders,
+  runRenewalReminders,
+} from '@/features/subscriptions/reminders';
 import { refreshOverdueInvoices } from '@/features/invoices/actions';
 import { getWorkspaceSettings } from '@/lib/workspace';
 import { pruneRateLimits } from '@/lib/rate-limit';
@@ -48,7 +51,12 @@ export async function GET(request: Request) {
       },
     );
 
-    results.push({ workspaceId, status: outcome.status, ...(outcome.error ? { error: outcome.error } : {}), result: outcome.result });
+    results.push({
+      workspaceId,
+      status: outcome.status,
+      ...(outcome.error ? { error: outcome.error } : {}),
+      result: outcome.result,
+    });
   }
 
   // Housekeeping that is not workspace-specific.

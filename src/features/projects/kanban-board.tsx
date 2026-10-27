@@ -126,7 +126,12 @@ export function KanbanBoard({
       current.map((t) => (t.id === taskId ? { ...t, status: targetStatus } : t)),
     );
 
-    const result = await moveTask({ id: taskId, status: targetStatus as never, beforeTaskId, afterTaskId });
+    const result = await moveTask({
+      id: taskId,
+      status: targetStatus as never,
+      beforeTaskId,
+      afterTaskId,
+    });
     if (!result.ok) {
       setTasks(previous);
       toast.error(result.error);
@@ -159,9 +164,7 @@ export function KanbanBoard({
         ))}
       </div>
 
-      <DragOverlay>
-        {activeTask ? <TaskCardView task={activeTask} dragging /> : null}
-      </DragOverlay>
+      <DragOverlay>{activeTask ? <TaskCardView task={activeTask} dragging /> : null}</DragOverlay>
     </DndContext>
   );
 }
@@ -186,15 +189,15 @@ function KanbanColumn({
   return (
     <section
       className={cn(
-        'flex w-[17rem] shrink-0 flex-col rounded-xl border border-line bg-surface-sunken/60 transition-colors',
+        'border-line bg-surface-sunken/60 flex w-[17rem] shrink-0 flex-col rounded-xl border transition-colors',
         isOver && 'border-brand-500/40 bg-brand-500/5',
       )}
       aria-label={`${label} column, ${tasks.length} tasks`}
     >
       <header className="flex items-center justify-between gap-2 px-3 py-2.5">
         <div className="flex items-center gap-2">
-          <h3 className="text-[13px] font-semibold text-ink">{label}</h3>
-          <span className="rounded-full bg-surface px-1.5 text-[11px] font-medium text-ink-subtle tabular">
+          <h3 className="text-ink text-[13px] font-semibold">{label}</h3>
+          <span className="bg-surface text-ink-subtle tabular rounded-full px-1.5 text-[11px] font-medium">
             {tasks.length}
           </span>
         </div>
@@ -222,7 +225,7 @@ function KanbanColumn({
           ))}
         </SortableContext>
         {tasks.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-line px-3 py-5 text-center text-xs text-ink-subtle">
+          <p className="border-line text-ink-subtle rounded-lg border border-dashed px-3 py-5 text-center text-xs">
             No tasks
           </p>
         ) : null}
@@ -277,7 +280,7 @@ function TaskCardView({
   return (
     <article
       className={cn(
-        'group rounded-lg border border-line bg-surface p-2.5 shadow-xs transition-shadow',
+        'group border-line bg-surface rounded-lg border p-2.5 shadow-xs transition-shadow',
         dragging ? 'rotate-1 shadow-lg' : 'hover:shadow-md',
       )}
     >
@@ -287,7 +290,7 @@ function TaskCardView({
             type="button"
             {...dragHandleProps}
             aria-label={`Reorder ${task.title}`}
-            className="mt-0.5 cursor-grab touch-none rounded p-0.5 text-ink-subtle opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100 active:cursor-grabbing"
+            className="text-ink-subtle mt-0.5 cursor-grab touch-none rounded p-0.5 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 active:cursor-grabbing"
           >
             <GripVertical className="size-3.5" />
           </button>
@@ -297,9 +300,9 @@ function TaskCardView({
           type="button"
           onClick={onOpen}
           aria-label={`Open task: ${task.title}`}
-          className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 rounded"
+          className="focus-visible:ring-brand-500/40 min-w-0 flex-1 rounded text-left focus-visible:ring-2 focus-visible:outline-none"
         >
-          <p className="text-[13px] font-medium leading-snug text-ink">{task.title}</p>
+          <p className="text-ink text-[13px] leading-snug font-medium">{task.title}</p>
         </button>
       </div>
 
@@ -309,7 +312,7 @@ function TaskCardView({
           <span
             className={cn(
               'inline-flex items-center gap-1 text-[11px]',
-              overdue ? 'font-medium text-danger' : 'text-ink-subtle',
+              overdue ? 'text-danger font-medium' : 'text-ink-subtle',
             )}
           >
             <CalendarDays className="size-3" aria-hidden />
@@ -317,13 +320,13 @@ function TaskCardView({
           </span>
         ) : null}
         {task.checklist.length > 0 ? (
-          <span className="inline-flex items-center gap-1 text-[11px] text-ink-subtle tabular">
+          <span className="text-ink-subtle tabular inline-flex items-center gap-1 text-[11px]">
             <CheckSquare className="size-3" aria-hidden />
             {done}/{task.checklist.length}
           </span>
         ) : null}
         {task.commentCount > 0 ? (
-          <span className="inline-flex items-center gap-1 text-[11px] text-ink-subtle tabular">
+          <span className="text-ink-subtle tabular inline-flex items-center gap-1 text-[11px]">
             <MessageSquare className="size-3" aria-hidden />
             {task.commentCount}
           </span>

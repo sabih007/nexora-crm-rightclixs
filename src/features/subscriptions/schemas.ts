@@ -194,13 +194,7 @@ export const markLinkRemovedSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const CADENCES = ['MONTHLY', 'QUARTERLY', 'ANNUAL', 'WEEKLY', 'CUSTOM_DAYS'] as const;
-export const SUBSCRIPTION_STATUSES = [
-  'ACTIVE',
-  'TRIAL',
-  'PAUSED',
-  'CANCELLED',
-  'EXPIRED',
-] as const;
+export const SUBSCRIPTION_STATUSES = ['ACTIVE', 'TRIAL', 'PAUSED', 'CANCELLED', 'EXPIRED'] as const;
 
 const amountString = z
   .string()

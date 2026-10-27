@@ -36,10 +36,7 @@ export interface SubscriptionListRow {
   project: { id: string; name: string } | null;
 }
 
-function buildWhere(
-  ctx: AuthContext,
-  filters: SubscriptionFilters,
-): Prisma.SubscriptionWhereInput {
+function buildWhere(ctx: AuthContext, filters: SubscriptionFilters): Prisma.SubscriptionWhereInput {
   const where: Prisma.SubscriptionWhereInput = { workspaceId: ctx.workspaceId };
   const and: Prisma.SubscriptionWhereInput[] = [];
 
@@ -258,7 +255,12 @@ export interface CardWithFootprint {
   notes: string | null;
   owner: { id: string; name: string } | null;
   /** Platforms this card is recorded as saved on. */
-  activePlatforms: { linkId: string; platformId: string; name: string; lastVerifiedAt: Date | null }[];
+  activePlatforms: {
+    linkId: string;
+    platformId: string;
+    name: string;
+    lastVerifiedAt: Date | null;
+  }[];
   removedPlatforms: { linkId: string; platformId: string; name: string; removedAt: Date | null }[];
   unverifiedPlatforms: { linkId: string; platformId: string; name: string }[];
   subscriptionCount: number;
@@ -479,7 +481,9 @@ export async function listExpenses(
       orderBy: { paidAt: 'desc' },
       ...skipTake(options.pagination),
       include: {
-        subscription: { select: { id: true, planName: true, platform: { select: { name: true } } } },
+        subscription: {
+          select: { id: true, planName: true, platform: { select: { name: true } } },
+        },
         project: { select: { id: true, name: true } },
         client: { select: { id: true, name: true } },
         createdBy: { select: { name: true } },

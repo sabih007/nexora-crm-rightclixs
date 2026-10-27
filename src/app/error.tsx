@@ -16,7 +16,7 @@ export default function RouteError({
   reset: () => void;
 }) {
   React.useEffect(() => {
-      console.error('Route error', error.digest ?? error.message);
+    console.error('Route error', error.digest ?? error.message);
   }, [error]);
 
   return (

@@ -111,7 +111,6 @@ test.describe('role boundaries as staff', () => {
     await expect(nav.getByRole('link', { name: 'Invoices' })).toHaveCount(0);
     await expect(nav.getByRole('link', { name: 'Activity Log' })).toHaveCount(0);
   });
-
 });
 
 test.describe('role boundaries as a manager', () => {
@@ -142,6 +141,15 @@ test.describe('api boundaries', () => {
     expect(response.ok()).toBe(true);
     const body = await response.json();
     expect(body.checks.database).toBe('up');
+  });
+
+  test('a cross-origin state change is refused', async ({ request }) => {
+    // A forged POST from another site carries its own Origin and cannot read
+    // the CSRF cookie to echo it back.
+    const response = await request.post('/api/auth/logout', {
+      headers: { origin: 'https://evil.example' },
+    });
+    expect(response.status()).toBe(403);
   });
 
   test('security headers are present', async ({ request }) => {

@@ -50,7 +50,10 @@ export const getWorkspace = cache(async (workspaceId: string): Promise<Workspace
 
 /** The single workspace, creating it on first run if the database is empty. */
 export async function ensureWorkspace(): Promise<string> {
-  const existing = await prisma.workspace.findFirst({ select: { id: true }, orderBy: { createdAt: 'asc' } });
+  const existing = await prisma.workspace.findFirst({
+    select: { id: true },
+    orderBy: { createdAt: 'asc' },
+  });
   if (existing) return existing.id;
 
   const created = await prisma.workspace.create({
@@ -99,16 +102,18 @@ export const DEFAULT_SETTINGS: WorkspaceSettings = {
 
 const SETTINGS_KEY = 'workspace';
 
-export const getWorkspaceSettings = cache(async (workspaceId: string): Promise<WorkspaceSettings> => {
-  const row = await prisma.setting.findUnique({
-    where: { workspaceId_key: { workspaceId, key: SETTINGS_KEY } },
-    select: { valueJson: true },
-  });
-  if (!row) return DEFAULT_SETTINGS;
-  // Merge so a setting added in a later release has a sane default for
-  // workspaces created before it existed.
-  return { ...DEFAULT_SETTINGS, ...(row.valueJson as Partial<WorkspaceSettings>) };
-});
+export const getWorkspaceSettings = cache(
+  async (workspaceId: string): Promise<WorkspaceSettings> => {
+    const row = await prisma.setting.findUnique({
+      where: { workspaceId_key: { workspaceId, key: SETTINGS_KEY } },
+      select: { valueJson: true },
+    });
+    if (!row) return DEFAULT_SETTINGS;
+    // Merge so a setting added in a later release has a sane default for
+    // workspaces created before it existed.
+    return { ...DEFAULT_SETTINGS, ...(row.valueJson as Partial<WorkspaceSettings>) };
+  },
+);
 
 export async function saveWorkspaceSettings(
   workspaceId: string,

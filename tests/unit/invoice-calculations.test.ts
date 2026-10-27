@@ -148,14 +148,17 @@ describe('computeInvoiceTotals', () => {
 describe('outstandingBalance / overpaymentAmount', () => {
   it('subtracts payments and credit notes', () => {
     expect(
-      outstandingBalance({ grandTotal: '1000', amountPaid: '300', creditedTotal: '200', currency: 'USD' }),
+      outstandingBalance({
+        grandTotal: '1000',
+        amountPaid: '300',
+        creditedTotal: '200',
+        currency: 'USD',
+      }),
     ).toBe('500');
   });
 
   it('clamps at zero rather than reporting a negative balance', () => {
-    expect(
-      outstandingBalance({ grandTotal: '100', amountPaid: '150', currency: 'USD' }),
-    ).toBe('0');
+    expect(outstandingBalance({ grandTotal: '100', amountPaid: '150', currency: 'USD' })).toBe('0');
   });
 
   it('reports the surplus as an overpayment', () => {
@@ -370,14 +373,20 @@ describe('validateAllocations', () => {
 describe('formatInvoiceNumber', () => {
   it('pads the sequence and includes the year', () => {
     expect(
-      formatInvoiceNumber({ prefix: 'INV', sequence: 7, padding: 4, includeYear: true, year: 2026 }),
+      formatInvoiceNumber({
+        prefix: 'INV',
+        sequence: 7,
+        padding: 4,
+        includeYear: true,
+        year: 2026,
+      }),
     ).toBe('INV-2026-0007');
   });
 
   it('omits the year when configured', () => {
-    expect(formatInvoiceNumber({ prefix: 'NX', sequence: 42, padding: 5, includeYear: false })).toBe(
-      'NX-00042',
-    );
+    expect(
+      formatInvoiceNumber({ prefix: 'NX', sequence: 42, padding: 5, includeYear: false }),
+    ).toBe('NX-00042');
   });
 
   it('does not truncate a sequence longer than the padding', () => {

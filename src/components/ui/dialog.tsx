@@ -47,10 +47,10 @@ export const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          'fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2',
+          'fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2',
           widths[size],
           'max-h-[calc(100vh-3rem)] overflow-y-auto',
-          'rounded-xl border border-line bg-surface-raised shadow-lg',
+          'border-line bg-surface-raised rounded-xl border shadow-lg',
           'animate-in-fade focus:outline-none',
           className,
         )}
@@ -58,7 +58,7 @@ export const DialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close
-          className="absolute right-3.5 top-3.5 rounded-md p-1 text-ink-subtle transition-colors hover:bg-surface-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+          className="text-ink-subtle hover:bg-surface-hover hover:text-ink focus-visible:ring-brand-500/40 absolute top-3.5 right-3.5 rounded-md p-1 transition-colors focus-visible:ring-2 focus-visible:outline-none"
           aria-label="Close"
         >
           <X className="size-4" />
@@ -69,7 +69,9 @@ export const DialogContent = React.forwardRef<
 });
 
 export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('space-y-1 border-b border-line px-5 py-4 pr-12', className)} {...props} />;
+  return (
+    <div className={cn('border-line space-y-1 border-b px-5 py-4 pr-12', className)} {...props} />
+  );
 }
 
 export function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
@@ -80,7 +82,7 @@ export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLD
   return (
     <div
       className={cn(
-        'flex flex-col-reverse gap-2 border-t border-line px-5 py-3.5 sm:flex-row sm:justify-end',
+        'border-line flex flex-col-reverse gap-2 border-t px-5 py-3.5 sm:flex-row sm:justify-end',
         className,
       )}
       {...props}
@@ -95,7 +97,7 @@ export const DialogTitle = React.forwardRef<
   return (
     <DialogPrimitive.Title
       ref={ref}
-      className={cn('text-base font-semibold text-ink', className)}
+      className={cn('text-ink text-base font-semibold', className)}
       {...props}
     />
   );
@@ -108,7 +110,7 @@ export const DialogDescription = React.forwardRef<
   return (
     <DialogPrimitive.Description
       ref={ref}
-      className={cn('text-sm text-ink-muted', className)}
+      className={cn('text-ink-muted text-sm', className)}
       {...props}
     />
   );

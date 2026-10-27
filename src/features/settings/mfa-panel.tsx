@@ -50,8 +50,8 @@ export function MfaPanel({
           <span
             className={
               enabled
-                ? 'flex size-9 items-center justify-center rounded-full bg-success-soft text-success'
-                : 'flex size-9 items-center justify-center rounded-full bg-surface-sunken text-ink-subtle'
+                ? 'bg-success-soft text-success flex size-9 items-center justify-center rounded-full'
+                : 'bg-surface-sunken text-ink-subtle flex size-9 items-center justify-center rounded-full'
             }
             aria-hidden
           >
@@ -59,7 +59,7 @@ export function MfaPanel({
           </span>
 
           <div className="min-w-0 flex-1">
-            <p className="flex flex-wrap items-center gap-2 text-sm font-medium text-ink">
+            <p className="text-ink flex flex-wrap items-center gap-2 text-sm font-medium">
               {enabled ? 'Two-factor authentication is on' : 'Two-factor authentication is off'}
               {required ? (
                 <Badge tone={enabled ? 'success' : 'warning'} size="sm">
@@ -67,7 +67,7 @@ export function MfaPanel({
                 </Badge>
               ) : null}
             </p>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               {enabled
                 ? `Enrolled ${enrolledAt ? formatDateTime(enrolledAt) : 'previously'}. ${remainingRecoveryCodes} recovery code${remainingRecoveryCodes === 1 ? '' : 's'} left.`
                 : 'Protects the account even if your password is stolen.'}
@@ -87,7 +87,7 @@ export function MfaPanel({
       <CardFooter className="justify-end">
         {enabled ? (
           required ? (
-            <p className="text-xs text-ink-subtle">
+            <p className="text-ink-subtle text-xs">
               Two-factor cannot be turned off for your role.
             </p>
           ) : (
@@ -195,12 +195,12 @@ function EnrolDialog({
           {recoveryCodes ? (
             <>
               <Callout tone="warning">
-                These are shown <strong>once</strong>. They are stored only as hashes and cannot
-                be displayed again. Keep them somewhere safe and separate from your password.
+                These are shown <strong>once</strong>. They are stored only as hashes and cannot be
+                displayed again. Keep them somewhere safe and separate from your password.
               </Callout>
-              <ul className="grid grid-cols-2 gap-1.5 rounded-lg border border-line bg-surface-sunken p-3">
+              <ul className="border-line bg-surface-sunken grid grid-cols-2 gap-1.5 rounded-lg border p-3">
                 {recoveryCodes.map((recoveryCode) => (
-                  <li key={recoveryCode} className="font-mono text-sm tabular text-ink">
+                  <li key={recoveryCode} className="tabular text-ink font-mono text-sm">
                     {recoveryCode}
                   </li>
                 ))}
@@ -212,7 +212,7 @@ function EnrolDialog({
           ) : (
             <>
               {qr ? (
-                <div className="flex justify-center rounded-lg border border-line bg-white p-3">
+                <div className="border-line flex justify-center rounded-lg border bg-white p-3">
                   {/* Data URL produced server-side by the qrcode library. */}
                   <Image
                     src={qr}
@@ -223,15 +223,15 @@ function EnrolDialog({
                   />
                 </div>
               ) : (
-                <p className="py-8 text-center text-sm text-ink-subtle">Preparing…</p>
+                <p className="text-ink-subtle py-8 text-center text-sm">Preparing…</p>
               )}
 
               {secret ? (
-                <div className="rounded-lg border border-line bg-surface-sunken px-3 py-2.5">
-                  <p className="flex items-center gap-1.5 text-xs text-ink-subtle">
+                <div className="border-line bg-surface-sunken rounded-lg border px-3 py-2.5">
+                  <p className="text-ink-subtle flex items-center gap-1.5 text-xs">
                     <KeyRound className="size-3" aria-hidden /> Or enter this key manually
                   </p>
-                  <code className="mt-1 block break-all font-mono text-xs text-ink">{secret}</code>
+                  <code className="text-ink mt-1 block font-mono text-xs break-all">{secret}</code>
                 </div>
               ) : null}
 

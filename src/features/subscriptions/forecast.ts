@@ -232,9 +232,7 @@ export function commitmentTotals(subscriptions: ForecastSubscription[]): Commitm
     activeCount += 1;
 
     const currency = subscription.currency;
-    monthly[currency] = (monthly[currency] ?? new Decimal(0)).plus(
-      monthlyEquivalent(subscription),
-    );
+    monthly[currency] = (monthly[currency] ?? new Decimal(0)).plus(monthlyEquivalent(subscription));
     annual[currency] = (annual[currency] ?? new Decimal(0)).plus(annualizedCost(subscription));
   }
 
@@ -267,10 +265,7 @@ export function totalChargesByCurrency(charges: UpcomingCharge[]): Record<string
  * Last date to cancel without being charged again, given a notice period.
  * Returns null when the subscription declares no notice requirement.
  */
-export function cancellationDeadline(
-  nextChargeAt: Date,
-  noticeDays?: number | null,
-): Date | null {
+export function cancellationDeadline(nextChargeAt: Date, noticeDays?: number | null): Date | null {
   if (!noticeDays || noticeDays <= 0) return null;
   const deadline = new Date(nextChargeAt.getTime());
   deadline.setUTCDate(deadline.getUTCDate() - noticeDays);

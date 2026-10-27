@@ -297,7 +297,8 @@ export const linkCardToPlatform = defineAction({
         select: { nickname: true, last4: true },
       }),
     ]);
-    if (!platform || !card) throw new ActionError('Platform or card not found.', { code: 'NOT_FOUND' });
+    if (!platform || !card)
+      throw new ActionError('Platform or card not found.', { code: 'NOT_FOUND' });
 
     const link = await prisma.platformCardLink.upsert({
       where: {

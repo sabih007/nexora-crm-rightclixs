@@ -104,14 +104,14 @@ export function PermissionMatrix() {
       <CardHeader>
         <div>
           <CardTitle>Full permission matrix</CardTitle>
-          <p className="mt-0.5 text-xs text-ink-subtle">
+          <p className="text-ink-subtle mt-0.5 text-xs">
             Generated from the same table the server checks on every request.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="shrink-0 rounded text-xs font-medium text-brand-500 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+          className="text-brand-500 focus-visible:ring-brand-500/40 shrink-0 rounded text-xs font-medium hover:underline focus-visible:ring-2 focus-visible:outline-none"
           aria-expanded={open}
         >
           {open ? 'Hide' : 'Show'}
@@ -123,10 +123,10 @@ export function PermissionMatrix() {
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">Permissions granted to each role</caption>
             <thead>
-              <tr className="border-b border-line">
+              <tr className="border-line border-b">
                 <th
                   scope="col"
-                  className="py-2 pr-4 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                  className="text-ink-subtle py-2 pr-4 text-left text-[11px] font-semibold tracking-wide uppercase"
                 >
                   Capability
                 </th>
@@ -134,7 +134,7 @@ export function PermissionMatrix() {
                   <th
                     key={role}
                     scope="col"
-                    className="px-2 py-2 text-center text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                    className="text-ink-subtle px-2 py-2 text-center text-[11px] font-semibold tracking-wide uppercase"
                   >
                     {ROLE_LABELS[role]}
                   </th>
@@ -144,20 +144,18 @@ export function PermissionMatrix() {
             <tbody>
               {GROUPS.map((group) => (
                 <React.Fragment key={group.title}>
-                  <tr className="border-b border-line bg-surface-sunken/60">
+                  <tr className="border-line bg-surface-sunken/60 border-b">
                     <th
                       scope="colgroup"
                       colSpan={ROLES.length + 1}
-                      className="py-1.5 pr-4 text-left text-[11px] font-semibold text-ink"
+                      className="text-ink py-1.5 pr-4 text-left text-[11px] font-semibold"
                     >
                       {group.title}
                     </th>
                   </tr>
                   {group.permissions.map((permission) => (
-                    <tr key={permission.key} className="border-b border-line last:border-0">
-                      <td className="py-1.5 pr-4 text-[13px] text-ink-muted">
-                        {permission.label}
-                      </td>
+                    <tr key={permission.key} className="border-line border-b last:border-0">
+                      <td className="text-ink-muted py-1.5 pr-4 text-[13px]">{permission.label}</td>
                       {ROLES.map((role) => {
                         const allowed = ROLE_SETS[role].has(permission.key);
                         return (
@@ -166,9 +164,9 @@ export function PermissionMatrix() {
                               {ROLE_LABELS[role]}: {allowed ? 'allowed' : 'not allowed'}
                             </span>
                             {allowed ? (
-                              <Check className="mx-auto size-3.5 text-success" aria-hidden />
+                              <Check className="text-success mx-auto size-3.5" aria-hidden />
                             ) : (
-                              <Minus className="mx-auto size-3.5 text-ink-subtle/40" aria-hidden />
+                              <Minus className="text-ink-subtle/40 mx-auto size-3.5" aria-hidden />
                             )}
                           </td>
                         );

@@ -9,18 +9,20 @@ import {
   getFinancialReport,
   getProjectPerformance,
 } from '@/features/reports/queries';
+import { type ReportDocument, renderReportPdf, reportToCsvRows } from '@/features/reports/pdf';
 import { getReceivablesAging } from '@/features/invoices/queries';
 import { isDateRangePreset, resolveDateRange } from '@/lib/dates';
 
 export const dynamic = 'force-dynamic';
 
 /**
- * Report CSV export.
+ * Report export, as CSV (`?format=csv`, the default) or PDF (`?format=pdf`).
  *
  * One document containing each section, with the calculation definitions and
  * the exchange-rate disclosures included as rows — so the exported file is
  * self-describing rather than a bare grid of numbers whose provenance is
- * lost the moment it leaves the app.
+ * lost the moment it leaves the app. Both formats are built from the same
+ * `ReportDocument`, so they cannot drift apart.
  */
 export async function GET(request: Request) {
   const ctx = await getAuthContext();
@@ -41,6 +43,7 @@ export async function GET(request: Request) {
     from: url.searchParams.get('from') ?? undefined,
     to: url.searchParams.get('to') ?? undefined,
   });
+  const format = url.searchParams.get('format') === 'pdf' ? 'pdf' : 'csv';
 
   const canSeeFinance = roleHasPermission(ctx.role, 'report:read_office_finance');
 
@@ -51,107 +54,173 @@ export async function GET(request: Request) {
     getProjectPerformance(ctx, range),
   ]);
 
-  const rows: unknown[][] = [];
-
-  rows.push(['Nexora OS management report']);
-  rows.push(['Generated', new Date().toISOString()]);
-  rows.push(['Period', range.label, range.from.toISOString().slice(0, 10), range.to.toISOString().slice(0, 10)]);
-  rows.push(['Base currency', report.baseCurrency]);
-  rows.push(['Note', 'Management reporting only. Not certified financial statements.']);
-  rows.push([]);
-
-  rows.push(['SUMMARY']);
-  rows.push(['Metric', `Value (${report.baseCurrency})`, 'Count', 'Definition', 'Conversion note']);
-  for (const [label, metric] of [
+  const summaryMetrics = [
     ['Cash collected', report.cashCollected],
     ['Invoiced revenue', report.invoicedRevenue],
     ['Expenses paid', report.actualExpenses],
     ['Outstanding receivable', report.outstandingReceivable],
     ['Overdue receivable', report.overdueReceivable],
-  ] as const) {
-    rows.push([label, metric.value, metric.count, metric.definition, metric.note]);
-  }
-  rows.push([
-    'Net cash movement',
-    report.netCashPosition.value,
-    '',
-    report.netCashPosition.definition,
-    report.netCashPosition.incomplete ? 'Incomplete: unconverted amounts excluded.' : '',
-  ]);
-  rows.push([]);
+  ] as const;
 
-  rows.push(['AMOUNTS BY ORIGINAL CURRENCY']);
-  rows.push(['Metric', 'Currency', 'Amount']);
+  const byCurrencyRows: (string | number)[][] = [];
   for (const [label, metric] of [
     ['Cash collected', report.cashCollected],
     ['Invoiced revenue', report.invoicedRevenue],
     ['Expenses paid', report.actualExpenses],
   ] as const) {
     for (const [currency, amount] of Object.entries(metric.byCurrency)) {
-      rows.push([label, currency, amount]);
+      byCurrencyRows.push([label, currency, amount]);
     }
   }
-  rows.push([]);
 
-  if (aging.length > 0) {
-    rows.push(['RECEIVABLES AGING']);
-    rows.push(['Bucket', 'Invoices', 'Currency', 'Outstanding']);
-    for (const bucket of aging) {
-      const entries = Object.entries(bucket.amountsByCurrency);
-      if (entries.length === 0) {
-        rows.push([bucket.label, bucket.count, '', '0']);
-      } else {
-        for (const [currency, amount] of entries) {
-          rows.push([bucket.label, bucket.count, currency, amount]);
-        }
+  const agingRows: (string | number)[][] = [];
+  for (const bucket of aging) {
+    const entries = Object.entries(bucket.amountsByCurrency);
+    if (entries.length === 0) {
+      agingRows.push([bucket.label, bucket.count, '', '0']);
+    } else {
+      for (const [currency, amount] of entries) {
+        agingRows.push([bucket.label, bucket.count, currency, amount]);
       }
     }
-    rows.push([]);
   }
 
-  rows.push(['REVENUE BY CLIENT']);
-  rows.push(['Client', 'Currency', 'Invoices', 'Invoiced', 'Collected', 'Outstanding']);
-  for (const row of clients) {
-    rows.push([row.name, row.currency, row.invoiceCount, row.invoiced, row.collected, row.outstanding]);
-  }
-  rows.push([]);
-
-  rows.push(['PROJECT PERFORMANCE']);
-  rows.push([
-    'Project', 'Client', 'Status', 'Currency', 'Budget', 'Invoiced', 'Expenses', 'Margin', 'Tasks complete %',
-  ]);
-  rows.push([
-    'Note', 'Margin is invoiced minus recorded expenses. It excludes staff time and overhead.',
-  ]);
-  for (const row of projects) {
-    rows.push([
-      row.name,
-      row.clientName ?? '',
-      row.status,
-      row.currency,
-      row.budget ?? '',
-      row.invoiced,
-      row.expenses,
-      row.margin,
-      row.taskCompletion,
-    ]);
-  }
+  const document: ReportDocument = {
+    title: 'Nexora OS management report',
+    subtitle: `${range.label} · ${range.from.toISOString().slice(0, 10)} to ${range.to
+      .toISOString()
+      .slice(0, 10)} · base currency ${report.baseCurrency}`,
+    meta: [
+      ['Generated', new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC'],
+      ['Period', range.label],
+      ['From', range.from.toISOString().slice(0, 10)],
+      ['To', range.to.toISOString().slice(0, 10)],
+      ['Base currency', report.baseCurrency],
+    ],
+    disclaimer:
+      'Management reporting only. Not certified financial statements. Amounts in other currencies are converted using dated exchange-rate snapshots; anything without a rate is excluded and listed below.',
+    sections: [
+      {
+        title: 'Summary',
+        header: ['Metric', `Value (${report.baseCurrency})`, 'Count', 'Definition', 'Conversion'],
+        weights: [1.1, 0.8, 0.4, 2.1, 1.6],
+        numericColumns: [1, 2],
+        rows: [
+          ...summaryMetrics.map(([label, metric]) => [
+            label,
+            metric.value,
+            metric.count,
+            metric.definition,
+            metric.note,
+          ]),
+          [
+            'Net cash movement',
+            report.netCashPosition.value,
+            '',
+            report.netCashPosition.definition,
+            report.netCashPosition.incomplete
+              ? 'Incomplete: unconverted amounts excluded.'
+              : 'Complete.',
+          ],
+        ],
+      },
+      {
+        title: 'Amounts by original currency',
+        notes: [
+          'Original transaction amounts, never converted. These are the authoritative figures.',
+        ],
+        header: ['Metric', 'Currency', 'Amount'],
+        weights: [1.4, 0.6, 1],
+        numericColumns: [2],
+        rows: byCurrencyRows,
+      },
+      ...(canSeeFinance
+        ? [
+            {
+              title: 'Receivables aging',
+              header: ['Bucket', 'Invoices', 'Currency', 'Outstanding'],
+              weights: [1.2, 0.6, 0.6, 1],
+              numericColumns: [1, 3],
+              rows: agingRows,
+              emptyText: 'Nothing outstanding.',
+            },
+          ]
+        : []),
+      {
+        title: 'Revenue by client',
+        header: ['Client', 'Currency', 'Invoices', 'Invoiced', 'Collected', 'Outstanding'],
+        weights: [2, 0.6, 0.6, 1, 1, 1],
+        numericColumns: [2, 3, 4, 5],
+        rows: clients.map((row) => [
+          row.name,
+          row.currency,
+          row.invoiceCount,
+          row.invoiced,
+          row.collected,
+          row.outstanding,
+        ]),
+      },
+      {
+        title: 'Project performance',
+        notes: ['Margin is invoiced minus recorded expenses. It excludes staff time and overhead.'],
+        header: [
+          'Project',
+          'Client',
+          'Status',
+          'Currency',
+          'Budget',
+          'Invoiced',
+          'Expenses',
+          'Margin',
+          'Tasks %',
+        ],
+        weights: [1.8, 1.4, 0.8, 0.6, 0.9, 0.9, 0.9, 0.9, 0.7],
+        numericColumns: [4, 5, 6, 7, 8],
+        rows: projects.map((row) => [
+          row.name,
+          row.clientName ?? '',
+          row.status,
+          row.currency,
+          row.budget ?? '',
+          row.invoiced,
+          row.expenses,
+          row.margin,
+          row.taskCompletion,
+        ]),
+      },
+    ],
+  };
 
   await recordAudit({
     workspaceId: ctx.workspaceId,
     actorId: ctx.user.id,
     action: 'report.exported',
     entityType: 'Report',
-    summary: `Management report exported for ${range.label}`,
+    summary: `Management report exported (${format.toUpperCase()}) for ${range.label}`,
   });
 
-  const csv = toCsv(rows);
-  const filename = `nexora-report-${range.from.toISOString().slice(0, 10)}-to-${range.to.toISOString().slice(0, 10)}.csv`;
+  const stem = `nexora-report-${range.from.toISOString().slice(0, 10)}-to-${range.to
+    .toISOString()
+    .slice(0, 10)}`;
+
+  if (format === 'pdf') {
+    const pdf = await renderReportPdf(document);
+    return new NextResponse(new Uint8Array(pdf), {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${stem}.pdf"`,
+        'Content-Length': String(pdf.byteLength),
+        'Cache-Control': 'private, no-store',
+      },
+    });
+  }
+
+  const csv = toCsv(reportToCsvRows(document));
 
   return new NextResponse(csv, {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Disposition': `attachment; filename="${stem}.csv"`,
       'Cache-Control': 'private, no-store',
     },
   });

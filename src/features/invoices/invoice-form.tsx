@@ -248,7 +248,7 @@ export function InvoiceForm({
         <CardHeader>
           <div>
             <CardTitle>Line items</CardTitle>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               Discounts are absolute amounts and are applied before tax.
             </p>
           </div>
@@ -271,13 +271,13 @@ export function InvoiceForm({
         </CardHeader>
         <CardContent className="space-y-2">
           {errors.lines?.message ? (
-            <p role="alert" className="text-xs text-danger">
+            <p role="alert" className="text-danger text-xs">
               {errors.lines.message}
             </p>
           ) : null}
 
           {/* Column headings, desktop only. */}
-          <div className="hidden gap-2 px-1 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle lg:grid lg:grid-cols-[1.5rem_1fr_5rem_7rem_7rem_5rem_7rem_2rem]">
+          <div className="text-ink-subtle hidden gap-2 px-1 text-[11px] font-semibold tracking-wide uppercase lg:grid lg:grid-cols-[1.5rem_1fr_5rem_7rem_7rem_5rem_7rem_2rem]">
             <span />
             <span>Description</span>
             <span className="text-right">Qty</span>
@@ -293,10 +293,10 @@ export function InvoiceForm({
             return (
               <div
                 key={field.id}
-                className="grid gap-2 rounded-lg border border-line bg-surface-sunken/40 p-2.5 lg:grid-cols-[1.5rem_1fr_5rem_7rem_7rem_5rem_7rem_2rem] lg:items-center lg:border-transparent lg:bg-transparent lg:p-1"
+                className="border-line bg-surface-sunken/40 grid gap-2 rounded-lg border p-2.5 lg:grid-cols-[1.5rem_1fr_5rem_7rem_7rem_5rem_7rem_2rem] lg:items-center lg:border-transparent lg:bg-transparent lg:p-1"
               >
                 <span
-                  className="hidden items-center justify-center text-ink-subtle lg:flex"
+                  className="text-ink-subtle hidden items-center justify-center lg:flex"
                   aria-hidden
                 >
                   <GripVertical className="size-3.5" />
@@ -311,7 +311,7 @@ export function InvoiceForm({
                     aria-invalid={errors.lines?.[index]?.description ? true : undefined}
                   />
                   {errors.lines?.[index]?.description ? (
-                    <p className="mt-1 text-xs text-danger">
+                    <p className="text-danger mt-1 text-xs">
                       {errors.lines[index]?.description?.message}
                     </p>
                   ) : null}
@@ -321,7 +321,7 @@ export function InvoiceForm({
                   <Label className="lg:sr-only">Qty</Label>
                   <Input
                     inputMode="decimal"
-                    className="text-right tabular"
+                    className="tabular text-right"
                     {...register(`lines.${index}.quantity`)}
                     aria-label={`Line ${index + 1} quantity`}
                   />
@@ -331,7 +331,7 @@ export function InvoiceForm({
                   <Label className="lg:sr-only">Unit price</Label>
                   <Input
                     inputMode="decimal"
-                    className="text-right tabular"
+                    className="tabular text-right"
                     {...register(`lines.${index}.unitPrice`)}
                     aria-label={`Line ${index + 1} unit price`}
                   />
@@ -341,7 +341,7 @@ export function InvoiceForm({
                   <Label className="lg:sr-only">Discount</Label>
                   <Input
                     inputMode="decimal"
-                    className="text-right tabular"
+                    className="tabular text-right"
                     {...register(`lines.${index}.discountAmount`)}
                     aria-label={`Line ${index + 1} discount`}
                   />
@@ -351,7 +351,7 @@ export function InvoiceForm({
                   <Label className="lg:sr-only">Tax %</Label>
                   <Input
                     inputMode="decimal"
-                    className="text-right tabular"
+                    className="tabular text-right"
                     disabled={taxMode === 'INVOICE_LEVEL'}
                     {...register(`lines.${index}.taxRate`)}
                     aria-label={`Line ${index + 1} tax rate`}
@@ -359,7 +359,7 @@ export function InvoiceForm({
                 </div>
 
                 <div className="flex items-center justify-between lg:justify-end">
-                  <span className="text-xs text-ink-subtle lg:hidden">Amount</span>
+                  <span className="text-ink-subtle text-xs lg:hidden">Amount</span>
                   <CurrencyAmount
                     amount={computed?.lineTotal ?? '0'}
                     currency={currency}
@@ -384,7 +384,7 @@ export function InvoiceForm({
           })}
 
           {/* Totals */}
-          <div className="mt-3 flex justify-end border-t border-line pt-3">
+          <div className="border-line mt-3 flex justify-end border-t pt-3">
             <dl className="w-full max-w-xs space-y-1.5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink-muted">Subtotal</dt>
@@ -401,7 +401,7 @@ export function InvoiceForm({
                 </div>
               ) : null}
               <div className="flex justify-between">
-                <dt className="flex items-center gap-1 text-ink-muted">
+                <dt className="text-ink-muted flex items-center gap-1">
                   Tax
                   <Tooltip
                     content={
@@ -410,7 +410,7 @@ export function InvoiceForm({
                         : 'The invoice rate applied to the net subtotal, rounded once.'
                     }
                   >
-                    <span className="cursor-help text-ink-subtle">
+                    <span className="text-ink-subtle cursor-help">
                       <Info className="size-3" aria-hidden />
                     </span>
                   </Tooltip>
@@ -419,7 +419,7 @@ export function InvoiceForm({
                   <CurrencyAmount amount={totals?.taxTotal ?? '0'} currency={currency} />
                 </dd>
               </div>
-              <div className="flex justify-between border-t border-line pt-1.5 text-base font-semibold">
+              <div className="border-line flex justify-between border-t pt-1.5 text-base font-semibold">
                 <dt>Total</dt>
                 <dd>
                   <CurrencyAmount

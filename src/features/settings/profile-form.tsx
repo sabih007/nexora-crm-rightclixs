@@ -69,11 +69,7 @@ export function ProfileForm({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Name" required htmlFor="profile-name">
-              <Input
-                id="profile-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <Input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} />
             </Field>
 
             <Field
@@ -104,10 +100,10 @@ export function ProfileForm({
             </Field>
           </div>
 
-          <label className="flex items-center justify-between gap-4 rounded-lg border border-line px-3.5 py-2.5">
+          <label className="border-line flex items-center justify-between gap-4 rounded-lg border px-3.5 py-2.5">
             <span>
               <Label>Do not email me</Label>
-              <span className="mt-0.5 block text-xs text-ink-subtle">
+              <span className="text-ink-subtle mt-0.5 block text-xs">
                 Renewal and overdue reminders still appear in the app; only email is suppressed.
               </span>
             </span>

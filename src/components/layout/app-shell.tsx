@@ -32,7 +32,7 @@ import {
 import { Avatar } from '@/components/ui/misc';
 import { Badge } from '@/components/ui/badge';
 import { ROLE_LABELS } from '@/lib/permissions';
-import { useIsMounted, setPreferenceCookie } from '@/lib/hooks';
+import { csrfHeaders, useIsMounted, setPreferenceCookie } from '@/lib/hooks';
 import { cn } from '@/lib/utils';
 import { Sidebar } from './sidebar';
 import { CommandPalette } from './command-palette';
@@ -93,16 +93,16 @@ export function AppShell({
   }, []);
 
   async function handleSignOut() {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch('/api/auth/logout', { method: 'POST', headers: csrfHeaders() });
     router.push('/login');
     router.refresh();
   }
 
   return (
-    <div className="flex min-h-screen bg-canvas">
+    <div className="bg-canvas flex min-h-screen">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[60] focus:rounded-md focus:bg-brand-500 focus:px-3 focus:py-2 focus:text-sm focus:text-white"
+        className="focus:bg-brand-500 sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:px-3 focus:py-2 focus:text-sm focus:text-white"
       >
         Skip to content
       </a>
@@ -121,13 +121,17 @@ export function AppShell({
             className="absolute inset-0 bg-[#0b1220]/50 backdrop-blur-[2px]"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-60 shadow-lg animate-in-fade">
-            <Sidebar role={role} workspaceName={workspaceName} onNavigate={() => setDrawerOpen(false)} />
+          <div className="animate-in-fade absolute inset-y-0 left-0 w-60 shadow-lg">
+            <Sidebar
+              role={role}
+              workspaceName={workspaceName}
+              onNavigate={() => setDrawerOpen(false)}
+            />
             <button
               type="button"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close navigation"
-              className="absolute right-2 top-3 rounded-md p-1.5 text-ink-subtle hover:bg-surface-hover hover:text-ink"
+              className="text-ink-subtle hover:bg-surface-hover hover:text-ink absolute top-3 right-2 rounded-md p-1.5"
             >
               <X className="size-4" />
             </button>
@@ -136,7 +140,7 @@ export function AppShell({
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b border-line bg-surface/85 px-3 backdrop-blur-md no-print sm:px-4">
+        <header className="border-line bg-surface/85 no-print sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b px-3 backdrop-blur-md sm:px-4">
           <Button
             variant="ghost"
             size="icon-sm"
@@ -160,14 +164,14 @@ export function AppShell({
             type="button"
             onClick={() => setPaletteOpen(true)}
             className={cn(
-              'group flex h-8 min-w-0 flex-1 items-center gap-2 rounded-lg border border-line bg-surface-sunken px-2.5',
-              'text-[13px] text-ink-subtle transition-colors hover:border-line-strong hover:text-ink-muted',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 sm:max-w-xs',
+              'group border-line bg-surface-sunken flex h-8 min-w-0 flex-1 items-center gap-2 rounded-lg border px-2.5',
+              'text-ink-subtle hover:border-line-strong hover:text-ink-muted text-[13px] transition-colors',
+              'focus-visible:ring-brand-500/40 focus-visible:ring-2 focus-visible:outline-none sm:max-w-xs',
             )}
           >
             <Search className="size-3.5 shrink-0" aria-hidden />
             <span className="truncate">Search clients, invoices…</span>
-            <kbd className="ml-auto hidden shrink-0 rounded border border-line bg-surface px-1.5 py-0.5 font-mono text-[10px] text-ink-subtle sm:inline">
+            <kbd className="border-line bg-surface text-ink-subtle ml-auto hidden shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] sm:inline">
               ⌘K
             </kbd>
           </button>
@@ -184,7 +188,7 @@ export function AppShell({
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="ml-0.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                  className="focus-visible:ring-brand-500/40 ml-0.5 rounded-full focus-visible:ring-2 focus-visible:outline-none"
                   aria-label="Account menu"
                 >
                   <Avatar name={user.name} color={user.avatarColor} size="md" />
@@ -192,10 +196,10 @@ export function AppShell({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
-                  <span className="block truncate text-[13px] font-semibold normal-case tracking-normal text-ink">
+                  <span className="text-ink block truncate text-[13px] font-semibold tracking-normal normal-case">
                     {user.name}
                   </span>
-                  <span className="block truncate text-[11px] font-normal normal-case tracking-normal text-ink-subtle">
+                  <span className="text-ink-subtle block truncate text-[11px] font-normal tracking-normal normal-case">
                     {user.email}
                   </span>
                   <Badge tone="brand" size="sm" className="mt-1.5">
@@ -266,7 +270,9 @@ function ThemeToggle() {
             <DropdownMenuItem key={opt.value} onSelect={() => setTheme(opt.value)}>
               <Icon />
               <span className="flex-1">{opt.label}</span>
-              {mounted && theme === opt.value ? <Check className="size-3.5 text-brand-500" /> : null}
+              {mounted && theme === opt.value ? (
+                <Check className="text-brand-500 size-3.5" />
+              ) : null}
             </DropdownMenuItem>
           );
         })}

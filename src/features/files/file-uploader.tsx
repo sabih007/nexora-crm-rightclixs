@@ -118,14 +118,14 @@ export function FileUploader({
 
         <div className="pointer-events-none flex flex-col items-center gap-2">
           {busy ? (
-            <Loader2 className="size-6 animate-spin text-brand-500" aria-hidden />
+            <Loader2 className="text-brand-500 size-6 animate-spin" aria-hidden />
           ) : (
-            <CloudUpload className="size-6 text-ink-subtle" aria-hidden />
+            <CloudUpload className="text-ink-subtle size-6" aria-hidden />
           )}
-          <p className="text-sm font-medium text-ink">
+          <p className="text-ink text-sm font-medium">
             {busy ? 'Uploading and checking files…' : 'Drop files here, or click to choose'}
           </p>
-          <p className="text-xs text-ink-subtle">
+          <p className="text-ink-subtle text-xs">
             Spreadsheets, PDFs, documents and images up to {formatBytes(maxBytes)}. Each file is
             checked against its real contents, not just its name.
           </p>
@@ -156,7 +156,7 @@ export function FileUploader({
           <button
             type="button"
             onClick={() => setRejected([])}
-            className="mt-2 inline-flex items-center gap-1 text-xs text-ink-subtle hover:text-ink"
+            className="text-ink-subtle hover:text-ink mt-2 inline-flex items-center gap-1 text-xs"
           >
             <X className="size-3" aria-hidden /> Dismiss
           </button>

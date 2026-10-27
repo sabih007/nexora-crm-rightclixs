@@ -27,18 +27,16 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-xl border border-dashed border-line bg-surface text-center',
+        'border-line bg-surface flex flex-col items-center justify-center rounded-xl border border-dashed text-center',
         compact ? 'px-5 py-8' : 'px-6 py-14',
         className,
       )}
     >
-      <div className="flex size-11 items-center justify-center rounded-full bg-surface-sunken text-ink-subtle">
+      <div className="bg-surface-sunken text-ink-subtle flex size-11 items-center justify-center rounded-full">
         <Icon className="size-5" aria-hidden />
       </div>
-      <h3 className="mt-3.5 text-sm font-semibold text-ink">{title}</h3>
-      {description ? (
-        <p className="mt-1 max-w-sm text-sm text-ink-subtle">{description}</p>
-      ) : null}
+      <h3 className="text-ink mt-3.5 text-sm font-semibold">{title}</h3>
+      {description ? <p className="text-ink-subtle mt-1 max-w-sm text-sm">{description}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
   );
@@ -59,13 +57,13 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        'flex flex-col items-center justify-center rounded-xl border border-danger/25 bg-danger-soft px-6 py-10 text-center',
+        'border-danger/25 bg-danger-soft flex flex-col items-center justify-center rounded-xl border px-6 py-10 text-center',
         className,
       )}
     >
-      <AlertTriangle className="size-6 text-danger" aria-hidden />
-      <h3 className="mt-3 text-sm font-semibold text-ink">{title}</h3>
-      {description ? <p className="mt-1 max-w-md text-sm text-ink-muted">{description}</p> : null}
+      <AlertTriangle className="text-danger size-6" aria-hidden />
+      <h3 className="text-ink mt-3 text-sm font-semibold">{title}</h3>
+      {description ? <p className="text-ink-muted mt-1 max-w-md text-sm">{description}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
   );

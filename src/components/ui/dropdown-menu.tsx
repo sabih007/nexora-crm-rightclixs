@@ -82,10 +82,14 @@ export const DropdownMenuRadioItem = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
 >(function DropdownMenuRadioItem({ className, children, ...props }, ref) {
   return (
-    <DropdownMenuPrimitive.RadioItem ref={ref} className={cn(itemClasses, 'pl-7', className)} {...props}>
+    <DropdownMenuPrimitive.RadioItem
+      ref={ref}
+      className={cn(itemClasses, 'pl-7', className)}
+      {...props}
+    >
       <span className="absolute left-2 flex size-3.5 items-center justify-center">
         <DropdownMenuPrimitive.ItemIndicator>
-          <span className="size-1.5 rounded-full bg-brand-500" />
+          <span className="bg-brand-500 size-1.5 rounded-full" />
         </DropdownMenuPrimitive.ItemIndicator>
       </span>
       {children}
@@ -100,7 +104,10 @@ export const DropdownMenuLabel = React.forwardRef<
   return (
     <DropdownMenuPrimitive.Label
       ref={ref}
-      className={cn('px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-subtle', className)}
+      className={cn(
+        'text-ink-subtle px-2 py-1.5 text-[11px] font-semibold tracking-wide uppercase',
+        className,
+      )}
       {...props}
     />
   );
@@ -111,7 +118,11 @@ export const DropdownMenuSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(function DropdownMenuSeparator({ className, ...props }, ref) {
   return (
-    <DropdownMenuPrimitive.Separator ref={ref} className={cn('-mx-1 my-1 h-px bg-line', className)} {...props} />
+    <DropdownMenuPrimitive.Separator
+      ref={ref}
+      className={cn('bg-line -mx-1 my-1 h-px', className)}
+      {...props}
+    />
   );
 });
 
@@ -133,7 +144,11 @@ export const DropdownMenuSubContent = React.forwardRef<
 >(function DropdownMenuSubContent({ className, ...props }, ref) {
   return (
     <DropdownMenuPrimitive.Portal>
-      <DropdownMenuPrimitive.SubContent ref={ref} className={cn(contentClasses, className)} {...props} />
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        className={cn(contentClasses, className)}
+        {...props}
+      />
     </DropdownMenuPrimitive.Portal>
   );
 });

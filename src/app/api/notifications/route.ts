@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getAuthContext } from '@/lib/auth/session';
+import { assertStateChangeAllowed, CsrfError } from '@/lib/auth/csrf';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,8 +14,13 @@ export async function GET() {
     orderBy: { createdAt: 'desc' },
     take: 25,
     select: {
-      id: true, type: true, title: true, body: true,
-      link: true, readAt: true, createdAt: true,
+      id: true,
+      type: true,
+      title: true,
+      body: true,
+      link: true,
+      readAt: true,
+      createdAt: true,
     },
   });
 
@@ -22,7 +28,16 @@ export async function GET() {
 }
 
 /** Mark every notification read for the current user. */
-export async function POST() {
+export async function POST(request: Request) {
+  try {
+    await assertStateChangeAllowed(request);
+  } catch (error) {
+    if (error instanceof CsrfError) {
+      return NextResponse.json({ error: error.message }, { status: 403 });
+    }
+    throw error;
+  }
+
   const ctx = await getAuthContext();
   if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

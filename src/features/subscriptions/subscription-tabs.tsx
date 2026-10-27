@@ -10,8 +10,18 @@ import { cn } from '@/lib/utils';
 const TABS: { href: string; label: string; icon: typeof LayoutGrid; permission: Permission }[] = [
   { href: '/subscriptions', label: 'Overview', icon: LayoutGrid, permission: 'subscription:read' },
   { href: '/subscriptions/cards', label: 'Cards', icon: CreditCard, permission: 'card:read' },
-  { href: '/subscriptions/platforms', label: 'Platforms', icon: Globe, permission: 'platform:read' },
-  { href: '/subscriptions/calendar', label: 'Calendar', icon: CalendarDays, permission: 'subscription:read' },
+  {
+    href: '/subscriptions/platforms',
+    label: 'Platforms',
+    icon: Globe,
+    permission: 'platform:read',
+  },
+  {
+    href: '/subscriptions/calendar',
+    label: 'Calendar',
+    icon: CalendarDays,
+    permission: 'subscription:read',
+  },
   { href: '/subscriptions/expenses', label: 'Expenses', icon: Receipt, permission: 'expense:read' },
 ];
 
@@ -20,7 +30,7 @@ export function SubscriptionTabs({ role }: { role: Role }) {
   const visible = TABS.filter((tab) => roleHasPermission(role, tab.permission));
 
   return (
-    <nav aria-label="Subscriptions sections" className="border-b border-line">
+    <nav aria-label="Subscriptions sections" className="border-line border-b">
       <ul className="flex gap-1 overflow-x-auto">
         {visible.map((tab) => {
           const active = pathname === tab.href;
@@ -31,11 +41,11 @@ export function SubscriptionTabs({ role }: { role: Role }) {
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'inline-flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 rounded-t',
+                  'inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+                  'focus-visible:ring-brand-500/40 rounded-t focus-visible:ring-2 focus-visible:outline-none',
                   active
                     ? 'border-brand-500 text-ink'
-                    : 'border-transparent text-ink-muted hover:text-ink',
+                    : 'text-ink-muted hover:text-ink border-transparent',
                 )}
               >
                 <Icon className="size-3.5" aria-hidden />

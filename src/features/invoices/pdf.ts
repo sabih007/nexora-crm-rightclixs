@@ -231,13 +231,13 @@ export async function renderInvoicePdf({
 
   // ---- Bill to -----------------------------------------------------------
   const billTop = Math.max(y, metaTop + 48) + 18;
+  doc.font('Helvetica-Bold').fontSize(8).fillColor(SUBTLE).text('BILL TO', PAGE_MARGIN, billTop);
+
   doc
     .font('Helvetica-Bold')
-    .fontSize(8)
-    .fillColor(SUBTLE)
-    .text('BILL TO', PAGE_MARGIN, billTop);
-
-  doc.font('Helvetica-Bold').fontSize(11).fillColor(INK).text(billTo.name, PAGE_MARGIN, billTop + 13);
+    .fontSize(11)
+    .fillColor(INK)
+    .text(billTo.name, PAGE_MARGIN, billTop + 13);
 
   doc.font('Helvetica').fontSize(9).fillColor(MUTED);
   let billY = doc.y + 2;
@@ -291,12 +291,7 @@ export async function renderInvoicePdf({
       rowY = PAGE_MARGIN;
     }
 
-    doc
-      .moveTo(PAGE_MARGIN, rowY)
-      .lineTo(right, rowY)
-      .strokeColor(LINE)
-      .lineWidth(0.5)
-      .stroke();
+    doc.moveTo(PAGE_MARGIN, rowY).lineTo(right, rowY).strokeColor(LINE).lineWidth(0.5).stroke();
 
     doc.font('Helvetica').fontSize(9.5).fillColor(INK);
     doc.text(line.description, col.description + 8, rowY + 7, { width: widths.description - 8 });
@@ -319,9 +314,14 @@ export async function renderInvoicePdf({
         .font('Helvetica')
         .fontSize(8)
         .fillColor(SUBTLE)
-        .text(`Discount ${money(line.discountAmount)}`, col.description + 8, rowY + 7 + descriptionHeight, {
-          width: widths.description - 8,
-        });
+        .text(
+          `Discount ${money(line.discountAmount)}`,
+          col.description + 8,
+          rowY + 7 + descriptionHeight,
+          {
+            width: widths.description - 8,
+          },
+        );
     }
 
     rowY += rowHeight;
@@ -382,7 +382,11 @@ export async function renderInvoicePdf({
     ['Notes', invoice.notes],
   ] as const) {
     if (!body) continue;
-    doc.font('Helvetica-Bold').fontSize(8).fillColor(SUBTLE).text(label.toUpperCase(), PAGE_MARGIN, footerY);
+    doc
+      .font('Helvetica-Bold')
+      .fontSize(8)
+      .fillColor(SUBTLE)
+      .text(label.toUpperCase(), PAGE_MARGIN, footerY);
     doc
       .font('Helvetica')
       .fontSize(9)

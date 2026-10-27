@@ -1,16 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Building2,
-  Globe,
-  Mail,
-  MapPin,
-  Pencil,
-  Phone,
-  Plus,
-  Receipt,
-  User,
-} from 'lucide-react';
+import { Building2, Globe, Mail, MapPin, Pencil, Phone, Plus, Receipt, User } from 'lucide-react';
 import { requireAuthPage, can } from '@/lib/auth/guard';
 import { roleHasPermission } from '@/lib/permissions';
 import { NoAccessState } from '@/components/ui/empty-state';
@@ -149,7 +139,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
       />
 
       {client.archivedAt ? (
-        <div className="mb-4 rounded-lg border border-warning/25 bg-warning-soft px-3.5 py-2.5 text-sm text-ink-muted">
+        <div className="border-warning/25 bg-warning-soft text-ink-muted mb-4 rounded-lg border px-3.5 py-2.5 text-sm">
           This client was archived on {formatDate(client.archivedAt)}. Existing records are
           preserved and read-only in list views.
         </div>
@@ -177,29 +167,32 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                 </CardHeader>
                 <CardContent>
                   {!client.canSeeSensitive ? (
-                    <p className="text-sm text-ink-subtle">
+                    <p className="text-ink-subtle text-sm">
                       Contact details are restricted for your role.
                     </p>
                   ) : client.contacts.length === 0 ? (
-                    <p className="text-sm text-ink-subtle">No contacts recorded.</p>
+                    <p className="text-ink-subtle text-sm">No contacts recorded.</p>
                   ) : (
                     <ul className="divide-y divide-[var(--line)]">
                       {client.contacts.map((contact) => (
-                        <li key={contact.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0 last:pb-0">
-                          <span className="text-sm font-medium text-ink">{contact.name}</span>
+                        <li
+                          key={contact.id}
+                          className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5 first:pt-0 last:pb-0"
+                        >
+                          <span className="text-ink text-sm font-medium">{contact.name}</span>
                           {contact.isPrimary ? (
                             <Badge tone="brand" size="sm">
                               Primary
                             </Badge>
                           ) : null}
                           {contact.position ? (
-                            <span className="text-xs text-ink-subtle">{contact.position}</span>
+                            <span className="text-ink-subtle text-xs">{contact.position}</span>
                           ) : null}
-                          <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-ink-muted">
+                          <span className="text-ink-muted ml-auto flex flex-wrap items-center gap-3 text-xs">
                             {contact.email ? (
                               <a
                                 href={`mailto:${contact.email}`}
-                                className="inline-flex items-center gap-1 hover:text-brand-500"
+                                className="hover:text-brand-500 inline-flex items-center gap-1"
                               >
                                 <Mail className="size-3" aria-hidden /> {contact.email}
                               </a>
@@ -207,7 +200,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                             {contact.phone ? (
                               <a
                                 href={`tel:${contact.phone}`}
-                                className="inline-flex items-center gap-1 hover:text-brand-500"
+                                className="hover:text-brand-500 inline-flex items-center gap-1"
                               >
                                 <Phone className="size-3" aria-hidden /> {contact.phone}
                               </a>
@@ -226,7 +219,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                     <CardTitle>Notes</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">
+                    <p className="text-ink-muted text-sm leading-relaxed whitespace-pre-wrap">
                       {client.notes}
                     </p>
                   </CardContent>
@@ -255,14 +248,16 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                     <li key={project.id}>
                       <Link
                         href={`/projects/${project.id}`}
-                        className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:bg-surface-hover"
+                        className="border-line bg-surface hover:bg-surface-hover flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 transition-colors"
                       >
-                        <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
+                        <span className="text-ink min-w-0 flex-1 truncate text-sm font-medium">
                           {project.name}
                         </span>
                         <StatusBadge kind="project" value={project.status} />
                         <StatusBadge kind="priority" value={project.priority} />
-                        <span className="text-xs text-ink-subtle">{project._count.tasks} tasks</span>
+                        <span className="text-ink-subtle text-xs">
+                          {project._count.tasks} tasks
+                        </span>
                         {project.budgetAmount ? (
                           <CurrencyAmount
                             amount={project.budgetAmount.toString()}
@@ -271,7 +266,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                           />
                         ) : null}
                         {project.dueDate ? (
-                          <span className="text-xs text-ink-subtle">
+                          <span className="text-ink-subtle text-xs">
                             due {formatDate(project.dueDate)}
                           </span>
                         ) : null}
@@ -285,21 +280,25 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             {financials ? (
               <TabsContent value="invoices">
                 {financials.invoices.length === 0 ? (
-                  <EmptyState title="No invoices" description="Invoices raised for this client will appear here." />
+                  <EmptyState
+                    title="No invoices"
+                    description="Invoices raised for this client will appear here."
+                  />
                 ) : (
                   <ul className="space-y-2">
                     {financials.invoices.map((invoice) => (
                       <li key={invoice.id}>
                         <Link
                           href={`/invoices/${invoice.id}`}
-                          className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:bg-surface-hover"
+                          className="border-line bg-surface hover:bg-surface-hover flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3 transition-colors"
                         >
-                          <span className="font-mono text-sm font-medium text-ink">
+                          <span className="text-ink font-mono text-sm font-medium">
                             {invoice.invoiceNumber}
                           </span>
                           <StatusBadge kind="invoice" value={invoice.status} />
-                          <span className="text-xs text-ink-subtle">
-                            issued {formatDate(invoice.issueDate)} · due {formatDate(invoice.dueDate)}
+                          <span className="text-ink-subtle text-xs">
+                            issued {formatDate(invoice.issueDate)} · due{' '}
+                            {formatDate(invoice.dueDate)}
                           </span>
                           <span className="ml-auto flex items-center gap-3">
                             <CurrencyAmount
@@ -319,18 +318,23 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             {financials ? (
               <TabsContent value="payments">
                 {financials.payments.length === 0 ? (
-                  <EmptyState title="No payments" description="Recorded payments will appear here." />
+                  <EmptyState
+                    title="No payments"
+                    description="Recorded payments will appear here."
+                  />
                 ) : (
                   <ul className="space-y-2">
                     {financials.payments.map((payment) => (
                       <li
                         key={payment.id}
-                        className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3"
+                        className="border-line bg-surface flex flex-wrap items-center gap-3 rounded-xl border px-4 py-3"
                       >
-                        <span className="text-sm text-ink">{formatDate(payment.paymentDate)}</span>
-                        <Badge tone="outline">{payment.method.replace('_', ' ').toLowerCase()}</Badge>
+                        <span className="text-ink text-sm">{formatDate(payment.paymentDate)}</span>
+                        <Badge tone="outline">
+                          {payment.method.replace('_', ' ').toLowerCase()}
+                        </Badge>
                         {payment.reference ? (
-                          <span className="truncate text-xs text-ink-subtle">
+                          <span className="text-ink-subtle truncate text-xs">
                             ref {payment.reference}
                           </span>
                         ) : null}
@@ -365,29 +369,29 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               </CardHeader>
               <CardContent className="space-y-3">
                 <div>
-                  <p className="text-xs text-ink-subtle">Outstanding balance</p>
+                  <p className="text-ink-subtle text-xs">Outstanding balance</p>
                   <CurrencyAmount
                     amount={outstanding?.toString() ?? '0'}
                     currency={client.billingCurrency}
                     size="lg"
                     tone={outstanding && outstanding.greaterThan(0) ? 'negative' : 'neutral'}
                   />
-                  <p className="mt-0.5 text-[11px] text-ink-subtle">
+                  <p className="text-ink-subtle mt-0.5 text-[11px]">
                     Issued invoices not yet fully paid.
                   </p>
                 </div>
-                <div className="border-t border-line pt-3">
-                  <p className="text-xs text-ink-subtle">Lifetime invoiced</p>
+                <div className="border-line border-t pt-3">
+                  <p className="text-ink-subtle text-xs">Lifetime invoiced</p>
                   <CurrencyAmount
                     amount={lifetimeBilled?.toString() ?? '0'}
                     currency={client.billingCurrency}
                   />
-                  <p className="mt-0.5 text-[11px] text-ink-subtle">
+                  <p className="text-ink-subtle mt-0.5 text-[11px]">
                     Excludes drafts, voided and cancelled invoices.
                   </p>
                 </div>
                 {mixedCurrencies.length > 0 ? (
-                  <p className="border-t border-line pt-3 text-[11px] text-warning">
+                  <p className="border-line text-warning border-t pt-3 text-[11px]">
                     This client also has invoices in {mixedCurrencies.join(', ')}. Totals above
                     cover {client.billingCurrency} only — see Reports for a converted view.
                   </p>
@@ -403,15 +407,15 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
             <CardContent className="space-y-2.5 text-sm">
               {client.email ? (
                 <p className="flex items-start gap-2">
-                  <Mail className="mt-0.5 size-3.5 shrink-0 text-ink-subtle" aria-hidden />
-                  <a href={`mailto:${client.email}`} className="break-all hover:text-brand-500">
+                  <Mail className="text-ink-subtle mt-0.5 size-3.5 shrink-0" aria-hidden />
+                  <a href={`mailto:${client.email}`} className="hover:text-brand-500 break-all">
                     {client.email}
                   </a>
                 </p>
               ) : null}
               {client.phone ? (
                 <p className="flex items-start gap-2">
-                  <Phone className="mt-0.5 size-3.5 shrink-0 text-ink-subtle" aria-hidden />
+                  <Phone className="text-ink-subtle mt-0.5 size-3.5 shrink-0" aria-hidden />
                   <a href={`tel:${client.phone}`} className="hover:text-brand-500">
                     {client.phone}
                   </a>
@@ -419,12 +423,16 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               ) : null}
               {client.website ? (
                 <p className="flex items-start gap-2">
-                  <Globe className="mt-0.5 size-3.5 shrink-0 text-ink-subtle" aria-hidden />
+                  <Globe className="text-ink-subtle mt-0.5 size-3.5 shrink-0" aria-hidden />
                   <a
-                    href={client.website.startsWith('http') ? client.website : `https://${client.website}`}
+                    href={
+                      client.website.startsWith('http')
+                        ? client.website
+                        : `https://${client.website}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="break-all hover:text-brand-500"
+                    className="hover:text-brand-500 break-all"
                   >
                     {client.website}
                   </a>
@@ -432,7 +440,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
               ) : null}
               {addressLines.length > 0 ? (
                 <p className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 size-3.5 shrink-0 text-ink-subtle" aria-hidden />
+                  <MapPin className="text-ink-subtle mt-0.5 size-3.5 shrink-0" aria-hidden />
                   <span className="text-ink-muted">
                     {addressLines.map((line) => (
                       <span key={line} className="block">
@@ -443,12 +451,12 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
                 </p>
               ) : null}
               {client.taxId ? (
-                <p className="border-t border-line pt-2.5 text-xs">
+                <p className="border-line border-t pt-2.5 text-xs">
                   <span className="text-ink-subtle">Tax ID: </span>
-                  <span className="font-mono text-ink">{client.taxId}</span>
+                  <span className="text-ink font-mono">{client.taxId}</span>
                 </p>
               ) : null}
-              <p className="border-t border-line pt-2.5 text-xs text-ink-subtle">
+              <p className="border-line text-ink-subtle border-t pt-2.5 text-xs">
                 Added {formatDate(client.createdAt)}
               </p>
             </CardContent>

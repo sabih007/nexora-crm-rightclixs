@@ -145,7 +145,9 @@ export function outstandingBalance({
   creditedTotal,
   currency,
 }: BalanceInput): string {
-  const balance = dec(grandTotal).minus(dec(amountPaid)).minus(dec(creditedTotal ?? 0));
+  const balance = dec(grandTotal)
+    .minus(dec(amountPaid))
+    .minus(dec(creditedTotal ?? 0));
   return roundMoney(balance.isNegative() ? new Decimal(0) : balance, currency).toString();
 }
 
@@ -156,18 +158,14 @@ export function overpaymentAmount({
   creditedTotal,
   currency,
 }: BalanceInput): string {
-  const over = dec(amountPaid).plus(dec(creditedTotal ?? 0)).minus(dec(grandTotal));
+  const over = dec(amountPaid)
+    .plus(dec(creditedTotal ?? 0))
+    .minus(dec(grandTotal));
   return roundMoney(over.isNegative() ? new Decimal(0) : over, currency).toString();
 }
 
 export type InvoiceStatus =
-  | 'DRAFT'
-  | 'SENT'
-  | 'PARTIALLY_PAID'
-  | 'PAID'
-  | 'OVERDUE'
-  | 'VOID'
-  | 'CANCELLED';
+  'DRAFT' | 'SENT' | 'PARTIALLY_PAID' | 'PAID' | 'OVERDUE' | 'VOID' | 'CANCELLED';
 
 /**
  * Derive the status of an issued invoice from its money and dates.

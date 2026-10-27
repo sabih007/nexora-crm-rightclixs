@@ -98,9 +98,7 @@ export function DashboardCharts({
     [baseCurrency],
   );
 
-  const hasSeriesData = series.some(
-    (p) => p.collected > 0 || p.invoiced > 0 || p.expenses > 0,
-  );
+  const hasSeriesData = series.some((p) => p.collected > 0 || p.invoiced > 0 || p.expenses > 0);
 
   return (
     <div className="space-y-4">
@@ -115,7 +113,7 @@ export function DashboardCharts({
         <CardHeader>
           <div>
             <CardTitle>Cash, invoiced revenue and expenses</CardTitle>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               Bars are money in and out; the line is what was invoiced, which is not the same as
               what was collected.
             </p>
@@ -123,7 +121,7 @@ export function DashboardCharts({
         </CardHeader>
         <CardContent>
           {!hasSeriesData ? (
-            <p className="py-10 text-center text-sm text-ink-subtle">
+            <p className="text-ink-subtle py-10 text-center text-sm">
               No financial activity in the last 12 months yet.
             </p>
           ) : (
@@ -187,34 +185,41 @@ export function DashboardCharts({
 
               {/* Accessible equivalent of the chart. */}
               <details className="mt-2">
-                <summary className="cursor-pointer text-xs text-ink-subtle hover:text-ink">
+                <summary className="text-ink-subtle hover:text-ink cursor-pointer text-xs">
                   View this chart as a table
                 </summary>
                 <div className="mt-2 overflow-x-auto">
                   <table className="w-full text-xs">
                     <caption className="sr-only">
-                      Cash collected, expenses paid and invoiced revenue by month in{' '}
-                      {baseCurrency}
+                      Cash collected, expenses paid and invoiced revenue by month in {baseCurrency}
                     </caption>
                     <thead>
-                      <tr className="border-b border-line text-left text-ink-subtle">
-                        <th scope="col" className="py-1 pr-3">Month</th>
-                        <th scope="col" className="py-1 pr-3 text-right">Collected</th>
-                        <th scope="col" className="py-1 pr-3 text-right">Invoiced</th>
-                        <th scope="col" className="py-1 text-right">Expenses</th>
+                      <tr className="border-line text-ink-subtle border-b text-left">
+                        <th scope="col" className="py-1 pr-3">
+                          Month
+                        </th>
+                        <th scope="col" className="py-1 pr-3 text-right">
+                          Collected
+                        </th>
+                        <th scope="col" className="py-1 pr-3 text-right">
+                          Invoiced
+                        </th>
+                        <th scope="col" className="py-1 text-right">
+                          Expenses
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {series.map((point) => (
-                        <tr key={point.month} className="border-b border-line last:border-0">
-                          <td className="py-1 pr-3 text-ink">{point.month}</td>
-                          <td className="py-1 pr-3 text-right tabular text-ink-muted">
+                        <tr key={point.month} className="border-line border-b last:border-0">
+                          <td className="text-ink py-1 pr-3">{point.month}</td>
+                          <td className="tabular text-ink-muted py-1 pr-3 text-right">
                             {formatMoney(point.collected, baseCurrency)}
                           </td>
-                          <td className="py-1 pr-3 text-right tabular text-ink-muted">
+                          <td className="tabular text-ink-muted py-1 pr-3 text-right">
                             {formatMoney(point.invoiced, baseCurrency)}
                           </td>
-                          <td className="py-1 text-right tabular text-ink-muted">
+                          <td className="tabular text-ink-muted py-1 text-right">
                             {formatMoney(point.expenses, baseCurrency)}
                           </td>
                         </tr>
@@ -253,14 +258,14 @@ export function DashboardCharts({
           <CardHeader>
             <div>
               <CardTitle>Expenses by category</CardTitle>
-              <p className="mt-0.5 text-xs text-ink-subtle">
+              <p className="text-ink-subtle mt-0.5 text-xs">
                 Actual spend in the selected period, in its original currency.
               </p>
             </div>
           </CardHeader>
           <CardContent>
             {expensesByCategory.length === 0 ? (
-              <p className="py-8 text-center text-sm text-ink-subtle">
+              <p className="text-ink-subtle py-8 text-center text-sm">
                 No expenses recorded in this period.
               </p>
             ) : (
@@ -334,7 +339,7 @@ function StatusDonut({
       </CardHeader>
       <CardContent>
         {total === 0 ? (
-          <p className="py-8 text-center text-sm text-ink-subtle">Nothing to show yet.</p>
+          <p className="text-ink-subtle py-8 text-center text-sm">Nothing to show yet.</p>
         ) : (
           <div className="flex items-center gap-3">
             <div className="h-36 w-36 shrink-0">
@@ -377,8 +382,8 @@ function StatusDonut({
                       style={{ backgroundColor: entry.color }}
                       aria-hidden
                     />
-                    <span className="min-w-0 flex-1 truncate text-ink-muted">{entry.name}</span>
-                    <span className="tabular font-medium text-ink">{entry.value}</span>
+                    <span className="text-ink-muted min-w-0 flex-1 truncate">{entry.name}</span>
+                    <span className="tabular text-ink font-medium">{entry.value}</span>
                   </li>
                 ))}
             </ul>

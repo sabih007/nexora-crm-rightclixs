@@ -33,12 +33,12 @@ export function ExpensePagination({
   return (
     <nav
       aria-label="Expense pagination"
-      className="mt-3 flex items-center justify-between gap-3 text-[13px] text-ink-muted"
+      className="text-ink-muted mt-3 flex items-center justify-between gap-3 text-[13px]"
     >
       <p>
-        Showing <span className="tabular font-medium text-ink">{first}</span>–
-        <span className="tabular font-medium text-ink">{last}</span> of{' '}
-        <span className="tabular font-medium text-ink">{total}</span>
+        Showing <span className="tabular text-ink font-medium">{first}</span>–
+        <span className="tabular text-ink font-medium">{last}</span> of{' '}
+        <span className="tabular text-ink font-medium">{total}</span>
       </p>
       <div className="flex items-center gap-2">
         <Button

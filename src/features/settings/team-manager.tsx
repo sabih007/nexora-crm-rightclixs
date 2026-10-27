@@ -106,7 +106,7 @@ export function TeamManager({
 
                   <div className="min-w-0 flex-1">
                     <p className="flex flex-wrap items-center gap-2">
-                      <span className="truncate text-sm font-medium text-ink">{member.name}</span>
+                      <span className="text-ink truncate text-sm font-medium">{member.name}</span>
                       {isSelf ? (
                         <Badge tone="brand" size="sm">
                           you
@@ -137,7 +137,7 @@ export function TeamManager({
                         </span>
                       </Tooltip>
                     </p>
-                    <p className="truncate text-xs text-ink-subtle">
+                    <p className="text-ink-subtle truncate text-xs">
                       {member.email} · joined {formatDate(member.joinedAt)}
                       {member.lastLoginAt
                         ? ` · last signed in ${formatDate(member.lastLoginAt)}`
@@ -149,9 +149,7 @@ export function TeamManager({
                     <Select
                       aria-label={`Role for ${member.name}`}
                       value={member.role}
-                      onChange={(e) =>
-                        setPendingRole({ member, role: e.target.value as Role })
-                      }
+                      onChange={(e) => setPendingRole({ member, role: e.target.value as Role })}
                       className="h-8 w-auto text-[13px]"
                     >
                       {/* The current role must stay selectable even when the
@@ -296,9 +294,9 @@ function InviteDialog({
               <Callout tone="success" title="Account created">
                 {created.password ? (
                   <>
-                    Give <strong>{created.email}</strong> this temporary password. It is shown
-                    once and stored only as a hash — it cannot be recovered later. Ask them to
-                    change it after signing in.
+                    Give <strong>{created.email}</strong> this temporary password. It is shown once
+                    and stored only as a hash — it cannot be recovered later. Ask them to change it
+                    after signing in.
                   </>
                 ) : (
                   <>
@@ -309,9 +307,9 @@ function InviteDialog({
               </Callout>
 
               {created.password ? (
-                <div className="flex items-center gap-2 rounded-lg border border-line bg-surface-sunken px-3 py-2.5">
-                  <KeyRound className="size-4 shrink-0 text-ink-subtle" aria-hidden />
-                  <code className="min-w-0 flex-1 break-all font-mono text-sm text-ink">
+                <div className="border-line bg-surface-sunken flex items-center gap-2 rounded-lg border px-3 py-2.5">
+                  <KeyRound className="text-ink-subtle size-4 shrink-0" aria-hidden />
+                  <code className="text-ink min-w-0 flex-1 font-mono text-sm break-all">
                     {created.password}
                   </code>
                   <Button variant="secondary" size="sm" onClick={copyPassword}>
@@ -374,11 +372,7 @@ function InviteDialog({
             {created ? 'Done' : 'Cancel'}
           </Button>
           {!created ? (
-            <Button
-              onClick={handleSubmit}
-              loading={busy}
-              disabled={!name.trim() || !email.trim()}
-            >
+            <Button onClick={handleSubmit} loading={busy} disabled={!name.trim() || !email.trim()}>
               Create account
             </Button>
           ) : null}

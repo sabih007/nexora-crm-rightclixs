@@ -57,12 +57,12 @@ export function InvoicesTable({
         <div className="min-w-0">
           <Link
             href={`/invoices/${row.id}`}
-            className="block font-mono text-[13px] font-medium text-ink hover:text-brand-500 hover:underline"
+            className="text-ink hover:text-brand-500 block font-mono text-[13px] font-medium hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             {row.invoiceNumber}
           </Link>
-          <span className="block truncate text-xs text-ink-subtle">{row.client.name}</span>
+          <span className="text-ink-subtle block truncate text-xs">{row.client.name}</span>
         </div>
       ),
     },
@@ -85,10 +85,14 @@ export function InvoicesTable({
       cell: (row) => {
         const overdue =
           row.status === 'OVERDUE' ||
-          (daysUntil(row.dueDate) < 0 &&
-            ['SENT', 'PARTIALLY_PAID'].includes(row.status));
+          (daysUntil(row.dueDate) < 0 && ['SENT', 'PARTIALLY_PAID'].includes(row.status));
         return (
-          <span className={cn('whitespace-nowrap', overdue ? 'font-medium text-danger' : 'text-ink-muted')}>
+          <span
+            className={cn(
+              'whitespace-nowrap',
+              overdue ? 'text-danger font-medium' : 'text-ink-muted',
+            )}
+          >
             {formatDate(row.dueDate)}
           </span>
         );
@@ -125,14 +129,14 @@ export function InvoicesTable({
   return (
     <>
       {totalEntries.length > 0 ? (
-        <div className="mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-line bg-surface px-3.5 py-2.5 text-[13px]">
+        <div className="border-line bg-surface mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border px-3.5 py-2.5 text-[13px]">
           <span className="text-ink-subtle">Issued total in view:</span>
           {totalEntries.map(([currency, amount]) => (
-            <span key={currency} className="font-medium text-ink">
+            <span key={currency} className="text-ink font-medium">
               <CurrencyAmount amount={amount} currency={currency} />
             </span>
           ))}
-          <span className="text-[11px] text-ink-subtle">
+          <span className="text-ink-subtle text-[11px]">
             Each currency is shown separately — unlike currencies are never added together.
           </span>
         </div>
@@ -230,7 +234,7 @@ export function InvoicesTable({
               ))}
             </Select>
 
-            <label className="flex items-center gap-1.5 text-[13px] text-ink-muted">
+            <label className="text-ink-muted flex items-center gap-1.5 text-[13px]">
               <span className="sr-only">Issued from</span>
               <Input
                 type="date"
@@ -240,7 +244,7 @@ export function InvoicesTable({
                 className="h-9 w-auto"
               />
             </label>
-            <label className="flex items-center gap-1.5 text-[13px] text-ink-muted">
+            <label className="text-ink-muted flex items-center gap-1.5 text-[13px]">
               <span className="sr-only">Issued to</span>
               <Input
                 type="date"
@@ -251,7 +255,7 @@ export function InvoicesTable({
               />
             </label>
 
-            <label className="flex cursor-pointer items-center gap-1.5 text-[13px] text-ink-muted">
+            <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-[13px]">
               <Checkbox
                 checked={filters.unpaidOnly}
                 onCheckedChange={(checked) => update({ unpaidOnly: checked ? '1' : null })}

@@ -181,9 +181,7 @@ export function createDownloadToken(fileId: string, userId: string): string {
   );
 }
 
-export function verifyDownloadToken(
-  token: string,
-): { fileId: string; userId: string } | null {
+export function verifyDownloadToken(token: string): { fileId: string; userId: string } | null {
   const payload = verifySignedPayload<{ fileId: string; userId: string; exp: number }>(
     token,
     'file-download',

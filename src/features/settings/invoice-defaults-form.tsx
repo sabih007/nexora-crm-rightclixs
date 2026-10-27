@@ -45,7 +45,10 @@ export function InvoiceDefaultsForm({
       reset();
       return;
     }
-    set(key, [...values[key], parsed].sort((a, b) => b - a));
+    set(
+      key,
+      [...values[key], parsed].sort((a, b) => b - a),
+    );
     reset();
   }
 
@@ -108,11 +111,7 @@ export function InvoiceDefaultsForm({
               />
             </Field>
 
-            <Field
-              label="Number padding"
-              htmlFor="padding"
-              hint={`Produces ${sampleNumber}`}
-            >
+            <Field label="Number padding" htmlFor="padding" hint={`Produces ${sampleNumber}`}>
               <Input
                 id="padding"
                 inputMode="numeric"
@@ -127,10 +126,10 @@ export function InvoiceDefaultsForm({
               />
             </Field>
 
-            <label className="flex items-center justify-between gap-4 self-end rounded-lg border border-line px-3.5 py-2.5">
+            <label className="border-line flex items-center justify-between gap-4 self-end rounded-lg border px-3.5 py-2.5">
               <span>
                 <Label>Include the year</Label>
-                <span className="mt-0.5 block text-xs text-ink-subtle">
+                <span className="text-ink-subtle mt-0.5 block text-xs">
                   Restarts numbering visually each year.
                 </span>
               </span>
@@ -197,10 +196,10 @@ export function InvoiceDefaultsForm({
             />
           </div>
 
-          <p className="text-[11px] leading-relaxed text-ink-subtle">
+          <p className="text-ink-subtle text-[11px] leading-relaxed">
             Reminders are raised by the daily job at{' '}
-            <code className="font-mono">/api/cron/reminders</code>. They are deduplicated per
-            charge cycle, so running the job more than once a day sends nothing twice.
+            <code className="font-mono">/api/cron/reminders</code>. They are deduplicated per charge
+            cycle, so running the job more than once a day sends nothing twice.
           </p>
         </CardContent>
 
@@ -238,7 +237,7 @@ function DayChips({
   return (
     <div>
       <Label>{label}</Label>
-      <p className="mt-0.5 text-xs text-ink-subtle">{hint}</p>
+      <p className="text-ink-subtle mt-0.5 text-xs">{hint}</p>
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
         {days.map((day) => (
           <Badge key={day} tone="brand" className="gap-1 pr-1">
@@ -248,7 +247,7 @@ function DayChips({
                 type="button"
                 aria-label={`Remove the ${day} day reminder`}
                 onClick={() => onRemove(day)}
-                className="rounded-full p-0.5 hover:bg-brand-500/20"
+                className="hover:bg-brand-500/20 rounded-full p-0.5"
               >
                 <X className="size-3" />
               </button>
@@ -272,7 +271,7 @@ function DayChips({
           />
         ) : null}
         {days.length === 0 ? (
-          <span className="text-xs text-ink-subtle">None — no reminders will be sent.</span>
+          <span className="text-ink-subtle text-xs">None — no reminders will be sent.</span>
         ) : null}
       </div>
     </div>

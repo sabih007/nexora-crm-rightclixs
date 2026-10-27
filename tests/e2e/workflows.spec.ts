@@ -102,9 +102,7 @@ test.describe('card footprint', () => {
     await expect(page.getByText('···· 4242').first()).toBeVisible();
 
     // ---- link the card to the platform ----------------------------------
-    await page
-      .getByRole('button', { name: `Link a platform to ${nickname}` })
-      .click();
+    await page.getByRole('button', { name: `Link a platform to ${nickname}` }).click();
     await page.getByRole('combobox', { name: 'Platform' }).selectOption({ label: platformName });
     await page.getByRole('button', { name: 'Record link' }).click();
 
@@ -178,16 +176,12 @@ test.describe('reporting', () => {
 
     // The definitions panel states the difference explicitly.
     await expect(page.getByText('How these figures are calculated')).toBeVisible();
-    await expect(
-      page.getByText(/cash in hand — not what was billed/i),
-    ).toBeVisible();
+    await expect(page.getByText(/cash in hand — not what was billed/i)).toBeVisible();
   });
 
   test('reports are labelled as management reporting, not statements', async ({ page }) => {
     await page.goto('/reports');
-    await expect(
-      page.getByText(/Management reporting, not financial statements/i),
-    ).toBeVisible();
+    await expect(page.getByText(/Management reporting, not financial statements/i)).toBeVisible();
   });
 
   test('a report exports as CSV', async ({ page }) => {
@@ -198,6 +192,24 @@ test.describe('reporting', () => {
     const download = await downloadPromise;
 
     expect(download.suggestedFilename()).toMatch(/^nexora-report-.*\.csv$/);
+  });
+
+  test('a report exports as PDF', async ({ page }) => {
+    await page.goto('/reports');
+
+    const downloadPromise = page.waitForEvent('download', { timeout: 20_000 });
+    await page.getByRole('link', { name: 'Export PDF' }).click();
+    const download = await downloadPromise;
+
+    expect(download.suggestedFilename()).toMatch(/^nexora-report-.*\.pdf$/);
+
+    // A real PDF, not an error page with the wrong content type.
+    const stream = await download.createReadStream();
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) chunks.push(chunk as Buffer);
+    const bytes = Buffer.concat(chunks);
+    expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
+    expect(bytes.byteLength).toBeGreaterThan(1000);
   });
 });
 

@@ -40,7 +40,13 @@ const fileIdSchema = z.object({ fileId: z.uuid(), sheetName: z.string().optional
 
 export interface ImportPreview {
   sheetNames: string[];
-  sheet: { name: string; headers: string[]; rows: string[][]; rowCount: number; truncated: boolean };
+  sheet: {
+    name: string;
+    headers: string[];
+    rows: string[][];
+    rowCount: number;
+    truncated: boolean;
+  };
   suggestedMapping: Record<string, string | null>;
   fields: { key: string; label: string; required: boolean }[];
   warnings: string[];
@@ -69,7 +75,7 @@ async function loadSheet(
   const parsed = await parseSpreadsheet(buffer, file.originalName, limit);
 
   const sheet = sheetName
-    ? parsed.sheets.find((s) => s.name === sheetName) ?? parsed.sheets[0]
+    ? (parsed.sheets.find((s) => s.name === sheetName) ?? parsed.sheets[0])
     : parsed.sheets[0];
 
   if (!sheet) throw new ActionError('The file contains no readable sheet.', { code: 'EMPTY' });

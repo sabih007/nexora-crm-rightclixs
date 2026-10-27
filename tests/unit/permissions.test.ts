@@ -66,7 +66,12 @@ describe('permission matrix', () => {
     });
 
     it('cannot create or delete clients and projects', () => {
-      for (const p of ['client:create', 'client:delete', 'project:create', 'project:delete'] as const) {
+      for (const p of [
+        'client:create',
+        'client:delete',
+        'project:create',
+        'project:delete',
+      ] as const) {
         expect(roleHasPermission('FINANCE', p)).toBe(false);
       }
     });

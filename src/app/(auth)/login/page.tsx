@@ -22,15 +22,15 @@ export default async function LoginPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-ink">Sign in</h1>
-      <p className="mt-1.5 text-sm text-ink-muted">
+      <h1 className="text-ink text-2xl font-semibold tracking-tight">Sign in</h1>
+      <p className="text-ink-muted mt-1.5 text-sm">
         Use your Nexora OS office account to continue.
       </p>
 
       {userCount === 0 ? (
         <Callout tone="warning" title="No accounts exist yet" className="mt-5">
           Create the first Owner account by running{' '}
-          <code className="rounded bg-surface-sunken px-1 py-0.5 font-mono text-[11px]">
+          <code className="bg-surface-sunken rounded px-1 py-0.5 font-mono text-[11px]">
             npm run bootstrap:admin
           </code>
           .
@@ -42,7 +42,7 @@ export default async function LoginPage() {
       </div>
 
       {isDevelopment ? (
-        <p className="mt-6 text-[11px] leading-relaxed text-ink-subtle">
+        <p className="text-ink-subtle mt-6 text-[11px] leading-relaxed">
           Development build. Seeded demo accounts use the password printed by{' '}
           <code className="font-mono">npm run db:seed</code>.
         </p>

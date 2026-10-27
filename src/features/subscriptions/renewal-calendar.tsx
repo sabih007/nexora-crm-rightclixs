@@ -86,8 +86,8 @@ export function RenewalCalendar({
           return (
             <section key={monthKey}>
               <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="text-sm font-semibold text-ink">{monthLabel}</h2>
-                <span className="text-xs text-ink-subtle">
+                <h2 className="text-ink text-sm font-semibold">{monthLabel}</h2>
+                <span className="text-ink-subtle text-xs">
                   expected{' '}
                   <MultiCurrencyAmount
                     amounts={Object.fromEntries(
@@ -117,7 +117,7 @@ export function RenewalCalendar({
                                   : 'border-line bg-surface-sunken',
                               )}
                             >
-                              <span className="block text-[10px] uppercase tracking-wide text-ink-subtle">
+                              <span className="text-ink-subtle block text-[10px] tracking-wide uppercase">
                                 {new Date(`${dayKey}T00:00:00Z`).toLocaleDateString('en-GB', {
                                   weekday: 'short',
                                   timeZone: 'UTC',
@@ -125,14 +125,14 @@ export function RenewalCalendar({
                               </span>
                               <span
                                 className={cn(
-                                  'block text-lg font-semibold tabular leading-tight',
+                                  'tabular block text-lg leading-tight font-semibold',
                                   imminent ? 'text-warning' : 'text-ink',
                                 )}
                               >
                                 {new Date(`${dayKey}T00:00:00Z`).getUTCDate()}
                               </span>
                             </div>
-                            <span className="mt-0.5 block text-[10px] text-ink-subtle">
+                            <span className="text-ink-subtle mt-0.5 block text-[10px]">
                               {days0 === 0 ? 'today' : days0 === 1 ? 'tomorrow' : `in ${days0}d`}
                             </span>
                           </div>
@@ -145,23 +145,23 @@ export function RenewalCalendar({
                               >
                                 <Link
                                   href={`/subscriptions/${charge.subscriptionId}`}
-                                  className="truncate text-sm font-medium text-ink hover:text-brand-500 hover:underline"
+                                  className="text-ink hover:text-brand-500 truncate text-sm font-medium hover:underline"
                                 >
                                   {charge.platformName}
                                 </Link>
-                                <span className="truncate text-xs text-ink-subtle">
+                                <span className="text-ink-subtle truncate text-xs">
                                   {charge.planName}
                                 </span>
                                 <Badge tone="outline" size="sm">
                                   {charge.category}
                                 </Badge>
                                 {charge.cardLabel ? (
-                                  <span className="inline-flex items-center gap-1 text-[11px] text-ink-subtle">
+                                  <span className="text-ink-subtle inline-flex items-center gap-1 text-[11px]">
                                     <CreditCard className="size-3" aria-hidden />
                                     {charge.cardLabel}
                                   </span>
                                 ) : (
-                                  <span className="text-[11px] text-warning">no card linked</span>
+                                  <span className="text-warning text-[11px]">no card linked</span>
                                 )}
                                 <CurrencyAmount
                                   amount={charge.amount}
@@ -192,9 +192,9 @@ export function RenewalCalendar({
         ).map(([label, amounts]) => (
           <Card key={label}>
             <CardContent className="pt-4">
-              <p className="text-xs text-ink-subtle">{label}</p>
+              <p className="text-ink-subtle text-xs">{label}</p>
               <MultiCurrencyAmount amounts={amounts} size="lg" className="mt-1" />
-              <p className="mt-1.5 text-[11px] text-ink-subtle">Expected, not yet paid.</p>
+              <p className="text-ink-subtle mt-1.5 text-[11px]">Expected, not yet paid.</p>
             </CardContent>
           </Card>
         ))}

@@ -99,7 +99,8 @@ export function SubscriptionForm({
   const autoRenew = watch('autoRenew') ?? true;
   const taxInclusive = watch('taxInclusive') ?? true;
 
-  const intervalDays = intervalDaysRaw === '' || intervalDaysRaw == null ? null : Number(intervalDaysRaw);
+  const intervalDays =
+    intervalDaysRaw === '' || intervalDaysRaw == null ? null : Number(intervalDaysRaw);
   const noticeDays = noticeDaysRaw === '' || noticeDaysRaw == null ? null : Number(noticeDaysRaw);
 
   // Live forecast preview, using the same engine the server reports from.
@@ -209,7 +210,7 @@ export function SubscriptionForm({
               id="amount"
               inputMode="decimal"
               placeholder="0.00"
-              className="text-right tabular"
+              className="tabular text-right"
               {...register('amount')}
             />
           </Field>
@@ -292,7 +293,12 @@ export function SubscriptionForm({
             htmlFor="noticeDays"
             hint="Used to work out the last day to cancel."
           >
-            <Input id="noticeDays" inputMode="numeric" placeholder="30" {...register('noticeDays')} />
+            <Input
+              id="noticeDays"
+              inputMode="numeric"
+              placeholder="30"
+              {...register('noticeDays')}
+            />
           </Field>
 
           <Field label="Status" htmlFor="status">
@@ -306,10 +312,10 @@ export function SubscriptionForm({
           </Field>
 
           <div className="space-y-3 sm:col-span-2">
-            <label className="flex items-center justify-between gap-4 rounded-lg border border-line px-3.5 py-2.5">
+            <label className="border-line flex items-center justify-between gap-4 rounded-lg border px-3.5 py-2.5">
               <span>
                 <Label>Renews automatically</Label>
-                <span className="mt-0.5 block text-xs text-ink-subtle">
+                <span className="text-ink-subtle mt-0.5 block text-xs">
                   When off, the forecast shows one final charge and then stops.
                 </span>
               </span>
@@ -320,10 +326,10 @@ export function SubscriptionForm({
               />
             </label>
 
-            <label className="flex items-center justify-between gap-4 rounded-lg border border-line px-3.5 py-2.5">
+            <label className="border-line flex items-center justify-between gap-4 rounded-lg border px-3.5 py-2.5">
               <span>
                 <Label>Amount includes tax</Label>
-                <span className="mt-0.5 block text-xs text-ink-subtle">
+                <span className="text-ink-subtle mt-0.5 block text-xs">
                   Recorded for reporting; it does not change the forecast.
                 </span>
               </span>
@@ -344,7 +350,7 @@ export function SubscriptionForm({
           <CardHeader>
             <div>
               <CardTitle>Forecast</CardTitle>
-              <p className="mt-0.5 text-xs text-ink-subtle">
+              <p className="text-ink-subtle mt-0.5 text-xs">
                 Expected cost at {cadenceLabel(cadence, intervalDays).toLowerCase()} billing. Not a
                 payment.
               </p>
@@ -352,16 +358,16 @@ export function SubscriptionForm({
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-3">
             <div>
-              <p className="text-xs text-ink-subtle">Monthly equivalent</p>
+              <p className="text-ink-subtle text-xs">Monthly equivalent</p>
               <CurrencyAmount amount={preview.monthly} currency={currency} size="lg" />
             </div>
             <div>
-              <p className="text-xs text-ink-subtle">Annual commitment</p>
+              <p className="text-ink-subtle text-xs">Annual commitment</p>
               <CurrencyAmount amount={preview.annual} currency={currency} size="lg" />
             </div>
             <div>
-              <p className="text-xs text-ink-subtle">Last day to cancel</p>
-              <p className="text-lg font-semibold text-ink">
+              <p className="text-ink-subtle text-xs">Last day to cancel</p>
+              <p className="text-ink text-lg font-semibold">
                 {preview.cancelBy ? formatDate(preview.cancelBy) : '—'}
               </p>
             </div>

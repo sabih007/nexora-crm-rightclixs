@@ -203,7 +203,10 @@ function TaskDialogBody({
 
       <DialogBody className="space-y-4">
         {error ? (
-          <p role="alert" className="rounded-lg border border-danger/25 bg-danger-soft px-3 py-2 text-sm text-danger">
+          <p
+            role="alert"
+            className="border-danger/25 bg-danger-soft text-danger rounded-lg border px-3 py-2 text-sm"
+          >
             {error}
           </p>
         ) : null}
@@ -290,7 +293,7 @@ function TaskDialogBody({
           <Label>
             Checklist{' '}
             {checklist.length > 0 ? (
-              <span className="font-normal text-ink-subtle tabular">
+              <span className="text-ink-subtle tabular font-normal">
                 ({checklistDone}/{checklist.length})
               </span>
             ) : null}
@@ -310,7 +313,9 @@ function TaskDialogBody({
                 />
                 <span
                   className={
-                    item.done ? 'flex-1 text-sm text-ink-subtle line-through' : 'flex-1 text-sm text-ink'
+                    item.done
+                      ? 'text-ink-subtle flex-1 text-sm line-through'
+                      : 'text-ink flex-1 text-sm'
                   }
                 >
                   {item.label}
@@ -320,7 +325,7 @@ function TaskDialogBody({
                     type="button"
                     aria-label={`Remove ${item.label}`}
                     onClick={() => setChecklist((items) => items.filter((_, i) => i !== index))}
-                    className="rounded p-1 text-ink-subtle hover:text-danger"
+                    className="text-ink-subtle hover:text-danger rounded p-1"
                   >
                     <Trash2 className="size-3.5" />
                   </button>
@@ -351,10 +356,10 @@ function TaskDialogBody({
         </div>
 
         {isEdit && task?.comments ? (
-          <div className="border-t border-line pt-4">
+          <div className="border-line border-t pt-4">
             <Label>Comments</Label>
             {task.comments.length === 0 ? (
-              <p className="mt-1.5 text-sm text-ink-subtle">No comments yet.</p>
+              <p className="text-ink-subtle mt-1.5 text-sm">No comments yet.</p>
             ) : (
               <ul className="mt-2 space-y-3">
                 {task.comments.map((c) => (
@@ -362,10 +367,10 @@ function TaskDialogBody({
                     <Avatar name={c.author.name} color={c.author.avatarColor} size="sm" />
                     <div className="min-w-0 flex-1">
                       <p className="text-xs">
-                        <span className="font-medium text-ink">{c.author.name}</span>{' '}
+                        <span className="text-ink font-medium">{c.author.name}</span>{' '}
                         <span className="text-ink-subtle">{formatDateTime(c.createdAt)}</span>
                       </p>
-                      <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-muted">{c.body}</p>
+                      <p className="text-ink-muted mt-0.5 text-sm whitespace-pre-wrap">{c.body}</p>
                     </div>
                   </li>
                 ))}

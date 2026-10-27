@@ -50,21 +50,21 @@ export function StatCard({
     <>
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-[13px] font-medium text-ink-muted">{label}</span>
+          <span className="text-ink-muted text-[13px] font-medium">{label}</span>
           <Tooltip content={definition}>
             <button
               type="button"
               aria-label={`How ${label} is calculated: ${definition}`}
-              className="rounded text-ink-subtle transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+              className="text-ink-subtle hover:text-ink focus-visible:ring-brand-500/40 rounded transition-colors focus-visible:ring-2 focus-visible:outline-none"
             >
               <Info className="size-3.5" aria-hidden />
             </button>
           </Tooltip>
         </div>
-        {Icon ? <Icon className="size-4 shrink-0 text-ink-subtle" /> : null}
+        {Icon ? <Icon className="text-ink-subtle size-4 shrink-0" /> : null}
       </div>
 
-      <div className={cn('mt-2 text-2xl font-semibold tracking-tight tabular', tones[tone])}>
+      <div className={cn('tabular mt-2 text-2xl font-semibold tracking-tight', tones[tone])}>
         {value}
       </div>
 
@@ -84,7 +84,7 @@ export function StatCard({
               <ArrowDownRight className="size-3.5" aria-hidden />
             ) : null}
             {Math.abs(delta.value).toFixed(1)}%
-            <span className="font-normal text-ink-subtle"> {delta.label}</span>
+            <span className="text-ink-subtle font-normal"> {delta.label}</span>
           </span>
         ) : null}
         {sublabel ? <span className="text-ink-subtle">{sublabel}</span> : null}
@@ -100,9 +100,15 @@ export function StatCard({
 
   if (href) {
     return (
-      <Link href={href} className={cn(classes, 'block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40')}>
+      <Link
+        href={href}
+        className={cn(
+          classes,
+          'focus-visible:ring-brand-500/40 block focus-visible:ring-2 focus-visible:outline-none',
+        )}
+      >
         {body}
-        <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-500 opacity-0 transition-opacity group-hover:opacity-100">
+        <span className="text-brand-500 mt-2 inline-flex items-center gap-1 text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100">
           View <ArrowRight className="size-3" aria-hidden />
         </span>
       </Link>

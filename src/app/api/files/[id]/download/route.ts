@@ -20,10 +20,7 @@ export const dynamic = 'force-dynamic';
  * (opening a PDF in a new tab); it is an addition to the session check, not
  * a replacement — a leaked token alone cannot fetch the file.
  */
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await getAuthContext();
   if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -37,7 +34,10 @@ export async function GET(
     const payload = verifyDownloadToken(token);
     // A token minted for someone else must not work for this session.
     if (!payload || payload.fileId !== id || payload.userId !== ctx.user.id) {
-      return NextResponse.json({ error: 'This download link is no longer valid.' }, { status: 403 });
+      return NextResponse.json(
+        { error: 'This download link is no longer valid.' },
+        { status: 403 },
+      );
     }
   }
 

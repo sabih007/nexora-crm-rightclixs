@@ -134,14 +134,10 @@ export function PasswordForm() {
         </CardContent>
 
         <CardFooter className="justify-between">
-          <p className="text-xs text-ink-subtle">
+          <p className="text-ink-subtle text-xs">
             Hashed with argon2id. Other sessions end immediately.
           </p>
-          <Button
-            type="submit"
-            loading={busy}
-            disabled={!currentPassword || !allMet || !matches}
-          >
+          <Button type="submit" loading={busy} disabled={!currentPassword || !allMet || !matches}>
             Change password
           </Button>
         </CardFooter>

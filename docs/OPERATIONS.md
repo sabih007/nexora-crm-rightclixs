@@ -32,7 +32,7 @@ it on port 5434 over the genuine PostgreSQL wire protocol. Prisma, `psql` and
 any other client connect to it normally, and `NUMERIC`, transactions,
 constraints and migrations behave exactly as they do on a server.
 
-If you *do* have PostgreSQL available, skip `db:start` and point
+If you _do_ have PostgreSQL available, skip `db:start` and point
 `DATABASE_URL` at it. Nothing else changes.
 
 ### Verifying a change
@@ -48,13 +48,13 @@ npm run test:e2e   # Playwright, needs a build and the seed
 
 ### 2.1 Prerequisites
 
-| Requirement | Notes |
-| --- | --- |
-| Node.js 20.11+ | 22 LTS recommended |
-| PostgreSQL 14+ | Managed (Neon, Supabase, RDS, Cloud SQL) or self-hosted |
-| S3-compatible bucket | **Private.** Public-read will leak client documents |
-| SMTP credentials | Optional; without them the app records but never sends email |
-| A scheduler | Vercel Cron, a systemd timer, or any cron that can send a header |
+| Requirement          | Notes                                                            |
+| -------------------- | ---------------------------------------------------------------- |
+| Node.js 20.11+       | 22 LTS recommended                                               |
+| PostgreSQL 14+       | Managed (Neon, Supabase, RDS, Cloud SQL) or self-hosted          |
+| S3-compatible bucket | **Private.** Public-read will leak client documents              |
+| SMTP credentials     | Optional; without them the app records but never sends email     |
+| A scheduler          | Vercel Cron, a systemd timer, or any cron that can send a header |
 
 ### 2.2 Environment
 
@@ -202,13 +202,13 @@ A backup nobody has restored is a hypothesis.
 
 ### 3.6 Retention
 
-| Item | Suggested retention |
-| --- | --- |
-| Daily database dump | 30 days |
-| Weekly dump | 12 weeks |
-| Monthly dump | 24 months |
-| Object store versions | 90 days |
-| Audit log rows | Keep indefinitely — they are the financial trail |
+| Item                  | Suggested retention                              |
+| --------------------- | ------------------------------------------------ |
+| Daily database dump   | 30 days                                          |
+| Weekly dump           | 12 weeks                                         |
+| Monthly dump          | 24 months                                        |
+| Object store versions | 90 days                                          |
+| Audit log rows        | Keep indefinitely — they are the financial trail |
 
 Check your own legal and tax requirements; these are starting points, not
 advice.
@@ -283,11 +283,11 @@ they created, so history stays complete.
 
 ## 6. Troubleshooting
 
-| Symptom | Likely cause |
-| --- | --- |
-| Boot fails with "Invalid environment configuration" | A required variable is missing or still a placeholder. The message names each one. |
-| Totals exclude some transactions | No exchange rate on or before those dates. Add them in Settings → Exchange rates; the app says which currencies were skipped. |
-| Reminders never fire | The scheduler is not calling `/api/cron/reminders`, or `CRON_SECRET` does not match. Check `job_executions`. |
-| Uploads rejected | The file failed extension, declared-type or magic-byte validation. The rejection message states which. |
-| Invoice PDF 404s | The file row exists but the object does not — usually `STORAGE_DRIVER=local` with files lost on redeploy. Use "Regenerate PDF". |
-| "This invoice has already been issued" | Working as designed. Issue a credit note, or void and raise a replacement. |
+| Symptom                                             | Likely cause                                                                                                                    |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Boot fails with "Invalid environment configuration" | A required variable is missing or still a placeholder. The message names each one.                                              |
+| Totals exclude some transactions                    | No exchange rate on or before those dates. Add them in Settings → Exchange rates; the app says which currencies were skipped.   |
+| Reminders never fire                                | The scheduler is not calling `/api/cron/reminders`, or `CRON_SECRET` does not match. Check `job_executions`.                    |
+| Uploads rejected                                    | The file failed extension, declared-type or magic-byte validation. The rejection message states which.                          |
+| Invoice PDF 404s                                    | The file row exists but the object does not — usually `STORAGE_DRIVER=local` with files lost on redeploy. Use "Regenerate PDF". |
+| "This invoice has already been issued"              | Working as designed. Issue a credit note, or void and raise a replacement.                                                      |

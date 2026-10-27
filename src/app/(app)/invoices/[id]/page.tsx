@@ -59,8 +59,8 @@ export default async function InvoiceDetailPage({
       : Promise.resolve([]),
   ]);
 
-  const address = (invoice.clientSnapshotJson as { address?: Record<string, string> } | null)
-    ?.address ??
+  const address =
+    (invoice.clientSnapshotJson as { address?: Record<string, string> } | null)?.address ??
     (invoice.client.addressJson as Record<string, string> | null) ??
     {};
   const addressLines = [
@@ -70,8 +70,7 @@ export default async function InvoiceDetailPage({
     [address.postalCode, address.country].filter(Boolean).join(' '),
   ].filter((line): line is string => Boolean(line && line.trim()));
 
-  const overdueDays =
-    invoice.status === 'OVERDUE' ? daysOverdue(invoice.dueDate) : 0;
+  const overdueDays = invoice.status === 'OVERDUE' ? daysOverdue(invoice.dueDate) : 0;
 
   const payments = invoice.allocations.map((a) => ({
     allocationId: a.id,
@@ -144,16 +143,16 @@ export default async function InvoiceDetailPage({
             <CardContent className="pt-5">
               <div className="flex flex-wrap items-start justify-between gap-6">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                  <p className="text-ink-subtle text-[11px] font-semibold tracking-wide uppercase">
                     Bill to
                   </p>
                   <Link
                     href={`/clients/${invoice.client.id}`}
-                    className="mt-1 block text-base font-semibold text-ink hover:text-brand-500 hover:underline"
+                    className="text-ink hover:text-brand-500 mt-1 block text-base font-semibold hover:underline"
                   >
                     {invoice.client.name}
                   </Link>
-                  <div className="mt-1 space-y-0.5 text-sm text-ink-muted">
+                  <div className="text-ink-muted mt-1 space-y-0.5 text-sm">
                     {addressLines.map((line) => (
                       <p key={line}>{line}</p>
                     ))}
@@ -167,11 +166,11 @@ export default async function InvoiceDetailPage({
                 <dl className="space-y-1 text-sm">
                   <div className="flex gap-6">
                     <dt className="text-ink-subtle">Issue date</dt>
-                    <dd className="ml-auto text-ink">{formatDate(invoice.issueDate)}</dd>
+                    <dd className="text-ink ml-auto">{formatDate(invoice.issueDate)}</dd>
                   </div>
                   <div className="flex gap-6">
                     <dt className="text-ink-subtle">Due date</dt>
-                    <dd className="ml-auto text-ink">{formatDate(invoice.dueDate)}</dd>
+                    <dd className="text-ink ml-auto">{formatDate(invoice.dueDate)}</dd>
                   </div>
                   {invoice.project ? (
                     <div className="flex gap-6">
@@ -194,34 +193,34 @@ export default async function InvoiceDetailPage({
                 <table className="w-full border-collapse text-sm">
                   <caption className="sr-only">Invoice line items</caption>
                   <thead>
-                    <tr className="border-b border-line">
+                    <tr className="border-line border-b">
                       <th
                         scope="col"
-                        className="pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                        className="text-ink-subtle pb-2 text-left text-[11px] font-semibold tracking-wide uppercase"
                       >
                         Description
                       </th>
                       <th
                         scope="col"
-                        className="pb-2 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                        className="text-ink-subtle pb-2 text-right text-[11px] font-semibold tracking-wide uppercase"
                       >
                         Qty
                       </th>
                       <th
                         scope="col"
-                        className="pb-2 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                        className="text-ink-subtle pb-2 text-right text-[11px] font-semibold tracking-wide uppercase"
                       >
                         Unit price
                       </th>
                       <th
                         scope="col"
-                        className="pb-2 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                        className="text-ink-subtle pb-2 text-right text-[11px] font-semibold tracking-wide uppercase"
                       >
                         Tax
                       </th>
                       <th
                         scope="col"
-                        className="pb-2 text-right text-[11px] font-semibold uppercase tracking-wide text-ink-subtle"
+                        className="text-ink-subtle pb-2 text-right text-[11px] font-semibold tracking-wide uppercase"
                       >
                         Amount
                       </th>
@@ -229,11 +228,11 @@ export default async function InvoiceDetailPage({
                   </thead>
                   <tbody>
                     {invoice.lines.map((line) => (
-                      <tr key={line.id} className="border-b border-line last:border-0">
-                        <td className="py-2.5 pr-4 text-ink">
+                      <tr key={line.id} className="border-line border-b last:border-0">
+                        <td className="text-ink py-2.5 pr-4">
                           {line.description}
                           {Number(line.discountAmount) > 0 ? (
-                            <span className="block text-xs text-ink-subtle">
+                            <span className="text-ink-subtle block text-xs">
                               Discount{' '}
                               <CurrencyAmount
                                 amount={line.discountAmount.toString()}
@@ -243,7 +242,7 @@ export default async function InvoiceDetailPage({
                             </span>
                           ) : null}
                         </td>
-                        <td className="py-2.5 text-right tabular text-ink-muted">
+                        <td className="tabular text-ink-muted py-2.5 text-right">
                           {formatNumber(line.quantity.toString(), 4)}
                         </td>
                         <td className="py-2.5 text-right">
@@ -253,7 +252,7 @@ export default async function InvoiceDetailPage({
                             muted
                           />
                         </td>
-                        <td className="py-2.5 text-right tabular text-ink-muted">
+                        <td className="tabular text-ink-muted py-2.5 text-right">
                           {formatNumber(line.taxRate.toString(), 2)}%
                         </td>
                         <td className="py-2.5 text-right">
@@ -307,7 +306,7 @@ export default async function InvoiceDetailPage({
                       />
                     </dd>
                   </div>
-                  <div className="flex justify-between border-t border-line pt-1.5 font-semibold">
+                  <div className="border-line flex justify-between border-t pt-1.5 font-semibold">
                     <dt>Total</dt>
                     <dd>
                       <CurrencyAmount
@@ -342,7 +341,7 @@ export default async function InvoiceDetailPage({
                     </div>
                   ) : null}
                   {Number(invoice.amountPaid) > 0 || Number(invoice.creditedTotal) > 0 ? (
-                    <div className="flex justify-between border-t border-line pt-1.5 font-semibold">
+                    <div className="border-line flex justify-between border-t pt-1.5 font-semibold">
                       <dt>Balance due</dt>
                       <dd>
                         <CurrencyAmount
@@ -358,23 +357,23 @@ export default async function InvoiceDetailPage({
               </div>
 
               {invoice.terms || invoice.notes ? (
-                <div className="mt-6 grid gap-4 border-t border-line pt-4 sm:grid-cols-2">
+                <div className="border-line mt-6 grid gap-4 border-t pt-4 sm:grid-cols-2">
                   {invoice.terms ? (
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <p className="text-ink-subtle text-[11px] font-semibold tracking-wide uppercase">
                         Terms
                       </p>
-                      <p className="mt-1 whitespace-pre-wrap text-sm text-ink-muted">
+                      <p className="text-ink-muted mt-1 text-sm whitespace-pre-wrap">
                         {invoice.terms}
                       </p>
                     </div>
                   ) : null}
                   {invoice.notes ? (
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-ink-subtle">
+                      <p className="text-ink-subtle text-[11px] font-semibold tracking-wide uppercase">
                         Notes
                       </p>
-                      <p className="mt-1 whitespace-pre-wrap text-sm text-ink-muted">
+                      <p className="text-ink-muted mt-1 text-sm whitespace-pre-wrap">
                         {invoice.notes}
                       </p>
                     </div>
@@ -453,7 +452,7 @@ export default async function InvoiceDetailPage({
                 <CardTitle>Issued snapshot</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xs leading-relaxed text-ink-subtle">
+                <p className="text-ink-subtle text-xs leading-relaxed">
                   A frozen copy of the amounts and the client&rsquo;s billing details was captured
                   when this invoice was issued. The PDF is rendered from that snapshot, so what the
                   client received can always be reproduced exactly.
@@ -484,7 +483,7 @@ function TimelineRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
       <span className="text-ink-subtle">{label}</span>
-      <span className="text-right text-ink">{value}</span>
+      <span className="text-ink text-right">{value}</span>
     </div>
   );
 }

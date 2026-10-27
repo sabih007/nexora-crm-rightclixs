@@ -139,7 +139,12 @@ export const updateInvoiceDefaults = defineAction({
     });
     for (const daysBefore of [...new Set(input.renewalReminderDays)]) {
       await prisma.reminderRule.create({
-        data: { workspaceId: ctx.workspaceId, entityType: 'subscription', daysBefore, channel: 'IN_APP' },
+        data: {
+          workspaceId: ctx.workspaceId,
+          entityType: 'subscription',
+          daysBefore,
+          channel: 'IN_APP',
+        },
       });
     }
 
@@ -173,7 +178,10 @@ export const addExchangeRate = defineAction({
         .trim()
         .regex(/^\d+(\.\d{1,10})?$/, 'Enter a positive rate.')
         .refine((v) => Number(v) > 0, 'The rate must be above zero.'),
-      effectiveDate: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use the date picker.'),
+      effectiveDate: z
+        .string()
+        .trim()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Use the date picker.'),
       source: z.string().trim().min(1).max(60).default('manual'),
     })
     .refine((v) => v.baseCurrency !== v.quoteCurrency, {
@@ -343,10 +351,9 @@ export const changeTeamMemberRole = defineAction({
         where: { workspaceId: ctx.workspaceId, role: 'OWNER' },
       });
       if (owners <= 1) {
-        throw new ActionError(
-          'This is the only owner. Promote someone else to owner first.',
-          { code: 'LAST_OWNER' },
-        );
+        throw new ActionError('This is the only owner. Promote someone else to owner first.', {
+          code: 'LAST_OWNER',
+        });
       }
     }
 

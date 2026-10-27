@@ -17,10 +17,7 @@ export const dynamic = 'force-dynamic';
  * the fly rather than 404-ing, but it never stores a draft rendering as the
  * issued artifact.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ctx = await getAuthContext();
   if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

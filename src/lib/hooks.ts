@@ -120,3 +120,22 @@ export function useStoredPreference<T extends string>(
 
   return [value, setValue];
 }
+
+/**
+ * Read the script-readable CSRF cookie the session issued.
+ *
+ * State-changing route handlers verify both the Origin and this token, so
+ * any `fetch` that mutates must send it. Server Actions do not need it —
+ * Next verifies their origin itself.
+ */
+export function csrfHeaders(): Record<string, string> {
+  try {
+    const match = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('nexora_csrf=') || row.startsWith('__Host-nexora_csrf='));
+    const value = match?.split('=')[1];
+    return value ? { 'x-csrf-token': decodeURIComponent(value) } : {};
+  } catch {
+    return {};
+  }
+}

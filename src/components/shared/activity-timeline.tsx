@@ -79,17 +79,22 @@ export function ActivityTimeline({
           <li key={entry.id} className="relative flex gap-3 pb-4 last:pb-0">
             {!isLast ? (
               <span
-                className="absolute left-[11px] top-6 h-[calc(100%-1rem)] w-px bg-line"
+                className="bg-line absolute top-6 left-[11px] h-[calc(100%-1rem)] w-px"
                 aria-hidden
               />
             ) : null}
 
             <span className="relative mt-1 flex size-6 shrink-0 items-center justify-center">
-              <span className={cn('size-2 rounded-full ring-4 ring-[var(--surface)]', toneFor(entry.action))} />
+              <span
+                className={cn(
+                  'size-2 rounded-full ring-4 ring-[var(--surface)]',
+                  toneFor(entry.action),
+                )}
+              />
             </span>
 
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] text-ink">
+              <p className="text-ink text-[13px]">
                 <span className="font-medium">{auditLabel(entry.action)}</span>
                 {entry.summary ? (
                   <>
@@ -104,7 +109,7 @@ export function ActivityTimeline({
                   </>
                 ) : null}
               </p>
-              <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-ink-subtle">
+              <p className="text-ink-subtle mt-0.5 flex items-center gap-1.5 text-[11px]">
                 {entry.actor ? (
                   <>
                     <Avatar name={entry.actor.name} color={entry.actor.avatarColor} size="xs" />

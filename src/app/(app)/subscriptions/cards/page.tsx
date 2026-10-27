@@ -1,10 +1,7 @@
 import { requireAuthPage, can } from '@/lib/auth/guard';
 import { roleHasPermission } from '@/lib/permissions';
 import { NoAccessState, Callout } from '@/components/ui/empty-state';
-import {
-  listCardsWithFootprint,
-  listPlatformOptions,
-} from '@/features/subscriptions/queries';
+import { listCardsWithFootprint, listPlatformOptions } from '@/features/subscriptions/queries';
 import { listWorkspaceMembers } from '@/features/projects/queries';
 import { CardsBoard } from '@/features/subscriptions/cards-board';
 

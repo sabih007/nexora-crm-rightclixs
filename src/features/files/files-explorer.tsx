@@ -134,17 +134,17 @@ export function FilesExplorer({
         const Icon = iconFor(row.originalName);
         return (
           <div className="flex min-w-0 items-center gap-2.5">
-            <Icon className="size-4 shrink-0 text-ink-subtle" aria-hidden />
+            <Icon className="text-ink-subtle size-4 shrink-0" aria-hidden />
             <div className="min-w-0">
               <span
                 className={cn(
-                  'block truncate font-medium text-ink',
+                  'text-ink block truncate font-medium',
                   row.deletedAt && 'text-ink-subtle line-through',
                 )}
               >
                 {row.originalName}
               </span>
-              <span className="flex flex-wrap items-center gap-1.5 text-xs text-ink-subtle">
+              <span className="text-ink-subtle flex flex-wrap items-center gap-1.5 text-xs">
                 {formatBytes(row.byteSize)}
                 {row.version > 1 ? (
                   <Tooltip content={`Version ${row.version} of this file`}>
@@ -178,7 +178,7 @@ export function FilesExplorer({
             {row.client ? (
               <Link
                 href={`/clients/${row.client.id}`}
-                className="block truncate text-brand-500 hover:underline"
+                className="text-brand-500 block truncate hover:underline"
               >
                 {row.client.name}
               </Link>
@@ -186,7 +186,7 @@ export function FilesExplorer({
             {row.project ? (
               <Link
                 href={`/projects/${row.project.id}`}
-                className="block truncate text-ink-muted hover:text-brand-500 hover:underline"
+                className="text-ink-muted hover:text-brand-500 block truncate hover:underline"
               >
                 {row.project.name}
               </Link>
@@ -200,7 +200,11 @@ export function FilesExplorer({
       id: 'category',
       header: 'Category',
       cell: (row) =>
-        row.category ? <Badge tone="outline">{row.category}</Badge> : <span className="text-ink-subtle">—</span>,
+        row.category ? (
+          <Badge tone="outline">{row.category}</Badge>
+        ) : (
+          <span className="text-ink-subtle">—</span>
+        ),
     },
     {
       id: 'scan',
@@ -225,7 +229,7 @@ export function FilesExplorer({
       id: 'uploadedBy',
       header: 'Uploaded by',
       cell: (row) => (
-        <span className="flex items-center gap-1.5 text-[13px] text-ink-muted">
+        <span className="text-ink-muted flex items-center gap-1.5 text-[13px]">
           <Avatar name={row.uploadedBy.name} color={row.uploadedBy.avatarColor} size="xs" />
           <span className="truncate">{row.uploadedBy.name}</span>
         </span>
@@ -246,7 +250,12 @@ export function FilesExplorer({
         <div className="flex items-center justify-end gap-1">
           {permissions.importData && isImportable(row.originalName) && !row.deletedAt ? (
             <Tooltip content="Preview and import this spreadsheet as client records">
-              <Button variant="ghost" size="icon-sm" asChild aria-label={`Import ${row.originalName}`}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                asChild
+                aria-label={`Import ${row.originalName}`}
+              >
                 <Link href={`/clients/import?fileId=${row.id}`}>
                   <Table2 />
                 </Link>
@@ -255,7 +264,12 @@ export function FilesExplorer({
           ) : null}
           {permissions.download && !row.deletedAt ? (
             <Tooltip content="Download">
-              <Button variant="ghost" size="icon-sm" asChild aria-label={`Download ${row.originalName}`}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                asChild
+                aria-label={`Download ${row.originalName}`}
+              >
                 <a href={`/api/files/${row.id}/download`}>
                   <Download />
                 </a>
@@ -312,13 +326,13 @@ export function FilesExplorer({
             className={cn(
               'flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[13px] transition-colors',
               !filters.folderId
-                ? 'bg-brand-500/10 font-medium text-brand-600 dark:text-brand-300'
+                ? 'bg-brand-500/10 text-brand-600 dark:text-brand-300 font-medium'
                 : 'text-ink-muted hover:bg-surface-hover hover:text-ink',
             )}
           >
             <Folder className="size-3.5 shrink-0" aria-hidden />
             All files
-            <span className="ml-auto tabular text-[11px] text-ink-subtle">{data.total}</span>
+            <span className="tabular text-ink-subtle ml-auto text-[11px]">{data.total}</span>
           </button>
 
           <ul className="mt-0.5 space-y-0.5">
@@ -330,7 +344,7 @@ export function FilesExplorer({
                   className={cn(
                     'flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-[13px] transition-colors',
                     filters.folderId === folder.id
-                      ? 'bg-brand-500/10 font-medium text-brand-600 dark:text-brand-300'
+                      ? 'bg-brand-500/10 text-brand-600 dark:text-brand-300 font-medium'
                       : 'text-ink-muted hover:bg-surface-hover hover:text-ink',
                   )}
                 >
@@ -338,12 +352,12 @@ export function FilesExplorer({
                   <span className="min-w-0 flex-1 truncate">
                     {folder.name}
                     {folder.contextLabel ? (
-                      <span className="block truncate text-[10px] text-ink-subtle">
+                      <span className="text-ink-subtle block truncate text-[10px]">
                         {folder.contextLabel}
                       </span>
                     ) : null}
                   </span>
-                  <span className="tabular text-[11px] text-ink-subtle">{folder.fileCount}</span>
+                  <span className="tabular text-ink-subtle text-[11px]">{folder.fileCount}</span>
                 </button>
               </li>
             ))}
@@ -420,7 +434,7 @@ export function FilesExplorer({
                 </Select>
               ) : null}
 
-              <label className="flex cursor-pointer items-center gap-1.5 text-[13px] text-ink-muted">
+              <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-[13px]">
                 <Checkbox
                   checked={filters.spreadsheetsOnly}
                   onCheckedChange={(checked) => update({ spreadsheetsOnly: checked ? '1' : null })}
@@ -429,7 +443,7 @@ export function FilesExplorer({
               </label>
 
               {permissions.delete ? (
-                <label className="flex cursor-pointer items-center gap-1.5 text-[13px] text-ink-muted">
+                <label className="text-ink-muted flex cursor-pointer items-center gap-1.5 text-[13px]">
                   <Checkbox
                     checked={filters.includeDeleted}
                     onCheckedChange={(checked) => update({ includeDeleted: checked ? '1' : null })}
@@ -494,7 +508,7 @@ function NewFolderDialog({
         </DialogHeader>
         <DialogBody>
           <label className="block">
-            <span className="text-[13px] font-medium text-ink">Folder name</span>
+            <span className="text-ink text-[13px] font-medium">Folder name</span>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}

@@ -170,10 +170,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <CardContent className="space-y-3">
               <div>
                 <div className="flex items-baseline justify-between">
-                  <span className="text-2xl font-semibold tabular text-ink">
+                  <span className="tabular text-ink text-2xl font-semibold">
                     {Math.round(progress)}%
                   </span>
-                  <span className="text-xs text-ink-subtle tabular">
+                  <span className="text-ink-subtle tabular text-xs">
                     {doneCount}/{taskCards.length} tasks
                   </span>
                 </div>
@@ -183,7 +183,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   className="mt-2"
                   label="Project completion"
                 />
-                <p className="mt-1.5 text-[11px] text-ink-subtle">
+                <p className="text-ink-subtle mt-1.5 text-[11px]">
                   Completion counts tasks marked Done out of all tasks.
                 </p>
               </div>
@@ -197,24 +197,24 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <CardContent className="space-y-3 text-sm">
               {project.client ? (
                 <div>
-                  <p className="text-xs text-ink-subtle">Client</p>
+                  <p className="text-ink-subtle text-xs">Client</p>
                   <Link
                     href={`/clients/${project.client.id}`}
-                    className="font-medium text-brand-500 hover:underline"
+                    className="text-brand-500 font-medium hover:underline"
                   >
                     {project.client.name}
                   </Link>
                 </div>
               ) : (
                 <div>
-                  <p className="text-xs text-ink-subtle">Client</p>
+                  <p className="text-ink-subtle text-xs">Client</p>
                   <p className="text-ink-muted">Internal project</p>
                 </div>
               )}
 
               {project.budgetAmount ? (
                 <div>
-                  <p className="text-xs text-ink-subtle">Budget</p>
+                  <p className="text-ink-subtle text-xs">Budget</p>
                   <CurrencyAmount
                     amount={project.budgetAmount.toString()}
                     currency={project.currency}
@@ -225,19 +225,19 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
               <div className="flex gap-6">
                 <div>
-                  <p className="text-xs text-ink-subtle">Start</p>
+                  <p className="text-ink-subtle text-xs">Start</p>
                   <p className="text-ink">{formatDate(project.startDate)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-ink-subtle">Due</p>
-                  <p className="inline-flex items-center gap-1 text-ink">
-                    <CalendarDays className="size-3.5 text-ink-subtle" aria-hidden />
+                  <p className="text-ink-subtle text-xs">Due</p>
+                  <p className="text-ink inline-flex items-center gap-1">
+                    <CalendarDays className="text-ink-subtle size-3.5" aria-hidden />
                     {formatDate(project.dueDate)}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-4 border-t border-line pt-3 text-xs text-ink-subtle">
+              <div className="border-line text-ink-subtle flex flex-wrap gap-4 border-t pt-3 text-xs">
                 <span className="inline-flex items-center gap-1">
                   <Receipt className="size-3.5" aria-hidden /> {project._count.invoices} invoices
                 </span>
@@ -260,8 +260,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <div className="flex items-center gap-2.5">
                   <Avatar name={project.owner.name} color={project.owner.avatarColor} size="sm" />
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-ink">{project.owner.name}</p>
-                    <p className="text-[11px] text-ink-subtle">Owner</p>
+                    <p className="text-ink truncate text-[13px] font-medium">
+                      {project.owner.name}
+                    </p>
+                    <p className="text-ink-subtle text-[11px]">Owner</p>
                   </div>
                 </div>
               ) : null}
@@ -271,13 +273,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   <div key={member.id} className="flex items-center gap-2.5">
                     <Avatar name={member.user.name} color={member.user.avatarColor} size="sm" />
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] text-ink">{member.user.name}</p>
-                      <p className="text-[11px] text-ink-subtle capitalize">{member.role}</p>
+                      <p className="text-ink truncate text-[13px]">{member.user.name}</p>
+                      <p className="text-ink-subtle text-[11px] capitalize">{member.role}</p>
                     </div>
                   </div>
                 ))}
               {project.members.length === 0 && !project.owner ? (
-                <p className="text-sm text-ink-subtle">No one assigned.</p>
+                <p className="text-ink-subtle text-sm">No one assigned.</p>
               ) : null}
             </CardContent>
           </Card>

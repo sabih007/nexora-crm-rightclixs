@@ -121,10 +121,10 @@ export function ExchangeRatesManager({
                         key={row.id}
                         className="flex flex-wrap items-center gap-x-3 gap-y-1 px-5 py-2.5"
                       >
-                        <span className="w-24 shrink-0 text-[13px] text-ink">
+                        <span className="text-ink w-24 shrink-0 text-[13px]">
                           {formatDate(row.effectiveDate)}
                         </span>
-                        <span className="tabular text-sm font-medium text-ink">
+                        <span className="tabular text-ink text-sm font-medium">
                           1 {row.baseCurrency} = {row.rate} {row.quoteCurrency}
                         </span>
                         <Badge tone="outline" size="sm">
@@ -216,7 +216,7 @@ export function ExchangeRatesManager({
                     value={rate}
                     onChange={(e) => setRate(e.target.value)}
                     placeholder="278.50"
-                    className="text-right tabular"
+                    className="tabular text-right"
                   />
                 </Field>
 
@@ -252,7 +252,7 @@ export function ExchangeRatesManager({
                 </Button>
 
                 {from === to ? (
-                  <p className="text-xs text-warning">Choose two different currencies.</p>
+                  <p className="text-warning text-xs">Choose two different currencies.</p>
                 ) : null}
               </form>
             </CardContent>

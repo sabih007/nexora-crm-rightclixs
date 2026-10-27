@@ -265,7 +265,13 @@ export async function getReceivablesAging(
   });
 
   const buckets: AgingBucket[] = [
-    { label: 'Not yet due', minDays: Number.NEGATIVE_INFINITY, maxDays: 1, amountsByCurrency: {}, count: 0 },
+    {
+      label: 'Not yet due',
+      minDays: Number.NEGATIVE_INFINITY,
+      maxDays: 1,
+      amountsByCurrency: {},
+      count: 0,
+    },
     { label: '1–30 days', minDays: 1, maxDays: 31, amountsByCurrency: {}, count: 0 },
     { label: '31–60 days', minDays: 31, maxDays: 61, amountsByCurrency: {}, count: 0 },
     { label: '61–90 days', minDays: 61, maxDays: 91, amountsByCurrency: {}, count: 0 },

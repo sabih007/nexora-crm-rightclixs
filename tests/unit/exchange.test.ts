@@ -10,9 +10,27 @@ import {
 const utc = (y: number, m: number, d: number) => new Date(Date.UTC(y, m - 1, d));
 
 const RATES: RateRecord[] = [
-  { baseCurrency: 'USD', quoteCurrency: 'PKR', rate: '270.00', effectiveDate: utc(2026, 1, 1), source: 'manual' },
-  { baseCurrency: 'USD', quoteCurrency: 'PKR', rate: '280.00', effectiveDate: utc(2026, 6, 1), source: 'manual' },
-  { baseCurrency: 'GBP', quoteCurrency: 'PKR', rate: '350.00', effectiveDate: utc(2026, 1, 1), source: 'manual' },
+  {
+    baseCurrency: 'USD',
+    quoteCurrency: 'PKR',
+    rate: '270.00',
+    effectiveDate: utc(2026, 1, 1),
+    source: 'manual',
+  },
+  {
+    baseCurrency: 'USD',
+    quoteCurrency: 'PKR',
+    rate: '280.00',
+    effectiveDate: utc(2026, 6, 1),
+    source: 'manual',
+  },
+  {
+    baseCurrency: 'GBP',
+    quoteCurrency: 'PKR',
+    rate: '350.00',
+    effectiveDate: utc(2026, 1, 1),
+    source: 'manual',
+  },
 ];
 
 describe('findRate', () => {
@@ -41,7 +59,13 @@ describe('findRate', () => {
   it('prefers a direct rate over an inverted one', () => {
     const rates: RateRecord[] = [
       ...RATES,
-      { baseCurrency: 'PKR', quoteCurrency: 'USD', rate: '0.004', effectiveDate: utc(2026, 7, 1), source: 'direct' },
+      {
+        baseCurrency: 'PKR',
+        quoteCurrency: 'USD',
+        rate: '0.004',
+        effectiveDate: utc(2026, 7, 1),
+        source: 'direct',
+      },
     ];
     const detail = findRate(rates, 'PKR', 'USD', utc(2026, 8, 1));
     expect(detail?.inverted).toBe(false);

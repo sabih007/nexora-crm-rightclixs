@@ -1,5 +1,10 @@
 import { requireAuthPage, can } from '@/lib/auth/guard';
-import { roleHasPermission, ROLE_DESCRIPTIONS, ROLE_LABELS, assignableRoles } from '@/lib/permissions';
+import {
+  roleHasPermission,
+  ROLE_DESCRIPTIONS,
+  ROLE_LABELS,
+  assignableRoles,
+} from '@/lib/permissions';
 import { NoAccessState, Callout } from '@/components/ui/empty-state';
 import { PageHeader, SectionHeader } from '@/components/shared/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,17 +98,15 @@ export default async function TeamPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-xs leading-relaxed text-ink-muted">
-                  {ROLE_DESCRIPTIONS[role]}
-                </p>
+                <p className="text-ink-muted text-xs leading-relaxed">{ROLE_DESCRIPTIONS[role]}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         <Callout tone="info" className="mt-4">
-          Owner, Admin and Finance accounts must clear a two-factor challenge once enrolled,
-          because those roles can move money or change who else can. Changing someone&rsquo;s role
+          Owner, Admin and Finance accounts must clear a two-factor challenge once enrolled, because
+          those roles can move money or change who else can. Changing someone&rsquo;s role
           immediately ends their active sessions.
         </Callout>
 

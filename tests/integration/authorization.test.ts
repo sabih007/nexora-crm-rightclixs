@@ -92,13 +92,23 @@ describe('object-level authorization', () => {
 
     insideClientId = (
       await prisma.client.create({
-        data: { workspaceId, name: 'Inside Co', normalizedName: 'insideco', billingCurrency: 'PKR' },
+        data: {
+          workspaceId,
+          name: 'Inside Co',
+          normalizedName: 'insideco',
+          billingCurrency: 'PKR',
+        },
       })
     ).id;
 
     outsideClientId = (
       await prisma.client.create({
-        data: { workspaceId, name: 'Outside Co', normalizedName: 'outsideco', billingCurrency: 'PKR' },
+        data: {
+          workspaceId,
+          name: 'Outside Co',
+          normalizedName: 'outsideco',
+          billingCurrency: 'PKR',
+        },
       })
     ).id;
 
@@ -173,9 +183,9 @@ describe('object-level authorization', () => {
       const foreign = await prisma.project.create({
         data: { workspaceId: otherWorkspaceId, name: 'Foreign', currency: 'USD' },
       });
-      await expect(
-        guard.assertProjectAccess(ctxFor('ADMIN', 'admin'), foreign.id),
-      ).rejects.toThrow(guard.NotFoundError);
+      await expect(guard.assertProjectAccess(ctxFor('ADMIN', 'admin'), foreign.id)).rejects.toThrow(
+        guard.NotFoundError,
+      );
     });
   });
 

@@ -39,7 +39,10 @@ export async function rateLimit(
     return {
       allowed: false,
       remaining: 0,
-      retryAfterSeconds: Math.max(1, Math.ceil((existing.windowEnd.getTime() - now.getTime()) / 1000)),
+      retryAfterSeconds: Math.max(
+        1,
+        Math.ceil((existing.windowEnd.getTime() - now.getTime()) / 1000),
+      ),
     };
   }
 

@@ -24,7 +24,7 @@ import {
  */
 
 export const DATE_FORMAT = 'dd MMM yyyy';
-export const DATETIME_FORMAT = "dd MMM yyyy, HH:mm";
+export const DATETIME_FORMAT = 'dd MMM yyyy, HH:mm';
 
 export function formatDate(value: Date | string | null | undefined, pattern = DATE_FORMAT): string {
   if (!value) return '—';

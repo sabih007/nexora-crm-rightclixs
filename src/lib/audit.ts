@@ -62,10 +62,7 @@ export interface AuditInput {
  * Write an audit record. Accepts an optional transaction client so the audit
  * entry commits atomically with the change it describes.
  */
-export async function recordAudit(
-  input: AuditInput,
-  tx?: Prisma.TransactionClient,
-): Promise<void> {
+export async function recordAudit(input: AuditInput, tx?: Prisma.TransactionClient): Promise<void> {
   const client = tx ?? prisma;
 
   let ipHash: string | null = null;

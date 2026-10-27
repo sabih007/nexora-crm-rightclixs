@@ -43,8 +43,8 @@ export function ConfirmDialog({ open, onOpenChange, ...rest }: ConfirmDialogProp
         <AlertDialog.Overlay className="fixed inset-0 z-50 bg-[#0b1220]/50 backdrop-blur-[2px]" />
         <AlertDialog.Content
           className={cn(
-            'fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2',
-            'rounded-xl border border-line bg-surface-raised p-5 shadow-lg animate-in-fade focus:outline-none',
+            'fixed top-1/2 left-1/2 z-50 w-[calc(100vw-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2',
+            'border-line bg-surface-raised animate-in-fade rounded-xl border p-5 shadow-lg focus:outline-none',
           )}
         >
           <ConfirmDialogBody {...rest} />
@@ -85,14 +85,16 @@ function ConfirmDialogBody({
     <>
       <div className="flex gap-3.5">
         {tone === 'danger' ? (
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-danger-soft text-danger">
+          <div className="bg-danger-soft text-danger flex size-9 shrink-0 items-center justify-center rounded-full">
             <AlertTriangle className="size-4.5" aria-hidden />
           </div>
         ) : null}
         <div className="min-w-0 flex-1">
-          <AlertDialog.Title className="text-base font-semibold text-ink">{title}</AlertDialog.Title>
+          <AlertDialog.Title className="text-ink text-base font-semibold">
+            {title}
+          </AlertDialog.Title>
           <AlertDialog.Description asChild>
-            <div className="mt-1.5 text-sm text-ink-muted">{description}</div>
+            <div className="text-ink-muted mt-1.5 text-sm">{description}</div>
           </AlertDialog.Description>
 
           {confirmPhrase ? (
@@ -100,9 +102,8 @@ function ConfirmDialogBody({
               <Label htmlFor={inputId}>
                 {confirmPhraseLabel ?? (
                   <>
-                    Type{' '}
-                    <span className="font-mono font-semibold text-ink">{confirmPhrase}</span> to
-                    confirm
+                    Type <span className="text-ink font-mono font-semibold">{confirmPhrase}</span>{' '}
+                    to confirm
                   </>
                 )}
               </Label>
@@ -144,9 +145,10 @@ function ConfirmDialogBody({
  *   ... {element}
  */
 export function useConfirm() {
-  const [state, setState] = React.useState<Omit<ConfirmDialogProps, 'open' | 'onOpenChange'> | null>(
-    null,
-  );
+  const [state, setState] = React.useState<Omit<
+    ConfirmDialogProps,
+    'open' | 'onOpenChange'
+  > | null>(null);
 
   const element = state ? (
     <ConfirmDialog

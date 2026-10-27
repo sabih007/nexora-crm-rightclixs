@@ -55,8 +55,8 @@ export default async function ImportClientsPage({
       />
 
       <Callout tone="info" className="mb-5">
-        Nothing is written until the final step. You will see the column mapping and every row
-        error before anything is created, and the uploaded file is kept unchanged.
+        Nothing is written until the final step. You will see the column mapping and every row error
+        before anything is created, and the uploaded file is kept unchanged.
       </Callout>
 
       <ClientImportWizard

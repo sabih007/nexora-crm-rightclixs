@@ -47,10 +47,10 @@ export default async function ExpensesPage({
         <Card className="mb-4">
           <CardContent className="flex flex-wrap items-baseline justify-between gap-3 pt-4">
             <div>
-              <p className="text-xs text-ink-subtle">Total paid in this view</p>
+              <p className="text-ink-subtle text-xs">Total paid in this view</p>
               <MultiCurrencyAmount amounts={result.totalsByCurrency} size="lg" className="mt-0.5" />
             </div>
-            <p className="text-[11px] text-ink-subtle">
+            <p className="text-ink-subtle text-[11px]">
               {result.total} expense{result.total === 1 ? '' : 's'}, each shown in the currency it
               was paid in.
             </p>
@@ -68,13 +68,16 @@ export default async function ExpensesPage({
           <CardContent className="p-0">
             <ul className="divide-y divide-[var(--line)]">
               {result.rows.map((expense) => (
-                <li key={expense.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3">
-                  <span className="w-24 shrink-0 text-sm text-ink">
+                <li
+                  key={expense.id}
+                  className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3"
+                >
+                  <span className="text-ink w-24 shrink-0 text-sm">
                     {formatDate(expense.paidAt)}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-ink">{expense.description}</p>
-                    <p className="flex flex-wrap items-center gap-x-2 text-xs text-ink-subtle">
+                    <p className="text-ink truncate text-sm">{expense.description}</p>
+                    <p className="text-ink-subtle flex flex-wrap items-center gap-x-2 text-xs">
                       <Badge tone="outline" size="sm">
                         {expense.category}
                       </Badge>
@@ -110,14 +113,10 @@ export default async function ExpensesPage({
         </Card>
       )}
 
-      <ExpensePagination
-        page={result.page}
-        pageSize={result.pageSize}
-        total={result.total}
-      />
+      <ExpensePagination page={result.page} pageSize={result.pageSize} total={result.total} />
 
       {!can(ctx, 'expense:create') ? null : (
-        <p className="mt-4 text-xs text-ink-subtle">
+        <p className="text-ink-subtle mt-4 text-xs">
           Record a subscription charge from its detail page to add it here automatically.
         </p>
       )}

@@ -236,7 +236,7 @@ export function ProjectForm({
                         { shouldDirty: true },
                       )
                     }
-                    className="rounded-full p-0.5 hover:bg-brand-500/20"
+                    className="hover:bg-brand-500/20 rounded-full p-0.5"
                   >
                     <X className="size-3" />
                   </button>
@@ -265,7 +265,7 @@ export function ProjectForm({
         <CardHeader>
           <div>
             <CardTitle>Team</CardTitle>
-            <p className="mt-0.5 text-xs text-ink-subtle">
+            <p className="text-ink-subtle mt-0.5 text-xs">
               Members can see this project even if their role is limited to assignments.
             </p>
           </div>
@@ -283,13 +283,13 @@ export function ProjectForm({
           </Field>
 
           <fieldset>
-            <legend className="text-[13px] font-medium text-ink">Members</legend>
+            <legend className="text-ink text-[13px] font-medium">Members</legend>
             <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
               {members.map((member) => {
                 const checked = memberIds.includes(member.id);
                 return (
                   <li key={member.id}>
-                    <label className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-line px-2.5 py-2 transition-colors hover:bg-surface-hover">
+                    <label className="border-line hover:bg-surface-hover flex cursor-pointer items-center gap-2.5 rounded-lg border px-2.5 py-2 transition-colors">
                       <Checkbox
                         checked={checked}
                         onCheckedChange={(next) =>
@@ -304,8 +304,8 @@ export function ProjectForm({
                       />
                       <Avatar name={member.name} color={member.avatarColor} size="sm" />
                       <span className="min-w-0">
-                        <span className="block truncate text-[13px] text-ink">{member.name}</span>
-                        <span className="block truncate text-[11px] text-ink-subtle">
+                        <span className="text-ink block truncate text-[13px]">{member.name}</span>
+                        <span className="text-ink-subtle block truncate text-[11px]">
                           {member.email}
                         </span>
                       </span>

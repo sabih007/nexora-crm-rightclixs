@@ -69,7 +69,7 @@ export function ActivityLog({
       cell: (row) => (
         <time
           dateTime={new Date(row.createdAt).toISOString()}
-          className="whitespace-nowrap text-[13px] text-ink-muted"
+          className="text-ink-muted text-[13px] whitespace-nowrap"
         >
           {formatDateTime(row.createdAt)}
         </time>
@@ -80,18 +80,20 @@ export function ActivityLog({
       header: 'Who',
       cell: (row) =>
         row.actor ? (
-          <span className="flex items-center gap-1.5 text-[13px] text-ink">
+          <span className="text-ink flex items-center gap-1.5 text-[13px]">
             <Avatar name={row.actor.name} color={row.actor.avatarColor} size="xs" />
             <span className="truncate">{row.actor.name}</span>
           </span>
         ) : (
-          <span className="text-[13px] text-ink-subtle">System</span>
+          <span className="text-ink-subtle text-[13px]">System</span>
         ),
     },
     {
       id: 'action',
       header: 'Action',
-      cell: (row) => <span className="text-[13px] font-medium text-ink">{auditLabel(row.action)}</span>,
+      cell: (row) => (
+        <span className="text-ink text-[13px] font-medium">{auditLabel(row.action)}</span>
+      ),
     },
     {
       id: 'entity',
@@ -104,7 +106,7 @@ export function ActivityLog({
               {row.entityType}
             </Badge>
             {href ? (
-              <Link href={href} className="text-xs text-brand-500 hover:underline">
+              <Link href={href} className="text-brand-500 text-xs hover:underline">
                 open
               </Link>
             ) : null}
@@ -117,7 +119,7 @@ export function ActivityLog({
       header: 'Detail',
       cell: (row) =>
         row.summary ? (
-          <span className="text-[13px] text-ink-muted">{row.summary}</span>
+          <span className="text-ink-muted text-[13px]">{row.summary}</span>
         ) : (
           <span className="text-ink-subtle">—</span>
         ),

@@ -6,10 +6,7 @@ import { roleHasPermission } from '@/lib/permissions';
 import { Decimal, dec, roundMoney, sum } from '@/lib/money';
 import { addDays, todayUtc } from '@/lib/dates';
 import { outstandingBalance } from '@/features/invoices/calculations';
-import {
-  allSubscriptionsForForecast,
-  getForecastSummary,
-} from '@/features/subscriptions/queries';
+import { allSubscriptionsForForecast, getForecastSummary } from '@/features/subscriptions/queries';
 import { commitmentTotals } from '@/features/subscriptions/forecast';
 import { consolidate, describeConsolidation, type RateRecord } from './exchange';
 
@@ -589,7 +586,10 @@ export async function getProjectPerformance(
       invoiced: roundMoney(invoiced, project.currency).toString(),
       expenses: roundMoney(expenses, project.currency).toString(),
       budgetRemaining: project.budgetAmount
-        ? roundMoney(dec(project.budgetAmount.toString()).minus(invoiced), project.currency).toString()
+        ? roundMoney(
+            dec(project.budgetAmount.toString()).minus(invoiced),
+            project.currency,
+          ).toString()
         : null,
       margin: roundMoney(invoiced.minus(expenses), project.currency).toString(),
       taskCompletion:

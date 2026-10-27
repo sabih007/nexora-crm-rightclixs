@@ -25,7 +25,7 @@ export const Separator = React.forwardRef<
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-line',
+        'bg-line shrink-0',
         orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
         className,
       )}
@@ -47,7 +47,7 @@ export const Switch = React.forwardRef<
       ref={ref}
       className={cn(
         'peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40',
+        'focus-visible:ring-brand-500/40 focus-visible:ring-2 focus-visible:outline-none',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'data-[state=checked]:bg-brand-500 data-[state=unchecked]:bg-line-strong',
         className,
@@ -71,8 +71,8 @@ export const Checkbox = React.forwardRef<
     <CheckboxPrimitive.Root
       ref={ref}
       className={cn(
-        'peer size-4 shrink-0 rounded border border-line-strong bg-surface shadow-xs transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40',
+        'peer border-line-strong bg-surface size-4 shrink-0 rounded border shadow-xs transition-colors',
+        'focus-visible:ring-brand-500/40 focus-visible:ring-2 focus-visible:outline-none',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'data-[state=checked]:border-brand-500 data-[state=checked]:bg-brand-500 data-[state=checked]:text-white',
         'data-[state=indeterminate]:border-brand-500 data-[state=indeterminate]:bg-brand-500 data-[state=indeterminate]:text-white',
@@ -104,7 +104,7 @@ export const TabsList = React.forwardRef<
   return (
     <TabsPrimitive.List
       ref={ref}
-      className={cn('flex items-center gap-1 border-b border-line overflow-x-auto', className)}
+      className={cn('border-line flex items-center gap-1 overflow-x-auto border-b', className)}
       {...props}
     />
   );
@@ -118,8 +118,8 @@ export const TabsTrigger = React.forwardRef<
     <TabsPrimitive.Trigger
       ref={ref}
       className={cn(
-        'relative -mb-px whitespace-nowrap border-b-2 border-transparent px-3 py-2 text-sm font-medium text-ink-muted transition-colors',
-        'hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 rounded-t',
+        'text-ink-muted relative -mb-px border-b-2 border-transparent px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
+        'hover:text-ink focus-visible:ring-brand-500/40 rounded-t focus-visible:ring-2 focus-visible:outline-none',
         'data-[state=active]:border-brand-500 data-[state=active]:text-ink',
         className,
       )}
@@ -166,7 +166,7 @@ export function Tooltip({
         <TooltipPrimitive.Content
           side={side}
           sideOffset={6}
-          className="z-50 max-w-xs rounded-md bg-ink px-2.5 py-1.5 text-xs text-ink-inverse shadow-md animate-in-fade"
+          className="bg-ink text-ink-inverse animate-in-fade z-50 max-w-xs rounded-md px-2.5 py-1.5 text-xs shadow-md"
         >
           {content}
           <TooltipPrimitive.Arrow className="fill-[var(--ink)]" />
@@ -196,7 +196,7 @@ export const PopoverContent = React.forwardRef<
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'z-50 rounded-lg border border-line bg-surface-raised p-3 shadow-lg animate-in-fade focus:outline-none',
+          'border-line bg-surface-raised animate-in-fade z-50 rounded-lg border p-3 shadow-lg focus:outline-none',
           className,
         )}
         {...props}
@@ -232,7 +232,10 @@ export function Progress({
     <ProgressPrimitive.Root
       value={clamped}
       aria-label={label}
-      className={cn('relative h-1.5 w-full overflow-hidden rounded-full bg-surface-sunken', className)}
+      className={cn(
+        'bg-surface-sunken relative h-1.5 w-full overflow-hidden rounded-full',
+        className,
+      )}
     >
       <ProgressPrimitive.Indicator
         className={cn('h-full rounded-full transition-[width] duration-500', toneClass)}
@@ -304,7 +307,7 @@ export function AvatarGroup({
         />
       ))}
       {extra > 0 ? (
-        <span className="inline-flex size-6 items-center justify-center rounded-full bg-surface-sunken text-[10px] font-semibold text-ink-muted ring-2 ring-[var(--surface)]">
+        <span className="bg-surface-sunken text-ink-muted inline-flex size-6 items-center justify-center rounded-full text-[10px] font-semibold ring-2 ring-[var(--surface)]">
           +{extra}
         </span>
       ) : null}
@@ -319,7 +322,7 @@ export function AvatarGroup({
 export function Skeleton({ className }: { className?: string }) {
   return (
     <div
-      className={cn('shimmer rounded-md bg-surface-sunken', className)}
+      className={cn('shimmer bg-surface-sunken rounded-md', className)}
       aria-hidden
       data-testid="skeleton"
     />
