@@ -6,9 +6,14 @@ import { defineConfig, devices } from '@playwright/test';
  * Runs against a production build on port 3210 with the development PGlite
  * database, which must already be running (`npm run db:start`). The suite
  * signs in as the seeded demo accounts, so run `npm run db:seed` first.
+ *
+ * The suite writes real records. `globalTeardown` removes them afterwards —
+ * everything it creates carries an `E2E ` prefix, and only those are deleted.
+ * Set `E2E_KEEP_DATA=1` to keep them for inspection.
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  globalTeardown: './tests/e2e/global-teardown.ts',
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,

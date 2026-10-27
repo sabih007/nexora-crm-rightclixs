@@ -42,6 +42,13 @@ npm run verify     # lint + typecheck + unit/integration tests + build
 npm run test:e2e   # Playwright, needs a build and the seed
 ```
 
+The E2E suite drives the real UI, so it writes real records. Everything it
+creates is named with an `E2E ` prefix, and a global teardown removes exactly
+those rows when the run finishes — without it the residue buries the demo data
+and inflates the dashboard and report totals. Set `E2E_KEEP_DATA=1` to keep
+them for inspection after a failure, and `npm run test:e2e:clean` to remove
+them later.
+
 ---
 
 ## 2. Production deployment

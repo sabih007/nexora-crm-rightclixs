@@ -275,6 +275,12 @@ test-only adjustment:
    card", Kanban card actions) — a genuine screen-reader ambiguity, now distinguished.
 9. `lib/audit` pulled the argon2 native binding into the client bundle; labels are
    now a separate module.
+10. The Playwright suite wrote real records into the development database and
+    never removed them. Found by clicking through the running app: the demo
+    data was buried under test residue, and the invoice-list header, dashboard
+    and report totals all included E2E amounts. A global teardown now deletes
+    exactly the `E2E `-prefixed rows each run creates (`E2E_KEEP_DATA=1` keeps
+    them; `npm run test:e2e:clean` removes them later).
 
 ### What was not done
 

@@ -28,6 +28,7 @@
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
+    "test:e2e:clean": "tsx --conditions=react-server scripts/e2e-cleanup.ts",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "prisma": {
