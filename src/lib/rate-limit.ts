@@ -66,8 +66,18 @@ export async function pruneRateLimits(): Promise<number> {
 }
 
 export const RATE_LIMITS = {
+  /**
+   * Per-account: the real brute-force defence. Eight wrong passwords in
+   * fifteen minutes is far more than a person mistypes.
+   */
   login: { limit: 8, windowSeconds: 15 * 60, scope: 'login' },
-  loginIp: { limit: 30, windowSeconds: 15 * 60, scope: 'login-ip' },
+  /**
+   * Per-network: a backstop against spraying many accounts from one source.
+   * Set generously, and cleared on any successful sign-in, because a whole
+   * office usually shares one address — a tight limit here locks out
+   * legitimate colleagues rather than an attacker.
+   */
+  loginIp: { limit: 60, windowSeconds: 15 * 60, scope: 'login-ip' },
   mfa: { limit: 10, windowSeconds: 10 * 60, scope: 'mfa' },
   passwordChange: { limit: 5, windowSeconds: 60 * 60, scope: 'password-change' },
   upload: { limit: 60, windowSeconds: 60 * 60, scope: 'upload' },

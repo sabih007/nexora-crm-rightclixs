@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GripVertical, Info, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -77,31 +77,39 @@ export function InvoiceForm({
 
   const lines = useFieldArray({ control, name: 'lines' });
 
-  const watchedLines = watch('lines');
+  /**
+   * `useWatch` rather than `watch` for the line array.
+   *
+   * `watch('lines')` hands back a reference into React Hook Form's internal
+   * values object, and editing a nested field mutates it in place. Memoising
+   * on that reference therefore never invalidates, and the preview silently
+   * stays at zero while the user types. `useWatch` returns a fresh value on
+   * each change, and the totals are cheap enough to compute every render.
+   */
+  const watchedLines = useWatch({ control, name: 'lines' });
   const currency = watch('currency') || 'PKR';
   const taxMode = watch('taxMode') ?? 'PER_LINE';
   const invoiceTaxRate = watch('invoiceTaxRate') ?? '0';
   const selectedClientId = watch('clientId');
 
-  // Live preview. Wrapped because a half-typed value ("1.") is not yet a
-  // valid decimal; the form shows zeros until it parses.
-  const totals = React.useMemo(() => {
-    try {
-      return computeInvoiceTotals({
-        lines: (watchedLines ?? []).map((l) => ({
-          quantity: l.quantity || '0',
-          unitPrice: l.unitPrice || '0',
-          discountAmount: l.discountAmount || '0',
-          taxRate: l.taxRate || '0',
-        })),
-        currency,
-        taxMode,
-        invoiceTaxRate: invoiceTaxRate || '0',
-      });
-    } catch {
-      return null;
-    }
-  }, [watchedLines, currency, taxMode, invoiceTaxRate]);
+  // Wrapped because a half-typed value ("1.") is not yet a valid decimal;
+  // the form shows zeros until it parses.
+  let totals: ReturnType<typeof computeInvoiceTotals> | null = null;
+  try {
+    totals = computeInvoiceTotals({
+      lines: (watchedLines ?? []).map((l) => ({
+        quantity: l?.quantity || '0',
+        unitPrice: l?.unitPrice || '0',
+        discountAmount: l?.discountAmount || '0',
+        taxRate: l?.taxRate || '0',
+      })),
+      currency,
+      taxMode,
+      invoiceTaxRate: invoiceTaxRate || '0',
+    });
+  } catch {
+    totals = null;
+  }
 
   const availableProjects = projects.filter(
     (p) => !selectedClientId || p.clientId === selectedClientId || p.clientId === null,

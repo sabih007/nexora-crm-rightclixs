@@ -143,7 +143,11 @@ export async function login(raw: unknown): Promise<ActionResult<LoginOutcome>> {
     where: { id: user.id },
     data: { failedLoginCount: 0, lockedUntil: null, lastLoginAt: new Date() },
   });
+  // A successful sign-in clears both buckets: the account is evidently not
+  // under attack, and the shared office address should not accumulate a
+  // lockout from ordinary daily use.
   await resetRateLimit(email, RATE_LIMITS.login.scope);
+  await resetRateLimit(ip, RATE_LIMITS.loginIp.scope);
 
   await createSession(user.id, { mfaSatisfied: !needsMfa });
 

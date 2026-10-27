@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { expect, type Page } from '@playwright/test';
 
 /**
@@ -43,4 +44,16 @@ export async function signOut(page: Page): Promise<void> {
 /** A value unique to this run, so repeated runs never collide. */
 export function unique(prefix: string): string {
   return `${prefix} ${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+}
+
+/**
+ * Where `auth.setup.ts` stores each role's signed-in browser state.
+ *
+ * Lives here rather than in the setup file because Playwright forbids a spec
+ * from importing another test file.
+ */
+export const AUTH_DIR = path.join(process.cwd(), 'tests', '.auth');
+
+export function statePath(role: AccountKey): string {
+  return path.join(AUTH_DIR, `${role}.json`);
 }

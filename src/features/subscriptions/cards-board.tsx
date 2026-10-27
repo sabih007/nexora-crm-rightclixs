@@ -220,6 +220,7 @@ export function CardsBoard({
                     <button
                       type="button"
                       onClick={() => setLinkTarget(card)}
+                      aria-label={`Link a platform to ${card.nickname}`}
                       className="inline-flex items-center gap-1 rounded text-[11px] font-medium normal-case tracking-normal text-brand-500 hover:underline"
                     >
                       <Link2 className="size-3" aria-hidden /> Link a platform

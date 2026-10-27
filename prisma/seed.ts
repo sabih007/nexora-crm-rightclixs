@@ -49,7 +49,11 @@ async function main() {
   for (const person of people) {
     const user = await prisma.user.upsert({
       where: { email: person.email },
-      update: {},
+      // Demo accounts are reset to the demo password every time the seed
+      // runs, so the credentials printed below are always the ones that
+      // work. This is a development-only script and refuses to run with
+      // NODE_ENV=production.
+      update: { name: person.name, passwordHash, status: 'ACTIVE' },
       create: {
         email: person.email,
         name: person.name,
@@ -428,6 +432,14 @@ async function main() {
       });
     }
   }
+  // The seed writes invoice numbers directly, so move the workspace counter
+  // past them; otherwise the first invoice created through the UI would
+  // collide with a seeded number.
+  await prisma.workspace.update({
+    where: { id: workspaceId },
+    data: { invoiceNextNo: sequence },
+  });
+
   console.log(`  ✓ ${invoicesCreated} invoices with payments`);
 
   // ---------------------------------------------------------------------

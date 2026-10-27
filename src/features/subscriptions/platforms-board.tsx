@@ -194,6 +194,7 @@ export function PlatformsBoard({
                         <button
                           type="button"
                           onClick={() => setLinkTarget(platform)}
+                          aria-label={`Record a card saved on ${platform.name}`}
                           className="inline-flex items-center gap-1 rounded text-[11px] font-medium normal-case tracking-normal text-brand-500 hover:underline"
                         >
                           <Link2 className="size-3" aria-hidden /> Record a card

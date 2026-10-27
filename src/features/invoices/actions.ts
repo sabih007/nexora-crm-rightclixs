@@ -119,13 +119,43 @@ export const createInvoice = defineAction({
         select: { invoicePrefix: true, invoiceNextNo: true },
       });
 
-      const invoiceNumber = formatInvoiceNumber({
-        prefix: workspace.invoicePrefix,
-        sequence: workspace.invoiceNextNo - 1,
-        padding: settings.invoiceNumberPadding,
-        includeYear: settings.invoiceNumberIncludeYear,
-        year: fromDateInput(input.issueDate).getUTCFullYear(),
-      });
+      const year = fromDateInput(input.issueDate).getUTCFullYear();
+      const buildNumber = (sequence: number) =>
+        formatInvoiceNumber({
+          prefix: workspace.invoicePrefix,
+          sequence,
+          padding: settings.invoiceNumberPadding,
+          includeYear: settings.invoiceNumberIncludeYear,
+          year,
+        });
+
+      /**
+       * The counter is the source of truth, but it can fall behind reality —
+       * after a restore, an import, or seeded rows written directly. Rather
+       * than failing with a unique-constraint error, step past anything
+       * already taken and leave the counter corrected.
+       */
+      let sequence = workspace.invoiceNextNo - 1;
+      let invoiceNumber = buildNumber(sequence);
+      for (let attempt = 0; attempt < 1000; attempt += 1) {
+        const clash = await tx.invoice.findFirst({
+          where: { workspaceId: ctx.workspaceId, invoiceNumber },
+          select: { id: true },
+        });
+        if (!clash) break;
+        sequence += 1;
+        invoiceNumber = buildNumber(sequence);
+      }
+      if (sequence !== workspace.invoiceNextNo - 1) {
+        await tx.workspace.update({
+          where: { id: ctx.workspaceId },
+          data: { invoiceNextNo: sequence + 1 },
+        });
+        logger.warn('Invoice counter had fallen behind and was advanced', {
+          workspaceId: ctx.workspaceId,
+          advancedTo: sequence + 1,
+        });
+      }
 
       const created = await tx.invoice.create({
         data: {

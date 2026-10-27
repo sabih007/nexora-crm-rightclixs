@@ -296,6 +296,7 @@ function TaskCardView({
         <button
           type="button"
           onClick={onOpen}
+          aria-label={`Open task: ${task.title}`}
           className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 rounded"
         >
           <p className="text-[13px] font-medium leading-snug text-ink">{task.title}</p>

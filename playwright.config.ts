@@ -24,7 +24,17 @@ export default defineConfig({
     video: 'off',
   },
 
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    // Signs in once per role and stores the session; the suites below reuse
+    // it instead of authenticating in every test.
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['setup'],
+      testIgnore: /auth\.setup\.ts/,
+    },
+  ],
 
   webServer: process.env.E2E_BASE_URL
     ? undefined

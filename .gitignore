@@ -39,3 +39,5 @@ src/generated/
 # playwright
 test-results/
 playwright-report/
+tests/.auth/
+.backups/

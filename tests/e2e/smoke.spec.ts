@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { ACCOUNTS, DEMO_PASSWORD, signIn, signOut } from './helpers';
+import { ACCOUNTS, DEMO_PASSWORD, signIn, signOut, statePath } from './helpers';
 
 /**
  * Smoke suite: every navigable page loads for an authorised role, and the
@@ -7,6 +7,9 @@ import { ACCOUNTS, DEMO_PASSWORD, signIn, signOut } from './helpers';
  */
 
 test.describe('authentication', () => {
+  // These exercise the login path itself, so they start with no session.
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test('an anonymous visitor is sent to the login page', async ({ page }) => {
     await page.goto('/clients');
     await page.waitForURL(/\/login/);
@@ -42,9 +45,7 @@ test.describe('authentication', () => {
 });
 
 test.describe('navigation as an admin', () => {
-  test.beforeEach(async ({ page }) => {
-    await signIn(page, 'admin');
-  });
+  test.use({ storageState: statePath('admin') });
 
   const pages: { path: string; heading: RegExp }[] = [
     { path: '/dashboard', heading: /Overview/ },
@@ -92,10 +93,10 @@ test.describe('navigation as an admin', () => {
   });
 });
 
-test.describe('role boundaries', () => {
-  test('a staff member cannot reach invoices, cards or the activity log', async ({ page }) => {
-    await signIn(page, 'staff');
+test.describe('role boundaries as staff', () => {
+  test.use({ storageState: statePath('staff') });
 
+  test('a staff member cannot reach invoices, cards or the activity log', async ({ page }) => {
     for (const path of ['/invoices', '/subscriptions/cards', '/activity']) {
       await page.goto(path);
       // The page renders, but with an explicit "No access" state rather than data.
@@ -104,15 +105,19 @@ test.describe('role boundaries', () => {
   });
 
   test('the sidebar hides sections a staff member cannot use', async ({ page }) => {
-    await signIn(page, 'staff');
+    await page.goto('/dashboard');
     const nav = page.getByRole('navigation', { name: 'Main navigation' });
     await expect(nav.getByRole('link', { name: 'Clients' })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Invoices' })).toHaveCount(0);
     await expect(nav.getByRole('link', { name: 'Activity Log' })).toHaveCount(0);
   });
 
+});
+
+test.describe('role boundaries as a manager', () => {
+  test.use({ storageState: statePath('manager') });
+
   test('a manager sees invoices read-only, with no new-invoice action', async ({ page }) => {
-    await signIn(page, 'manager');
     await page.goto('/invoices');
     await expect(page.getByRole('heading', { name: 'Invoices', level: 1 })).toBeVisible();
     await expect(page.getByRole('link', { name: 'New invoice' })).toHaveCount(0);
@@ -120,6 +125,8 @@ test.describe('role boundaries', () => {
 });
 
 test.describe('api boundaries', () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test('the cron endpoint rejects an unauthenticated call', async ({ request }) => {
     const response = await request.get('/api/cron/reminders');
     expect(response.status()).toBe(401);
