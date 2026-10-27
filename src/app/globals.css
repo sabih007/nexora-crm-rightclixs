@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+
+/* ===========================================================================
+   Nexora OS design tokens
+
+   Palette: navy ink #0B1220, blue #315CFD, cyan #38BDF8, canvas #F7F9FC.
+   Every colour is defined once on :root and re-mapped for dark mode, so a
+   component never needs a `dark:` variant for colour — only for effects.
+   =========================================================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Brand ramp */
+  --brand-50: #eef3ff;
+  --brand-100: #dbe5ff;
+  --brand-200: #bed0ff;
+  --brand-300: #93b0ff;
+  --brand-400: #6185fd;
+  --brand-500: #315cfd;
+  --brand-600: #1f3fe0;
+  --brand-700: #1a32b4;
+  --brand-800: #1a2d8f;
+  --brand-900: #1b2c71;
+
+  --cyan-400: #38bdf8;
+  --cyan-500: #0ea5e9;
+
+  /* Surfaces */
+  --canvas: #f7f9fc;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f1f4f9;
+  --surface-hover: #f3f6fb;
+
+  /* Ink */
+  --ink: #0b1220;
+  --ink-muted: #51607a;
+  --ink-subtle: #76839a;
+  --ink-inverse: #ffffff;
+
+  /* Lines */
+  --line: #e3e8f0;
+  --line-strong: #cfd7e4;
+
+  /* Semantic */
+  --success: #0f9d58;
+  --success-soft: #e6f6ed;
+  --warning: #b45309;
+  --warning-soft: #fdf3e3;
+  --danger: #d1333f;
+  --danger-soft: #fdecee;
+  --info: #0e7490;
+  --info-soft: #e3f4f8;
+
+  --focus-ring: #315cfd;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px 0 rgb(11 18 32 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(11 18 32 / 0.08), 0 1px 2px -1px rgb(11 18 32 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(11 18 32 / 0.09), 0 2px 6px -2px rgb(11 18 32 / 0.05);
+  --shadow-lg: 0 12px 32px -8px rgb(11 18 32 / 0.16), 0 4px 12px -4px rgb(11 18 32 / 0.08);
+
+  --radius: 0.625rem;
+}
+
+.dark {
+  --canvas: #070b14;
+  --surface: #0e1627;
+  --surface-raised: #141e33;
+  --surface-sunken: #0a111f;
+  --surface-hover: #182544;
+
+  --ink: #eef2f9;
+  --ink-muted: #9aa8c2;
+  --ink-subtle: #74839e;
+  --ink-inverse: #0b1220;
+
+  --line: #1e2a44;
+  --line-strong: #2b3a5a;
+
+  --brand-500: #4d74ff;
+  --brand-600: #3a60f5;
+
+  --success: #35c184;
+  --success-soft: #0f2a22;
+  --warning: #e0a450;
+  --warning-soft: #2b2113;
+  --danger: #f2707c;
+  --danger-soft: #30151a;
+  --info: #4fc3de;
+  --info-soft: #0f2630;
+
+  --focus-ring: #6185fd;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 14px -2px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 16px 40px -10px rgb(0 0 0 / 0.65);
+}
+
+@theme inline {
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+
+  --color-accent: var(--cyan-400);
+  --color-accent-strong: var(--cyan-500);
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-ink-inverse: var(--ink-inverse);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible, consistent focus for keyboard users everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Tabular figures keep money columns aligned. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--brand-500) 25%, transparent);
+  }
+
+  /* Scrollbars that match the theme instead of fighting it. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .shimmer {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--ink) 6%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-in-fade {
+    animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Honour the OS "reduce motion" setting throughout. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Printing an invoice or report should not print the app chrome. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

@@ -1,0 +1,37 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# local runtime artifacts
+.storage/
+.mail/
+.pgdata/
+.backups/
+*.log
+npm-debug.log*
+
+# test
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# prisma generated client
+src/generated/
