@@ -9,11 +9,13 @@ import { defineConfig } from 'vitest/config';
  */
 export default defineConfig({
   resolve: {
-    alias: { '@': path.resolve(import.meta.dirname, './src') },
-    // Resolve the `server-only` marker to its empty build, the way the Next
-    // server runtime does. Without this, importing any module that guards
-    // itself with `import 'server-only'` throws inside the test runner.
-    conditions: ['react-server', 'node', 'import', 'default'],
+    alias: {
+      '@': path.resolve(import.meta.dirname, './src'),
+      // `server-only` throws unless resolved under the `react-server`
+      // condition, which Vitest's Node transform does not apply. Point it at
+      // an empty stub so server modules can be imported directly in tests.
+      'server-only': path.resolve(import.meta.dirname, './tests/stubs/server-only.ts'),
+    },
   },
   test: {
     globals: true,

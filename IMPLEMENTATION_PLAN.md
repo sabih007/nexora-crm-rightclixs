@@ -77,7 +77,7 @@ applied with `prisma migrate deploy` — real, checked-in, ordered migration fil
 
 ## Phase 2 — Clients & projects
 - [x] Client CRUD, contacts, tags, archive, duplicate detection
-- [ ] Client CSV import/export (moved to Phase 5 with the spreadsheet tooling)
+- [x] Client CSV import/export (moved to Phase 5 with the spreadsheet tooling)
 - [x] Client detail: projects, invoices, payments, files, activity timeline
 - [x] Project CRUD, members, budget, status/priority
 - [x] Tasks: list + Kanban (drag/drop), comments, checklist, assignees, due dates
@@ -94,20 +94,20 @@ applied with `prisma migrate deploy` — real, checked-in, ordered migration fil
 - **Gate:** monetary edge-case unit tests pass; issued invoices cannot be silently rewritten
 
 ## Phase 4 — Cards, platforms & subscriptions
-- [ ] Card inventory (last4 + metadata only — no PAN/CVV fields anywhere)
-- [ ] Platform registry; card↔platform links with verify/remove + audit
-- [ ] Subscriptions: cadence, anchor date, trial, notice period, attribution
-- [ ] Forecast engine: monthly equivalent, annualized, 7/30/90-day, renewal calendar
-- [ ] Actual expenses linked to subscriptions (never counted as forecast)
-- [ ] Reminder rules (30/14/7/1d), timezone-aware, deduplicated cron job
+- [x] Card inventory (last4 + metadata only — no PAN/CVV fields anywhere)
+- [x] Platform registry; card↔platform links with verify/remove + audit
+- [x] Subscriptions: cadence, anchor date, trial, notice period, attribution
+- [x] Forecast engine: monthly equivalent, annualized, 7/30/90-day, renewal calendar
+- [x] Actual expenses linked to subscriptions (never counted as forecast)
+- [x] Reminder rules (30/14/7/1d), timezone-aware, deduplicated cron job
 - **Gate:** forecast/cadence/reminder unit tests pass
 
 ## Phase 5 — Files & spreadsheets
-- [ ] Signed upload flow (size, MIME + extension + magic-byte checks)
-- [ ] Folders, tags, metadata, versioning, soft delete
-- [ ] Private download route with per-object authorization
-- [ ] CSV/XLSX preview, column mapping, row validation, confirm-then-import
-- [ ] CSV-injection-safe exports
+- [x] Signed upload flow (size, MIME + extension + magic-byte checks)
+- [x] Folders, tags, metadata, versioning, soft delete
+- [x] Private download route with per-object authorization
+- [x] CSV/XLSX preview, column mapping, row validation, confirm-then-import
+- [x] CSV-injection-safe exports
 - **Gate:** access-control and malicious-upload tests pass
 
 ## Phase 6 — Reporting & polish
