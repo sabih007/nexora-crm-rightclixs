@@ -1,5 +1,3 @@
-'use client';
-
 import * as React from 'react';
 import Link from 'next/link';
 import { ArrowDownRight, ArrowRight, ArrowUpRight, Info } from 'lucide-react';
@@ -8,6 +6,11 @@ import { cn } from '@/lib/utils';
 
 /**
  * KPI tile.
+ *
+ * Deliberately a *server* component. It needs no client state, and keeping
+ * it on the server lets a page pass an icon component (`icon={Banknote}`)
+ * directly — a function cannot cross the server/client boundary, so marking
+ * this 'use client' would break every page that supplies an icon.
  *
  * Every tile must carry a `definition` — the exact rule used to compute the
  * number. A figure on this dashboard is never shown without the user being

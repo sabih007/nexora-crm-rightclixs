@@ -35,3 +35,7 @@ Thumbs.db
 
 # prisma generated client
 src/generated/
+
+# playwright
+test-results/
+playwright-report/

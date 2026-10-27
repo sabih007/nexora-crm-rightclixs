@@ -108,13 +108,21 @@ export function Field({ label, hint, error, required, htmlFor, className, childr
     .filter(Boolean)
     .join(' ');
 
-  const child = React.isValidElement(children)
-    ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
-        id,
-        'aria-invalid': errorText ? true : undefined,
-        'aria-describedby': describedBy || undefined,
-      })
-    : children;
+  /**
+   * When the caller supplies `htmlFor` it is wiring the control's `id`
+   * itself — typically because the control sits inside a wrapper (a password
+   * field with a reveal button, say). Injecting an `id` here as well would
+   * put the same id on both the wrapper and the input, and `<label for>`
+   * would resolve to the wrapper instead of the control.
+   */
+  const child =
+    React.isValidElement(children) && !htmlFor
+      ? React.cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+          id,
+          'aria-invalid': errorText ? true : undefined,
+          'aria-describedby': describedBy || undefined,
+        })
+      : children;
 
   return (
     <div className={cn('space-y-1.5', className)}>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { auditLabel } from '@/lib/audit';
+import { auditLabel } from '@/lib/audit-labels';
 import { Avatar } from '@/components/ui/misc';
 import { EmptyState } from '@/components/ui/empty-state';
 import { formatDateTime } from '@/lib/dates';
