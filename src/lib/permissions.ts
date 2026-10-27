@@ -133,6 +133,9 @@ const FINANCE: Permission[] = [
   'invoice:issue',
   'invoice:send',
   'invoice:void',
+  // Deleting is guarded to drafts at the action level, so a Finance user can
+  // discard a draft they raised without being able to erase an issued record.
+  'invoice:delete',
   'invoice:download_pdf',
   'payment:read',
   'payment:create',

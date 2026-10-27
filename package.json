@@ -2,7 +2,7 @@
   "name": "nexora-os",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexora OS — production-ready internal office CRM",
+  "description": "Nexora OS \u2014 production-ready internal office CRM",
   "engines": {
     "node": ">=20.11"
   },
@@ -15,14 +15,14 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:start": "tsx scripts/pglite-server.ts",
+    "db:start": "tsx --conditions=react-server scripts/pglite-server.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:makemigration": "tsx scripts/make-migration.ts",
-    "db:reset": "tsx scripts/db-reset.ts",
-    "db:seed": "tsx prisma/seed.ts",
-    "db:backup": "tsx scripts/backup.ts",
-    "bootstrap:admin": "tsx scripts/bootstrap-admin.ts",
+    "db:makemigration": "tsx --conditions=react-server scripts/make-migration.ts",
+    "db:reset": "tsx --conditions=react-server scripts/db-reset.ts",
+    "db:seed": "tsx --conditions=react-server prisma/seed.ts",
+    "db:backup": "tsx --conditions=react-server scripts/backup.ts",
+    "bootstrap:admin": "tsx --conditions=react-server scripts/bootstrap-admin.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",
@@ -31,7 +31,7 @@
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx --conditions=react-server prisma/seed.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1157.0",
@@ -82,6 +82,7 @@
     "react-dom": "^19.3.1",
     "react-hook-form": "^7.91.0",
     "recharts": "^3.10.1",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
     "zod": "^4.6.7"

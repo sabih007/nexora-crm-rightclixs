@@ -48,6 +48,7 @@ describe('permission matrix', () => {
       for (const p of [
         'invoice:issue',
         'invoice:void',
+        'invoice:delete',
         'payment:create',
         'expense:create',
         'subscription:update',

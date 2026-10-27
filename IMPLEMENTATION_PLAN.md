@@ -72,24 +72,25 @@ applied with `prisma migrate deploy` — real, checked-in, ordered migration fil
 - [x] TOTP MFA enrolment + challenge for privileged roles
 - [x] Central permission matrix + `authorize()` guard; default deny; object-level checks
 - [x] Audit log foundation (`recordAudit`) wired into mutation helper
-- [ ] Seed script (clearly labelled demo data, dev only) + admin bootstrap
+- [x] Seed script (clearly labelled demo data, dev only) + admin bootstrap
 - **Gate:** integration tests prove unauthorized requests are denied
 
 ## Phase 2 — Clients & projects
-- [ ] Client CRUD, contacts, tags, archive, duplicate detection, CSV import/export
-- [ ] Client detail: projects, invoices, payments, files, activity timeline
-- [ ] Project CRUD, members, budget, status/priority
-- [ ] Tasks: list + Kanban (drag/drop), comments, checklist, assignees, due dates
+- [x] Client CRUD, contacts, tags, archive, duplicate detection
+- [ ] Client CSV import/export (moved to Phase 5 with the spreadsheet tooling)
+- [x] Client detail: projects, invoices, payments, files, activity timeline
+- [x] Project CRUD, members, budget, status/priority
+- [x] Tasks: list + Kanban (drag/drop), comments, checklist, assignees, due dates
 - **Gate:** E2E client→project→task workflow passes
 
 ## Phase 3 — Invoices & payments
-- [ ] Invoice builder (line items, discount, per-line vs invoice tax, terms)
-- [ ] Server-side decimal totals + documented rounding policy
-- [ ] Status machine: Draft→Sent→Partially Paid→Paid/Overdue, Void, Cancelled
-- [ ] Configurable numbering, immutable issued snapshot, client billing snapshot
-- [ ] Branded PDF generation + signed download
-- [ ] Payments: partial, overpayment/credit allocation, idempotency keys, transactions
-- [ ] Credit notes; mark-sent; overdue computation
+- [x] Invoice builder (line items, discount, per-line vs invoice tax, terms)
+- [x] Server-side decimal totals + documented rounding policy
+- [x] Status machine: Draft→Sent→Partially Paid→Paid/Overdue, Void, Cancelled
+- [x] Configurable numbering, immutable issued snapshot, client billing snapshot
+- [x] Branded PDF generation + signed download
+- [x] Payments: partial, overpayment/credit allocation, idempotency keys, transactions
+- [x] Credit notes; mark-sent; overdue computation
 - **Gate:** monetary edge-case unit tests pass; issued invoices cannot be silently rewritten
 
 ## Phase 4 — Cards, platforms & subscriptions

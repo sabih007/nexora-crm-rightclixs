@@ -10,6 +10,10 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(import.meta.dirname, './src') },
+    // Resolve the `server-only` marker to its empty build, the way the Next
+    // server runtime does. Without this, importing any module that guards
+    // itself with `import 'server-only'` throws inside the test runner.
+    conditions: ['react-server', 'node', 'import', 'default'],
   },
   test: {
     globals: true,
