@@ -1,0 +1,9 @@
+# Normalise line endings so the repo is identical on Windows, macOS and Linux
+# and `git diff` is not full of whitespace-only changes.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
+*.ico binary
+*.woff binary
+*.woff2 binary
