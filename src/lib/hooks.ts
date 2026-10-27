@@ -65,3 +65,58 @@ export function setPreferenceCookie(name: string, value: string, days = 365): vo
     /* document unavailable — preference simply is not persisted */
   }
 }
+
+/**
+ * A per-viewer UI preference backed by localStorage.
+ *
+ * Implemented with `useSyncExternalStore` rather than `useState` + `useEffect`
+ * so the server render and the first client render agree on `fallback`, and
+ * the stored value is adopted without a state update inside an effect.
+ * Storage failures (private mode, blocked site data) degrade to the fallback.
+ */
+export function useStoredPreference<T extends string>(
+  key: string,
+  allowed: readonly T[],
+  fallback: T,
+): [T, (value: T) => void] {
+  const subscribe = React.useCallback(
+    (onChange: () => void) => {
+      const handler = (event: Event) => {
+        if (event instanceof StorageEvent && event.key !== null && event.key !== key) return;
+        onChange();
+      };
+      window.addEventListener('storage', handler);
+      window.addEventListener('nexora:preference', handler);
+      return () => {
+        window.removeEventListener('storage', handler);
+        window.removeEventListener('nexora:preference', handler);
+      };
+    },
+    [key],
+  );
+
+  const getSnapshot = React.useCallback(() => {
+    try {
+      const stored = window.localStorage.getItem(key);
+      return allowed.includes(stored as T) ? (stored as T) : fallback;
+    } catch {
+      return fallback;
+    }
+  }, [key, allowed, fallback]);
+
+  const value = React.useSyncExternalStore(subscribe, getSnapshot, () => fallback);
+
+  const setValue = React.useCallback(
+    (next: T) => {
+      try {
+        window.localStorage.setItem(key, next);
+      } catch {
+        /* preference simply is not persisted */
+      }
+      window.dispatchEvent(new Event('nexora:preference'));
+    },
+    [key],
+  );
+
+  return [value, setValue];
+}
