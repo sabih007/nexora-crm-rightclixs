@@ -7,11 +7,9 @@ coverage/
 .turbo/
 
 # env
-.env
-.env.local
-.env.*.local
-.env.production
-.env.production.template
+# Everything env-shaped is secret by default; .env.example is the one
+# deliberate exception because it ships as the public template.
+.env*
 *.bak
 !.env.example
 
