@@ -10,6 +10,9 @@ coverage/
 .env
 .env.local
 .env.*.local
+.env.production
+.env.production.template
+*.bak
 !.env.example
 
 # local runtime artifacts
