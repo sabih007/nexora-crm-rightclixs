@@ -1,20 +1,27 @@
 /**
- * Create the first Owner account.
+ * Create an Owner account.
  *
  *   npm run bootstrap:admin
+ *   npm run bootstrap:admin -- --email=owner@example.com --name='Jo Owner'
  *
- * Reads BOOTSTRAP_OWNER_* from the environment. When no password is supplied
- * a strong one is generated and printed exactly once — it is stored only as
- * an argon2id hash, so there is no way to recover it later.
+ * Reads BOOTSTRAP_OWNER_* from the environment; --email, --name and
+ * --password override those when given. When no password is supplied a strong
+ * one is generated and printed exactly once — it is stored only as an
+ * argon2id hash, so there is no way to recover it later.
  *
  * Safe to re-run: if the email already exists the script reports and exits
  * without modifying the account.
+ *
+ * Flags:
+ *   --force  accept a password that fails the workspace policy
  */
 import { randomBytes } from 'node:crypto';
 import { config as loadEnv } from 'dotenv';
 
 loadEnv({ path: '.env.local', quiet: true });
 loadEnv({ path: '.env', quiet: true });
+
+import { policyFailures, readFlag } from './lib/cli';
 
 async function main() {
   const { prisma } = await import('../src/lib/db');
@@ -23,18 +30,23 @@ async function main() {
   const { ensureWorkspace } = await import('../src/lib/workspace');
   const { recordAudit } = await import('../src/lib/audit');
 
-  const email = (env.BOOTSTRAP_OWNER_EMAIL ?? '').trim().toLowerCase();
+  const email = (readFlag('email') ?? env.BOOTSTRAP_OWNER_EMAIL ?? '').trim().toLowerCase();
   if (!email) {
-    console.error('BOOTSTRAP_OWNER_EMAIL is not set. Add it to .env.local and retry.');
+    console.error('No email given. Pass --email=<email> or set BOOTSTRAP_OWNER_EMAIL.');
     process.exit(1);
   }
 
-  const name = env.BOOTSTRAP_OWNER_NAME?.trim() || 'Workspace Owner';
-  const generated = !env.BOOTSTRAP_OWNER_PASSWORD;
-  const password = env.BOOTSTRAP_OWNER_PASSWORD || generateStrongPassword();
+  const name = (readFlag('name') ?? env.BOOTSTRAP_OWNER_NAME)?.trim() || 'Workspace Owner';
+  const supplied = readFlag('password') || env.BOOTSTRAP_OWNER_PASSWORD;
+  const generated = !supplied;
+  const password = supplied || generateStrongPassword();
+  const force = process.argv.includes('--force');
 
-  if (password.length < 12) {
-    console.error('BOOTSTRAP_OWNER_PASSWORD must be at least 12 characters.');
+  const failures = policyFailures(password);
+  if (failures.length > 0 && !force) {
+    console.error('\n  That password does not meet the workspace policy. It needs:');
+    for (const f of failures) console.error(`    • ${f}`);
+    console.error('\n  Re-run with --force to set it anyway.\n');
     process.exit(1);
   }
 
@@ -79,7 +91,13 @@ async function main() {
     console.log('\n   Store this now. It is hashed with argon2id and cannot be');
     console.log('   recovered. Change it after signing in.');
   } else {
-    console.log('   Password  : (taken from BOOTSTRAP_OWNER_PASSWORD)');
+    console.log('   Password  : (as supplied)');
+  }
+  if (failures.length > 0) {
+    console.log(
+      `\n   Policy overridden with --force. This password fails: ${failures.join(', ')}.`,
+    );
+    console.log('   Settings → Security will refuse it on the next change.');
   }
   console.log('\n   Owner accounts must enrol in two-factor authentication');
   console.log('   from Settings → Profile & security before the role can');

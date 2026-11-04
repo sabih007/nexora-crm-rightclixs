@@ -23,6 +23,7 @@
     "db:seed": "tsx --conditions=react-server prisma/seed.ts",
     "db:backup": "tsx --conditions=react-server scripts/backup.ts",
     "bootstrap:admin": "tsx --conditions=react-server scripts/bootstrap-admin.ts",
+    "reset:password": "tsx --conditions=react-server scripts/reset-password.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",
