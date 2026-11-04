@@ -42,3 +42,6 @@ test-results/
 playwright-report/
 tests/.auth/
 .backups/
+
+.vercel
+.env*
