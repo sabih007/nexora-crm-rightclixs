@@ -211,6 +211,7 @@ model Workspace {
   platforms        Platform[]
   platformLinks    PlatformCardLink[]
   subscriptions    Subscription[]
+  domains          Domain[]
   expenses         Expense[]
   reminderRules    ReminderRule[]
   notifications    Notification[]
@@ -355,6 +356,7 @@ model Client {
   files         FileAsset[]
   folders       Folder[]
   subscriptions Subscription[]
+  domains          Domain[]
   expenses      Expense[]
 
   @@index([workspaceId, status])
@@ -1045,4 +1047,34 @@ model Setting {
 
   @@unique([workspaceId, key])
   @@map("settings")
+}
+
+// ===========================================================================
+// Domains (synced from Spaceship)
+// ===========================================================================
+
+model Domain {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspaceId      String    @db.Uuid
+  clientId         String?   @db.Uuid
+  name             String
+  registrar        String    @default("Spaceship")
+  registrationDate DateTime?
+  /// Renewal happens on this date when autoRenew = true.
+  expirationDate   DateTime?
+  autoRenew        Boolean   @default(false)
+  /// EPP statuses as returned by the registrar.
+  status           String[]  @default([])
+  notes            String?
+  lastSyncedAt     DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  client    Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId, expirationDate])
+  @@index([clientId])
+  @@map("domains")
 }
