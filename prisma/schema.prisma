@@ -869,6 +869,7 @@ model Subscription {
   client    Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
   expenses  Expense[]
   reminders SubscriptionReminder[]
+  domain    Domain?
 
   @@index([workspaceId, status])
   @@index([workspaceId, nextChargeAt])
@@ -1057,6 +1058,7 @@ model Domain {
   id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   workspaceId      String    @db.Uuid
   clientId         String?   @db.Uuid
+  subscriptionId   String?   @unique @db.Uuid
   name             String
   registrar        String    @default("Spaceship")
   registrationDate DateTime?
@@ -1072,6 +1074,7 @@ model Domain {
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   client    Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+    subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
 
   @@unique([workspaceId, name])
   @@index([workspaceId, expirationDate])

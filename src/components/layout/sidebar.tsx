@@ -8,6 +8,7 @@ import {
   CreditCard,
   FileSpreadsheet,
   FolderKanban,
+  Globe,
   LayoutDashboard,
   type LucideIcon,
   PieChart,
@@ -55,6 +56,13 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CreditCard,
     permissions: ['subscription:read', 'card:read', 'platform:read'],
   },
+  {
+    href: '/domains',
+    label: 'Domains',
+    icon: Globe,
+    permissions: ['subscription:read', 'card:read', 'platform:read'],
+  },
+  
   { href: '/projects', label: 'Projects', icon: FolderKanban, permissions: ['project:read'] },
   { href: '/reports', label: 'Reports', icon: PieChart, permissions: ['report:read'] },
   { href: '/activity', label: 'Activity Log', icon: Activity, permissions: ['audit:read'] },

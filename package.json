@@ -2,7 +2,7 @@
   "name": "nexora-os",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexora OS \u2014 production-ready internal office CRM",
+  "description": "Nexora OS — production-ready internal office CRM",
   "engines": {
     "node": ">=20.11"
   },
