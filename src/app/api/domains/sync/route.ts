@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { importSpaceshipReceipts } from '@/lib/spaceship-receipts';
 
 const BASE = 'https://spaceship.dev/api/v1';
+const LOCK_MS = 4.5 * 60 * 1000;
 
-// Fallback only — used if the pricing API returns nothing for a TLD (e.g. site: 15.28)
 const FALLBACK_PRICES: Record<string, number> = {};
 
 function headers() {
@@ -23,26 +24,20 @@ async function getJson(url: string) {
   throw new Error(`Spaceship rate limit on ${url}`);
 }
 
-// Finds the 1-year renewal price in Spaceship's pricing response
 function extractRenewal(json: any): { amount: number; currency: string } | null {
   const renew: any[] = json?.prices?.renew ?? [];
   if (!renew.length) return null;
-
-  const oneYear =
-    renew.find(r => r?.period?.value === 1 && r?.period?.unit === 'y') ?? renew[0];
-
+  const oneYear = renew.find(r => r?.period?.value === 1 && r?.period?.unit === 'y') ?? renew[0];
   const p =
     oneYear?.priceInDefaultCurrency?.finalPrice ??
     oneYear?.priceInDefaultCurrency?.regularPrice ??
     oneYear?.finalPrice ??
     oneYear?.regularPrice;
-
   const amount = parseFloat(p?.amount);
   if (!amount) return null;
   return { amount, currency: p?.currency ?? 'USD' };
 }
 
-// Cache per TLD so 100 .com domains = 1 API call
 const tldCache = new Map<string, { amount: number; currency: string } | null>();
 
 async function renewalPrice(domain: string) {
@@ -66,27 +61,25 @@ export async function POST(req: Request) {
     if (!workspace) return NextResponse.json({ error: 'No workspace' }, { status: 400 });
     const workspaceId = workspace.id;
 
-    // ── 5-minute lock: skip if synced recently (manual button passes ?force=1) ──
+    // 5-minute lock (Sync button sends ?force=1)
     const force = new URL(req.url).searchParams.get('force') === '1';
     const lockKey = { workspaceId_key: { workspaceId, key: 'spaceship.lastSync' } };
-
     if (!force) {
       const last = await prisma.setting.findUnique({ where: lockKey });
       const lastAt = last ? new Date((last.valueJson as any)?.at) : null;
-      if (lastAt && Date.now() - lastAt.getTime() < 4.5 * 60 * 1000) {
+      if (lastAt && Date.now() - lastAt.getTime() < LOCK_MS) {
         return NextResponse.json({ skipped: true, lastSyncAt: lastAt });
       }
     }
-
+    const nowIso = new Date().toISOString();
     await prisma.setting.upsert({
       where:  lockKey,
-      update: { valueJson: { at: new Date().toISOString() } },
-      create: { workspaceId, key: 'spaceship.lastSync', valueJson: { at: new Date().toISOString() } },
+      update: { valueJson: { at: nowIso } },
+      create: { workspaceId, key: 'spaceship.lastSync', valueJson: { at: nowIso } },
     });
 
     tldCache.clear();
 
-    // Spaceship platform (auto-created) + the card linked to it
     const platform = await prisma.platform.upsert({
       where:  { workspaceId_name: { workspaceId, name: 'Spaceship' } },
       update: {},
@@ -107,7 +100,6 @@ export async function POST(req: Request) {
         lastSyncedAt:     new Date(),
       };
 
-      // Save the domain
       const domain = await prisma.domain.upsert({
         where:  { workspaceId_name: { workspaceId, name: d.name } },
         update: data,
@@ -121,7 +113,6 @@ export async function POST(req: Request) {
 
       const subStatus = domain.expirationDate < new Date() ? 'EXPIRED' : 'ACTIVE';
 
-      // Create or update its subscription
       if (domain.subscriptionId) {
         await prisma.subscription.update({
           where: { id: domain.subscriptionId },
@@ -164,23 +155,27 @@ export async function POST(req: Request) {
 
     const take = 100;
     let skip = 0, total = Infinity;
-
     while (skip < total) {
       const { items, total: t } = await getJson(
         `${BASE}/domains?take=${take}&skip=${skip}&orderBy=expirationDate`
       );
       total = t;
-
-      // save in batches of 10 (avoids the 5s transaction timeout)
       for (let i = 0; i < items.length; i += 10) {
         await Promise.all(items.slice(i, i + 10).map(syncOne));
       }
-
       synced += items.length;
       skip += take;
     }
 
-    return NextResponse.json({ synced, subsCreated, priced, unpriced, cardLinked: !!cardId });
+    // receipts are read after domains sync, so new domains can be matched
+    let receipts: any = null;
+    try {
+      receipts = await importSpaceshipReceipts(workspaceId);
+    } catch (err: any) {
+      receipts = { error: err.message }; // a mail problem never breaks the domain sync
+    }
+
+    return NextResponse.json({ synced, subsCreated, priced, unpriced, cardLinked: !!cardId, receipts });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
