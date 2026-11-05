@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { requireAuthPage } from '@/lib/auth/guard';
 import { getWorkspace } from '@/lib/workspace';
 import { AppShell } from '@/components/layout/app-shell';
+import { AutoSync } from '@/components/auto-sync';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +31,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       defaultCollapsed={defaultCollapsed}
     >
       {children}
+      <AutoSync />
     </AppShell>
   );
 }

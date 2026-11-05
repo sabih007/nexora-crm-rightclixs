@@ -8,10 +8,14 @@ export function SyncButton() {
 
   async function sync() {
     setLoading(true);
-    const res = await fetch('/api/domains/sync', { method: 'POST' });
+    const res = await fetch('/api/domains/sync?force=1', { method: 'POST' });
     const data = await res.json();
     setLoading(false);
-    alert(res.ok ? `Synced ${data.synced} domains` : `Error: ${data.error}`);
+
+    if (!res.ok) alert(`Error: ${data.error}`);
+    else if (data.skipped) alert('Already synced in the last 5 minutes');
+    else alert(`Synced ${data.synced} domains · ${data.priced} priced`);
+
     router.refresh();
   }
 

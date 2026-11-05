@@ -34,6 +34,7 @@ export default async function DomainsPage() {
             <tr>
               <th className="p-3">Domain</th>
               <th className="p-3">Client</th>
+              <th className="p-3">Purchased</th>
               <th className="p-3">Expires / Renews</th>
               <th className="p-3">Days left</th>
               <th className="p-3">Auto-renew</th>
@@ -47,6 +48,7 @@ export default async function DomainsPage() {
                 <tr key={d.id} className="border-t border-white/10">
                   <td className="p-3 font-medium">{d.name}</td>
                   <td className="p-3">{d.client?.name ?? '—'}</td>
+                  <td className="p-3">{d.registrationDate?.toLocaleDateString('en-GB') ?? '—'}</td>
                   <td className="p-3">{d.expirationDate?.toLocaleDateString('en-GB') ?? '—'}</td>
                   <td className={`p-3 ${danger ? 'text-red-400 font-semibold' : n !== null && n <= 30 ? 'text-amber-400' : ''}`}>
                     {n ?? '—'}
